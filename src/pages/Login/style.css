@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components{
+    .containerSignUp{
+        @apply w-[480px] h-[550px] bg-white  border-2 border-gray-200 grid grid-rows-8 gap-3 px-24 py-16 rounded-lg
+    }
+    .inputSignUP{
+        @apply p-2 rounded-lg border-solid border-2 border-black text-lg
+    }
+    .btnLogin{
+        @apply bg-black text-white rounded-lg
+    }
+    .btnLink{
+        @apply border-[1px] border-black rounded-lg 
+    }
+}
