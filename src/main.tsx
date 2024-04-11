@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { App } from './App.tsx'
 import './index.css'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter,Route,Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/Auth'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -10,7 +10,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     
     <BrowserRouter>
       <AuthProvider >
-        <App />
+        <Routes >
+          <Route path='/*' element={<App />} />
+        </Routes>
       </AuthProvider>
     </BrowserRouter>
     

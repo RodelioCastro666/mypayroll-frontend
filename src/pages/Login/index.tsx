@@ -1,9 +1,11 @@
 import googleLogo from '../../Assets/flat-color-icons_google.png'
 import fbLogo from '../../Assets/devicon_facebook.png'
 import  './style.css';
-import { useContext, useEffect, useRef, useState } from 'react';
-import AuthContext  from '../../auth/Auth';
+import { useEffect, useRef, useState } from 'react';
+import useAuth from '../../auth/useAuth'
 import axios from '../../api/axios'
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+
 
 
 
@@ -12,24 +14,26 @@ import axios from '../../api/axios'
 
 export const Login = () => {
 
- 
-
-  const {setAuth} = useContext(AuthContext);
+  const {setAuth} = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  
   const userRef = useRef();
-  const errorRef = useRef();
+  // const errorRef = useRef();
 
   const [user,setUser] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [success, setSuccess] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState('');
+  // const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    userRef.current.focus();
-  },[])
+  // useEffect(() => {
+  //   userRef.current.focus();
+  // },[])
 
-  useEffect(() =>{
-    setErrorMessage('');
-  }, [user,password])
+  // useEffect(() =>{
+  //   setErrorMessage('');
+  // }, [user,password])
 
   const handleSubmit =  async (e) => {
     e.preventDefault();
@@ -48,22 +52,19 @@ export const Login = () => {
         
         console.log(response);
         console.log(user, password);
-        setSuccess(true);
+        // setSuccess(true);
+        navigate(from, {replace:true})
         setUser('');
         setPassword('');
 
     }catch(error){
-
+      console.log("HAPPY BIRTHDAY")
     }
     
   }
 
   return (
-    <>  {success ? (
-            <section >
-                <h1>SUCCESSFULL</h1>
-            </section>
-        ) : (<div className="h-screen g-screen bg-[#F5F7F8] flex justify-center items-center text-center " >
+    <>  <div className="h-screen g-screen bg-[#F5F7F8] flex justify-center items-center text-center " >
                
 
                     <form className='containerSignUp' onSubmit={handleSubmit}>
@@ -110,7 +111,7 @@ export const Login = () => {
                     <img className='inline-block mr-2 ' src={fbLogo} alt="" />Continue with Facebook
                     </button>  */}
                 
-            </div>)}
+            </div>
     
         
 

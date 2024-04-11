@@ -4,7 +4,7 @@ import { Nav } from '../../components/Nav'
 export const Main = () => {
   return (
     <div>
-      <Nav />
+      {/* <Nav /> */}
       <Outlet />
     </div>
   )
