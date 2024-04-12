@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default axios.create({
 
-    // baseURL: "https://grown-geographic-nathan-diane.trycloudflare.com"
-    baseURL: "https://dummyjson.com"
+
+    baseURL: "http://10.10.10.98:3000/api"
 
 });

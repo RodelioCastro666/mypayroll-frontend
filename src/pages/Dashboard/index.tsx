@@ -1,6 +1,9 @@
 export const Dashboard = () => {
-    return (
-      <div className="h-screen flex justify-center items-center">Dashboard Screen</div>
-    )
-  }
-  
+
+  console.log("EHYEEEH");
+  return (
+    <div className="h-screen bg-red-600  w-screenflex justify-center items-center">
+      Dashboard Screen
+    </div>
+  )
+}

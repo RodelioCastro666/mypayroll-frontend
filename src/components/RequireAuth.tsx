@@ -1,11 +1,18 @@
-import { useLocation, Navigate,Outlet } from "react-router-dom";
-import useAuth from "../auth/useAuth";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
+// import { useAuth } from "../auth";
+import { useAuth } from "../auth/Auth";
 
-export  const RequireAuth = () =>{
-    const { auth }  = useAuth();
-    const location = useLocation();
+export const RequireAuth = () => {
+    const { token } = useAuth();
+    // const location = useLocation();
+    // const token = localStorage.getItem('token');
 
-    return (auth?.user ? <Outlet /> : <Navigate to="/login" state={{from: location}} replace /> );
+    // console.log(token)
+
+    return (token ?
+        <Outlet /> :
+        <Navigate to="/login" replace />);
 }
+
 
 
