@@ -4,8 +4,10 @@ import { Nav } from '../../components/Nav'
 export const Main = () => {
   return (
     <div>
+      MAIN
       {/* <Nav /> */}
-      <Outlet />
+      {/* <Outlet /> */}
+
     </div>
   )
 }

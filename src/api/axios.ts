@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect } from "react";
 
 
 export default axios.create({
@@ -7,3 +8,4 @@ export default axios.create({
     baseURL: "https://dummyjson.com"
 
 });
+

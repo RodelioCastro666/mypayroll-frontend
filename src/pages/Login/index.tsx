@@ -2,9 +2,10 @@ import googleLogo from '../../Assets/flat-color-icons_google.png'
 import fbLogo from '../../Assets/devicon_facebook.png'
 import  './style.css';
 import { useEffect, useRef, useState } from 'react';
-import useAuth from '../../auth/useAuth'
+// import useAuth from '../../auth/useAuth'
 import axios from '../../api/axios'
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthProvider';
 
 
 
@@ -14,16 +15,21 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 export const Login = () => {
 
-  const {setAuth} = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+    const {setToken} = useAuth();
+    const {token} = useAuth();
+
+    const navigate = useNavigate();
+  // const {setAuth} = useAuth();
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const from = location.state?.from?.pathname || "/";
   
   const userRef = useRef();
   // const errorRef = useRef();
 
   const [user,setUser] = useState('');
   const [password, setPassword] = useState('');
+
   // const [errorMessage, setErrorMessage] = useState('');
   // const [success, setSuccess] = useState(false);
 
@@ -37,12 +43,15 @@ export const Login = () => {
 
   const handleSubmit =  async (e) => {
     e.preventDefault();
+    
+    
 
     try {
         const response = await axios.post(LOGIN_URL,
             JSON.stringify({
                 username: user,
-                password: password
+                password: password,
+                expiresInMins: 1,
             }),
             {
                 headers: { 'Content-Type': 'application/json' },
@@ -50,10 +59,11 @@ export const Login = () => {
 
         )
         
-        console.log(response);
-        console.log(user, password);
-        // setSuccess(true);
-        navigate(from, {replace:true})
+     
+        setToken(response.data.token);
+        console.log(response.data.token);
+        console.log("my token: ", token);
+        navigate("/dashboard", { replace: true });
         setUser('');
         setPassword('');
 
