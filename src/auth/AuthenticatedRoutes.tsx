@@ -2,18 +2,18 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { Nav } from "../components/Nav";
 
-export const AuthenticatedRoutes = () =>{
-    
-    const { token } = useAuth();
+export const AuthenticatedRoutes = () => {
 
-    if(!token){
+    const { access_token } = useAuth();
 
-        return<Navigate to="/login" />
+    if (!access_token) {
+
+        return <Navigate to="/login" />
     }
-    return  (
+    return (
         <div>
             <Nav />
             <Outlet />
         </div>
-    ) 
+    )
 }

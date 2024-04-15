@@ -5,6 +5,7 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
 import { Employees } from "./pages/Employees";
+// import { Users } from "./pages/Users";
 
 
 //This functional component acts as the entry point for 
@@ -15,7 +16,7 @@ export const Routes = () => {
     //the authentication context. It allows us to access the 
     //authentication token within the Routes component.
     const { token } = useAuth();
-    
+
 
     const routesForPublic = [
         {
@@ -28,40 +29,44 @@ export const Routes = () => {
         },
     ];
 
-    const routesForNotAuthenticated =[
+    const routesForNotAuthenticated = [
         {
             path: "/",
             element: <div>JUST PAGE</div>,
         },
         {
             path: "/login",
-            element : <Login />
+            element: <Login />
         }
     ];
 
 
-    const routesForAuthenticated =[
+    const routesForAuthenticated = [
         {
             path: "/",
-            element : <AuthenticatedRoutes />,
-            children : [
+            element: <AuthenticatedRoutes />,
+            children: [
 
                 {
-                    path: "dashboard",
+                    path: "/dashboard",
                     element: <Dashboard />,
                 },
                 {
-                    path : "employees",
+                    path: "/employees",
                     element: <Employees />
                 },
+                // {
+                //     path: "/users",
+                //     element: <Users />
+                // }
             ]
         }
     ];
 
-    
+
     const router = createBrowserRouter([
-        ...routesForPublic, 
-        ...(!token ? routesForNotAuthenticated: []),
+        ...routesForPublic,
+        ...(!token ? routesForNotAuthenticated : []),
         ...routesForAuthenticated,
 
     ])
