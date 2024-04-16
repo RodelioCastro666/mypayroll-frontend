@@ -1,75 +1,67 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "./auth/AuthProvider";
 import { AuthenticatedRoutes } from "./auth/AuthenticatedRoutes";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import { Dashboard } from "./pages/Dashboard";
-import { Employees } from "./pages/Employees";
-// import { Users } from "./pages/Users";
-
-
-//This functional component acts as the entry point for 
+import { Login } from "./pages/Login/Login";
+import { Register } from "./pages/Register/Register";
+import { Dashboard } from "./pages/Dashboard/Dashboard";
+import { Employees } from "./pages/Employees/Employees";
+import { Organizations } from "./pages/Organizations/All_Organizations/Organizations";
+//This functional component acts as the entry point for
 //configuring the application routes.
 export const Routes = () => {
+  //The useAuth hook is called to retrieve the token value from
+  //the authentication context. It allows us to access the
+  //authentication token within the Routes component.
+  const { token } = useAuth();
 
-    //The useAuth hook is called to retrieve the token value from 
-    //the authentication context. It allows us to access the 
-    //authentication token within the Routes component.
-    const { token } = useAuth();
+  const routesForPublic = [
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+  ];
 
+  const routesForNotAuthenticated = [
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      path: "/organizations",
+      element: <Organizations />,
+    },
+  ];
 
-    const routesForPublic = [
+  const routesForAuthenticated = [
+    {
+      path: "/",
+      element: <></>,
+      children: [
         {
-            path: "/login",
-            element: <Login />
+          path: "/dashboard",
+          element: <Dashboard />,
         },
         {
-            path: "/register",
-            element: <Register />
+          path: "/employees",
+          element: <Employees />,
         },
-    ];
+      ],
+    },
+  ];
 
-    const routesForNotAuthenticated = [
-        {
-            path: "/",
-            element: <div>JUST PAGE</div>,
-        },
-        {
-            path: "/login",
-            element: <Login />
-        }
-    ];
+  const router = createBrowserRouter([
+    ...routesForPublic,
+    ...(!token ? routesForNotAuthenticated : []),
+    ...routesForAuthenticated,
+  ]);
 
-
-    const routesForAuthenticated = [
-        {
-            path: "/",
-            element: <AuthenticatedRoutes />,
-            children: [
-
-                {
-                    path: "/dashboard",
-                    element: <Dashboard />,
-                },
-                {
-                    path: "/employees",
-                    element: <Employees />
-                },
-                // {
-                //     path: "/users",
-                //     element: <Users />
-                // }
-            ]
-        }
-    ];
-
-
-    const router = createBrowserRouter([
-        ...routesForPublic,
-        ...(!token ? routesForNotAuthenticated : []),
-        ...routesForAuthenticated,
-
-    ])
-
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 };

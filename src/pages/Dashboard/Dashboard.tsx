@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../auth/AuthProvider"
+import { useAuth } from "../../auth/AuthProvider";
 import axios from "../../api/axios";
-import { useRefreshRequest } from "../../auth/useRefreshRequest";
-
-
-
+import { useRefreshRequest } from "../../auth/UseRefreshRequest";
 
 export const Dashboard = () => {
+  const { setAccessToken } = useAuth();
 
-  const { setToken } = useAuth();
-
-  const { token } = useAuth();
-
+  const { access_token } = useAuth();
 
   // const customFetch = axios.create({
   //   baseURL: "http://10.10.10.98:3000/api",
@@ -20,8 +15,6 @@ export const Dashboard = () => {
   //   },
   //   withCredentials: true,
   // });
-
-
 
   // customFetch.interceptors.request.use(
   //   async (config) => {
@@ -47,20 +40,12 @@ export const Dashboard = () => {
   // };
 
   const refresh = useRefreshRequest();
-
+  console.log(access_token);
   return (
-    <div className="h-screen flex justify-center items-center">Dashboard Screen
-      <button onClick={() => setToken()} >RESET</button>
-
-      <button onClick={() => refresh()} >Refresh</button>
-
+    <div className="h-screen flex justify-center items-center">
+      Dashboard Screen
+      <button onClick={() => setAccessToken()}>RESET</button>
+      <button onClick={() => refresh()}>Refresh</button>
     </div>
-
-  )
-
-
-
-}
-
-
-
+  );
+};
