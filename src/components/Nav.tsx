@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export const Nav = () => {
   return (
-    <nav className="">
+    <nav className="   p-4 border-r-[1px]">
       <ul className="">
         <li className="px-5 py-3 hover:bg-gray-100 rounded-r">
           <Link to="/">Home</Link>
@@ -17,7 +17,7 @@ export const Nav = () => {
           <Link to="/employees">Employees</Link>
         </li>
         <li className="px-5 py-3 hover:bg-gray-100 rounded-r">
-          <Link to="/organization">Organizations</Link>
+          <Link to="/organizations">Organizations</Link>
         </li>
       </ul>
     </nav>

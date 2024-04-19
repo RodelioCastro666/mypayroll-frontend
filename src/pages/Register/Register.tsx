@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../../api/axios";
 import { useMutation } from "@tanstack/react-query";
-import { registerUser } from "../../requestCalls/createUser";
+import { registerUser } from "../../requestCalls/requestUser";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -17,26 +17,29 @@ export const Register = () => {
   const [password, setPassword] = useState("");
 
   //crete NewUser
-  const mutation = useMutation({
-    mutationFn: (userCredentials) => registerUser(userCredentials),
-  });
+  // const mutation = useMutation({
+  //   mutationFn: (userCredentials) => registerUser(userCredentials),
+  // });
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    mutation.mutate({
-      firstName: firstname,
-      lastName: lastname,
-      email: email,
-      password: password,
-    });
+    // mutation.mutate({
+    //   firstName: firstname,
+    //   lastName: lastname,
+    //   email: email,
+    //   password: password,
+    // });
 
-    console.log("KLKL");
+    console.log(firstname, lastname, email, password);
   };
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="flex w-[480px] flex-col gap-4 px-16">
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-[480px] flex-col gap-4 px-16"
+      >
         <div>
           <h1 className="mb-2 text-start text-3xl font-bold">
             Create your account
@@ -53,6 +56,8 @@ export const Register = () => {
               type="text"
               name=""
               id="firstName"
+              onChange={(e) => setFirstname(e.target.value)}
+              required
               placeholder="e.g. john"
               className="rounded border-[1px] border-gray-500 px-4 py-1"
             />
@@ -65,6 +70,8 @@ export const Register = () => {
               type="text"
               name=""
               id="lastName"
+              onChange={(e) => setLastname(e.target.value)}
+              required
               placeholder="e.g. doe"
               className="rounded border-[1px] border-gray-500 px-4 py-1"
             />
@@ -77,6 +84,8 @@ export const Register = () => {
               type="email"
               name=""
               id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
               placeholder="e.g. example@company.org"
               className="w-full rounded border-[1px] border-gray-500 px-4 py-1"
             />
@@ -90,6 +99,8 @@ export const Register = () => {
                 type={hiddenPassword ? "password" : "text"}
                 name=""
                 id="password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded border-[1px] border-gray-500 px-4 py-1"
               />
               <button
@@ -108,12 +119,14 @@ export const Register = () => {
               Password Confirmation
             </label>
             <div className="relative">
-              <input
+              {/* <input
                 type={hiddenPassword ? "password" : "text"}
                 name=""
                 id="passwordConfirmation"
+                required
+                // onChange={(e) => setMatchPassword(e.target.value)}
                 className="w-full rounded border-[1px] border-gray-500 px-4 py-1"
-              />
+              /> */}
               <button
                 className="absolute right-2 top-1/4"
                 onClick={() => setHiddenPassword((prev) => !prev)}
@@ -144,7 +157,7 @@ export const Register = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 

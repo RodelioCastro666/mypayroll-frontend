@@ -7,7 +7,7 @@ import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "../../requestCalls/createUser";
+import { loginUser } from "../../requestCalls/requestUser";
 
 import { FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
@@ -27,11 +27,11 @@ export const Login = () => {
   const mutation = useMutation({
     mutationFn: (credentials) => loginUser(credentials),
     onSuccess: (data) => {
-      console.log("refresh", data.headers["refresh-token"]);
-      console.log("accesss", data.headers["access-token"]);
-      setAccessToken(data.headers["access-token"]);
-      setRefreshToken(data.headers["refresh-token"]);
-      navigate("/dashboard", { replace: true });
+      // console.log("refresh", data.headers["refresh-token"]);
+      // console.log("accesss", data.headers["access-token"]);
+      // setAccessToken(data.headers["access-token"]);
+      // setRefreshToken(data.headers["refresh-token"]);
+      // navigate("/dashboard", { replace: true });
     },
     onError: (error) => {
       console.log(error);
@@ -40,11 +40,14 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    mutation.mutate({
-      email: user,
-      password: password,
-    });
+    setAccessToken("KKKK");
+    setRefreshToken("KKKK");
+    navigate("/dashboard", { replace: true });
+    console.log(user, password);
+    // mutation.mutate({
+    //   email: user,
+    //   password: password,
+    // });
 
     console.log("KKK");
   };
@@ -52,7 +55,10 @@ export const Login = () => {
   return (
     <div>
       <div className="flex h-screen items-center justify-center">
-        <div className="flex w-[480px] flex-col gap-4 px-16 py-8">
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-[480px] flex-col gap-4 px-16 py-8"
+        >
           <div>
             <h1 className="mb-2 text-start text-3xl font-bold">
               Hey there, Welcome!
@@ -69,6 +75,9 @@ export const Login = () => {
               id="email"
               placeholder="e.g. example@company.org"
               className="rounded border-[1px] border-gray-500 px-4 py-1"
+              required
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
             />
           </div>
           <div className="flex flex-col">
@@ -81,6 +90,9 @@ export const Login = () => {
                 name=""
                 id="password"
                 className="w-full rounded border-[1px] border-gray-500 px-4 py-1"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                required
               />
               <button
                 className="absolute right-2 top-1/4"
@@ -108,7 +120,7 @@ export const Login = () => {
               Create One
             </Link>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -42,10 +42,11 @@ export const Dashboard = () => {
   const refresh = useRefreshRequest();
   console.log(access_token);
   return (
-    <div className="h-screen flex justify-center items-center">
-      Dashboard Screen
+    <div className="w-full h-full bg-red-100">
+      {/* Dashboard Screenddd
       <button onClick={() => setAccessToken()}>RESET</button>
-      <button onClick={() => refresh()}>Refresh</button>
+      <button onClick={() => refresh()}>Refresh</button> */}
+      ddd
     </div>
   );
 };

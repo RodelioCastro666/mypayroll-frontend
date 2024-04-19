@@ -22,7 +22,7 @@ export const Organization = () => {
     console.log(response);
   };
 
-  console.log("Organizations");
+  console.log("Organization");
 
   return (
     <div className="h-screen  flex flex-col ">
