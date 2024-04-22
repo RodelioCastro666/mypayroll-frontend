@@ -18,7 +18,7 @@ export const useRefreshRequest = () => {
       setRefreshToken(response.headers["refresh-token"]);
       setAccessToken(response.headers["access-token"]);
       return response.headers["access-token"];
-      console.log(response.headers["access-token"]);
+      
     } catch (error) {
       console.log("====================================");
       console.log(error);

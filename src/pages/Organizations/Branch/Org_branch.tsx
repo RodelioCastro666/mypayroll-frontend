@@ -1,62 +1,68 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 
-export const SpecificORg = () => {
-  const { id } = useParams();
 
-  const [branchHighLight, setBranchHighLight] = useState(true);
-  const [memberHighLight, setMembertHighLight] = useState(false);
+export const Org_Branch = () => {
 
-  const branchFlip = () => {
-    if (branchHighLight) {
+  // set which category to display  BRANCH or MEMBER when higlighted
+  const [departmentHighLight, setDepartmentHighLight] = useState(true);
+  const [positionHighLight, setPositiontHighLight] = useState(false);
+
+  // flip the value of department category
+  const deparmtentFlip = () => {
+    //if already true , stay true
+    if (departmentHighLight) {
       null;
     } else {
-      setBranchHighLight((prev) => !prev);
-      setMembertHighLight(false);
-    }
-  };
-  const memberFlip = () => {
-    if (memberHighLight) {
-      null;
-    } else {
-      setMembertHighLight((prev) => !prev);
-      setBranchHighLight(false);
+      //if false , then set to true, other category will set to be false
+      setDepartmentHighLight((prev) => !prev);
+      setPositiontHighLight(false);
     }
   };
 
-  console.log(id);
+  // flip the value of member category
+  const positionFlip = () => {
+    //if already true , stay true
+    if (positionHighLight) {
+      null;
+    } else {
+       //if false , then set to true, other category will set to be false
+      setPositiontHighLight((prev) => !prev);
+      setDepartmentHighLight(false);
+    }
+  };
+
   return (
     <>
-      {branchHighLight ? (
+      {/* if department is true/highlighted then display departments else displ ay members */}
+      {departmentHighLight ? (
         <div>
           <nav>
             <div className=" px-4  border-b-[1px] flex justify-between gap-3">
               <div className="flex  gap-5 relative">
-                {branchHighLight ? (
+                {departmentHighLight ? (
                   <button
-                    onClick={branchFlip}
+                    onClick={deparmtentFlip}
                     className=" px-8 border-b-4 border-blue-600 rounded-b"
                   >
-                    Branch
+                    Departments
                   </button>
                 ) : (
-                  <button onClick={branchFlip} className=" px-8 rounded-b">
-                    Branch
+                  <button onClick={deparmtentFlip} className=" px-8 rounded-b">
+                    Departments
                   </button>
                 )}
 
-                {memberHighLight ? (
+                {positionHighLight ? (
                   <button
-                    onClick={memberFlip}
+                    onClick={positionFlip}
                     className=" px-8 border-b-4 border-blue-600 rounded-b"
                   >
-                    Members
+                    Positions
                   </button>
                 ) : (
-                  <button onClick={memberFlip} className=" px-8  rounded-b">
-                    Members
+                  <button onClick={positionFlip} className=" px-8  rounded-b">
+                    Positions
                   </button>
                 )}
               </div>
@@ -73,10 +79,10 @@ export const SpecificORg = () => {
 
           <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
             
-            <div><Link to={`branch`}>Branch 1111</Link> </div>
-            <div>BRANCH 2</div>
-            <div>BRANCH 4</div>
-            <div>BRANCH 5</div>
+            <div>Department 1 </div>
+            <div>Department 2</div>
+            <div>Department 4</div>
+            <div>Department 5</div>
           </section>
         </div>
       ) : (
@@ -84,29 +90,29 @@ export const SpecificORg = () => {
           <nav>
             <div className=" px-4  border-b-[1px] flex justify-between gap-3">
               <div className="flex  gap-5 relative">
-                {branchHighLight ? (
+                {departmentHighLight ? (
                   <button
-                    onClick={branchFlip}
+                    onClick={deparmtentFlip}
                     className=" px-8 border-b-4 border-blue-600 rounded-b"
                   >
-                    Branch
+                    Department
                   </button>
                 ) : (
-                  <button onClick={branchFlip} className=" px-8 rounded-b">
-                    Branch
+                  <button onClick={deparmtentFlip} className=" px-8 rounded-b">
+                    Department
                   </button>
                 )}
 
-                {memberHighLight ? (
+                {positionHighLight ? (
                   <button
-                    onClick={memberFlip}
+                    onClick={positionFlip}
                     className=" px-8 border-b-4 border-blue-600 rounded-b"
                   >
-                    Members
+                    Positions
                   </button>
                 ) : (
-                  <button onClick={memberFlip} className=" px-8  rounded-b">
-                    Members
+                  <button onClick={positionFlip} className=" px-8  rounded-b">
+                    Positions
                   </button>
                 )}
               </div>
@@ -123,10 +129,10 @@ export const SpecificORg = () => {
 
           <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
             
-            <div>Member 1 </div>
-            <div>Member 2</div>
-            <div>Member 4</div>
-            <div>Member 5</div>
+            <div>Position 1 </div>
+            <div>Position 2</div>
+            <div>Position 4</div>
+            <div>Position 5</div>
           </section>
         </div>
       )}

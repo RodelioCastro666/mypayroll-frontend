@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
 
       // console.log("Bearer " + token);
-      localStorage.setItem("token", access_token);
+      // localStorage.setItem("token", access_token);
     } else {
       // delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");

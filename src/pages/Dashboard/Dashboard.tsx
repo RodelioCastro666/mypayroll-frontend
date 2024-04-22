@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import axios from "../../api/axios";
-import { useRefreshRequest } from "../../auth/UseRefreshRequest";
+import { useRefreshRequest } from "../../auth/useRefreshRequest";
 
 export const Dashboard = () => {
   const { setAccessToken } = useAuth();
@@ -39,7 +39,8 @@ export const Dashboard = () => {
   //   }
   // };
 
-  const refresh = useRefreshRequest();
+  console.log(access_token);
+  //const refresh = useRefreshRequest();
   console.log(access_token);
   return (
     <div className="w-full h-full bg-red-100">

@@ -5,11 +5,15 @@ import { Login } from "./pages/Login/Login";
 import { Register } from "./pages/Register/Register";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Employees } from "./pages/Employees/Employees";
-import { Organizations } from "./pages/Organizations/All_Organizations/Organizations";
-import { Organization } from "./pages/Organizations/Organization(Specific)/Organization";
+import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/Organizations";
+import { Branch } from "./components/Branch";
 import { ErrorPage } from "./ErroPage";
 import { AllORg } from "./pages/Organizations/All_Organizations/AllOrg";
 import { SpecificORg } from "./pages/Organizations/All_Organizations/SpecificORg";
+import { Org_Branch } from "./pages/Organizations/Branch/Org_branch";
+import { Branches } from "./pages/Branches/Branches";
+import { Departments } from "./pages/Deparmemts/Departments";
+
 //This functional component acts as the entry point for
 //configuring the application routes.
 export const Routes = () => {
@@ -56,16 +60,13 @@ export const Routes = () => {
           element: <Dashboard />,
         },
         {
-          path: "/employees",
+          path: "employees",
           element: <Employees />,
         },
-        {
-          path: "/dashboard",
-          element: <Dashboard />,
-        },
+        
         {
           path: "organizations/*",
-          element: <Organizations />,
+          element: <OrganizationsLayout />,
           children: [
             {
               path: "*",
@@ -76,11 +77,20 @@ export const Routes = () => {
               element: <SpecificORg />,
             },
             {
-              path: "branch",
-              element: <div>BRANCHES</div>,
+              path: ":id/branch",
+              element: <Org_Branch />,
             },
+            
           ],
         },
+        {
+          path: "branches",
+          element: <Branches />,
+        },
+        {
+          path: "departments",
+          element: <Departments />,
+        }
       ],
     },
   ];

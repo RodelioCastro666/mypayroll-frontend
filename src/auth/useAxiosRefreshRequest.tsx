@@ -1,10 +1,12 @@
 import { axiosRefreshRequest } from "../api/axios";
-import { useRefreshRequest } from "./UseRefreshRequest";
+import { useRefreshRequest } from "./useRefreshRequest";
 import { useAuth } from "./AuthProvider";
-import { axiosRefreshRequest } from "../api/axios";
+
 import { useEffect } from "react";
 
-const useAxiosRefreshRequest = () => {
+export const useAxiosRefreshRequest = () => {
+
+  
   const refresh = useRefreshRequest();
   const { access_token, refresh_token } = useAuth;
 
@@ -16,7 +18,7 @@ const useAxiosRefreshRequest = () => {
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          prevRequest.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosRefreshRequest(prevRequest);
         }
 
