@@ -12,13 +12,21 @@
   "dependencies": {
     "@tanstack/react-query": "^5.29.2",
     "axios": "^1.6.8",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
     "localforage": "^1.10.0",
+    "lucide-react": "^0.372.0",
     "match-sorter": "^6.3.4",
+    "next-themes": "^0.3.0",
+    "primereact": "^10.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.1.0",
     "react-router-dom": "^6.22.3",
-    "sort-by": "^1.2.0"
+    "sonner": "^1.4.41",
+    "sort-by": "^1.2.0",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "proxy": "http://10.10.10.98:3000",
   "devDependencies": {
@@ -35,5 +43,9 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
-  }
+  },
+  "description": "- [Atomic Design Guide 2](https://www.toptal.com/designers/ui/atomic-design-sketch)\r - [Atomic Design Guide 1](https://medium.com/@janelle.wg/atomic-design-pattern-how-to-structure-your-react-application-2bb4d9ca5f97)\r - [Atomic Design by Brad Frost](https://atomicdesign.bradfrost.com/)\r - [Git Branch Naming Convention](https://phoenixnap.com/kb/git-branch-name-convention)\r - [Git Cheat Sheet](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet)",
+  "main": "postcss.config.js",
+  "author": "",
+  "license": "ISC"
 }

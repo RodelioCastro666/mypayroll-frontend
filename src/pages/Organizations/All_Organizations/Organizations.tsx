@@ -1,10 +1,8 @@
 // import axios from "../../../api/axios";
 import { useAuth } from "../../../auth/AuthProvider";
+import { CreateOrganization } from "../OrganizationModal/CreateOrganization";
 
-
-
-import { Outlet, } from "react-router-dom";
-
+import { Outlet } from "react-router-dom";
 
 export const OrganizationsLayout = () => {
   const { access_token } = useAuth();
@@ -22,9 +20,7 @@ export const OrganizationsLayout = () => {
 
   return (
     <div className="grid grid-rows-[50px_1fr] ">
-
       <Outlet />
-
     </div>
   );
 };

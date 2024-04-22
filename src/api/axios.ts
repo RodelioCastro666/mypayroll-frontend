@@ -4,8 +4,8 @@ import { useEffect } from "react";
 
 
 
-// const BASE_URL = "http://10.10.10.98:3000/api"
-const BASE_URL = "10.10.10.207:3000"
+const BASE_URL = "http://10.10.10.98:3000/api"
+
 
 // const { refresh_token } = useAuth();
 // const { access_token } = useAuth();

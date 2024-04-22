@@ -16,19 +16,19 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //crete NewUser
-  // const mutation = useMutation({
-  //   mutationFn: (userCredentials) => registerUser(userCredentials),
-  // });
+  // crete NewUser
+  const mutation = useMutation({
+    mutationFn: (userCredentials) => registerUser(userCredentials),
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // mutation.mutate({
-    //   firstName: firstname,
-    //   lastName: lastname,
-    //   email: email,
-    //   password: password,
-    // });
+    mutation.mutate({
+      firstName: firstname,
+      lastName: lastname,
+      email: email,
+      password: password,
+    });
 
     console.log(firstname, lastname, email, password);
   };

@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { useEffect } from "react";
+import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 
 export const SpecificORg = () => {
   const { id } = useParams();
 
   const [branchHighLight, setBranchHighLight] = useState(true);
   const [memberHighLight, setMembertHighLight] = useState(false);
+  const axiosRequest = useAxiosRefreshRequest();
+
+  const [members, setMembers] = useState([]);
 
   const branchFlip = () => {
     if (branchHighLight) {
@@ -26,7 +30,25 @@ export const SpecificORg = () => {
     }
   };
 
+  useEffect(() => {
+    getMembers();
+  }, []);
+
+  const getMembers = async () => {
+    try {
+      const response = await axiosRequest.get(`/organizations/${id}/members/`, {
+        // signal: controller.signal,
+      });
+      console.log(response.data);
+      //isMounted &&
+      setMembers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   console.log(id);
+
   return (
     <>
       {branchHighLight ? (
@@ -72,8 +94,9 @@ export const SpecificORg = () => {
           </nav>
 
           <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-            
-            <div><Link to={`branch`}>Branch 1111</Link> </div>
+            <div>
+              <Link to={`branch`}>Branch 1111</Link>{" "}
+            </div>
             <div>BRANCH 2</div>
             <div>BRANCH 4</div>
             <div>BRANCH 5</div>
@@ -122,11 +145,7 @@ export const SpecificORg = () => {
           </nav>
 
           <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-            
-            <div>Member 1 </div>
-            <div>Member 2</div>
-            <div>Member 4</div>
-            <div>Member 5</div>
+            {members ? members.map((member) => <li>{member.id}</li>) : null}
           </section>
         </div>
       )}

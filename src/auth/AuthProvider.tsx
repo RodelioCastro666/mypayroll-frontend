@@ -1,6 +1,6 @@
 import axios from "../api/axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
+import { axiosRefreshRequest } from "../api/axios";
 //createContext() creates an empty context object that will be used to
 //share the authentication state and functions between components.
 const AuthContext = createContext();
@@ -16,8 +16,12 @@ const AuthContext = createContext();
 //authentication context.
 export const AuthProvider = ({ children }) => {
   //token represents the authentication token.
-  const [access_token, setAccessToken_] = useState();
-  const [refresh_token, setRefreshToken_] = useState();
+  const [access_token, setAccessToken_] = useState(
+    localStorage.getItem("token")
+  );
+  const [refresh_token, setRefreshToken_] = useState(
+    localStorage.getItem("token")
+  );
 
   // This function is used to set the new token value.
   // It updates the token state using setToken_() and stores the
@@ -38,11 +42,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (access_token) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
-
+      axiosRefreshRequest.defaults.headers.common["Authorization"] =
+        "Bearer " + access_token;
       // console.log("Bearer " + token);
-      // localStorage.setItem("token", access_token);
+      localStorage.setItem("token", access_token);
     } else {
-      // delete axios.defaults.headers.common["Authorization"];
+      delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");
     }
   }, [refresh_token, access_token]);

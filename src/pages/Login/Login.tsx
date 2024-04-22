@@ -24,32 +24,29 @@ export const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
-  // const mutation = useMutation({
-  //   mutationFn: (credentials) => loginUser(credentials),
-  //   onSuccess: (data) => {
-  //     // console.log("refresh", data.headers["refresh-token"]);
-  //     // console.log("accesss", data.headers["access-token"]);
-  //     // setAccessToken(data.headers["access-token"]);
-  //     // setRefreshToken(data.headers["refresh-token"]);
-  //     // navigate("/dashboard", { replace: true });
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //   },
-  // });
+  const mutation = useMutation({
+    mutationFn: (credentials) => loginUser(credentials),
+    onSuccess: (data) => {
+      console.log("refresh", data.headers["refresh-token"]);
+      console.log("accesss", data.headers["access-token"]);
+      setAccessToken(data.headers["access-token"]);
+      setRefreshToken(data.headers["refresh-token"]);
+      navigate("/dashboard", { replace: true });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAccessToken("KKKK");
-    setRefreshToken("KKKK");
-    navigate("/dashboard", { replace: true });
-    console.log(user, password);
-    // mutation.mutate({
-    //   email: user,
-    //   password: password,
-    // });
 
-    console.log("KKK");
+    console.log("LOG IN");
+    console.log(user, password);
+    mutation.mutate({
+      email: user,
+      password: password,
+    });
   };
 
   return (

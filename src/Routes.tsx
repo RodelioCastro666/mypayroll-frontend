@@ -13,6 +13,7 @@ import { SpecificORg } from "./pages/Organizations/All_Organizations/SpecificORg
 import { Org_Branch } from "./pages/Organizations/Branch/Org_branch";
 import { Branches } from "./pages/Branches/Branches";
 import { Departments } from "./pages/Deparmemts/Departments";
+import { CreateOrganization } from "./pages/Organizations/OrganizationModal/CreateOrganization";
 
 //This functional component acts as the entry point for
 //configuring the application routes.
@@ -63,7 +64,7 @@ export const Routes = () => {
           path: "employees",
           element: <Employees />,
         },
-        
+
         {
           path: "organizations/*",
           element: <OrganizationsLayout />,
@@ -80,7 +81,6 @@ export const Routes = () => {
               path: ":id/branch",
               element: <Org_Branch />,
             },
-            
           ],
         },
         {
@@ -90,7 +90,11 @@ export const Routes = () => {
         {
           path: "departments",
           element: <Departments />,
-        }
+        },
+        {
+          path: "createOrg",
+          element: <CreateOrganization />,
+        },
       ],
     },
   ];
