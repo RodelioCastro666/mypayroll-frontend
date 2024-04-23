@@ -19,7 +19,7 @@ export const OrganizationsLayout = () => {
   console.log("Organizations");
 
   return (
-    <div className="grid grid-rows-[50px_1fr] ">
+    <div>
       <Outlet />
     </div>
   );

@@ -1,9 +1,7 @@
 import { useState } from "react";
-
-
+import { useParams } from "react-router-dom";
 
 export const Org_Branch = () => {
-
   // set which category to display  BRANCH or MEMBER when higlighted
   const [departmentHighLight, setDepartmentHighLight] = useState(true);
   const [positionHighLight, setPositiontHighLight] = useState(false);
@@ -26,7 +24,7 @@ export const Org_Branch = () => {
     if (positionHighLight) {
       null;
     } else {
-       //if false , then set to true, other category will set to be false
+      //if false , then set to true, other category will set to be false
       setPositiontHighLight((prev) => !prev);
       setDepartmentHighLight(false);
     }
@@ -78,7 +76,6 @@ export const Org_Branch = () => {
           </nav>
 
           <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-            
             <div>Department 1 </div>
             <div>Department 2</div>
             <div>Department 4</div>
@@ -128,7 +125,6 @@ export const Org_Branch = () => {
           </nav>
 
           <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-            
             <div>Position 1 </div>
             <div>Position 2</div>
             <div>Position 4</div>

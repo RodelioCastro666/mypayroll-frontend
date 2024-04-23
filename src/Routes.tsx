@@ -6,14 +6,12 @@ import { Register } from "./pages/Register/Register";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Employees } from "./pages/Employees/Employees";
 import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/Organizations";
-import { Branch } from "./components/Branch";
+
 import { ErrorPage } from "./ErroPage";
-import { AllORg } from "./pages/Organizations/All_Organizations/AllOrg";
-import { SpecificORg } from "./pages/Organizations/All_Organizations/SpecificORg";
-import { Org_Branch } from "./pages/Organizations/Branch/Org_branch";
-import { Branches } from "./pages/Branches/Branches";
-import { Departments } from "./pages/Deparmemts/Departments";
-import { CreateOrganization } from "./pages/Organizations/OrganizationModal/CreateOrganization";
+
+import { Organizations } from "./pages/Organizations/_Organizations/Organizations";
+
+import { BMP } from "./pages/Organizations/Organization(sub)/BMP/BMP";
 
 //This functional component acts as the entry point for
 //configuring the application routes.
@@ -71,29 +69,18 @@ export const Routes = () => {
           children: [
             {
               path: "*",
-              element: <AllORg />,
+              element: <Organizations />,
             },
+
             {
               path: ":id",
-              element: <SpecificORg />,
+              element: <BMP />,
             },
             {
               path: ":id/branch",
-              element: <Org_Branch />,
+              element: <></>,
             },
           ],
-        },
-        {
-          path: "branches",
-          element: <Branches />,
-        },
-        {
-          path: "departments",
-          element: <Departments />,
-        },
-        {
-          path: "createOrg",
-          element: <CreateOrganization />,
         },
       ],
     },

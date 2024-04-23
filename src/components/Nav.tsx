@@ -29,14 +29,10 @@ export const Nav = () => {
           </li>
         </Link>
         <Link to="/branches">
-          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">
-            Branches
-          </li>
+          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Branches</li>
         </Link>
         <Link to="/departments">
-          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">
-            Departmens
-          </li>
+          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Departmens</li>
         </Link>
       </ul>
     </nav>

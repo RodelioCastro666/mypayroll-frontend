@@ -9,6 +9,8 @@ export const SpecificORg = () => {
 
   const [branchHighLight, setBranchHighLight] = useState(true);
   const [memberHighLight, setMembertHighLight] = useState(false);
+  const [pendingHighLight, setPendingHighLight] = useState(false);
+
   const axiosRequest = useAxiosRefreshRequest();
 
   const [members, setMembers] = useState([]);
@@ -19,6 +21,7 @@ export const SpecificORg = () => {
     } else {
       setBranchHighLight((prev) => !prev);
       setMembertHighLight(false);
+      setPendingHighLight(false);
     }
   };
   const memberFlip = () => {
@@ -27,6 +30,18 @@ export const SpecificORg = () => {
     } else {
       setMembertHighLight((prev) => !prev);
       setBranchHighLight(false);
+      ssetPendingHighLight(false);
+    }
+  };
+  const pendingFlip = () => {
+    if (pendingHighLight) {
+      null;
+    } else {
+      setPendingHighLight((prev) => !prev);
+      setBranchHighLight(false);
+      setMembertHighLight(false);
+
+      console.log("JKJKJKJKJ");
     }
   };
 
@@ -81,6 +96,18 @@ export const SpecificORg = () => {
                     Members
                   </button>
                 )}
+                {pendingHighLight ? (
+                  <button
+                    onClick={pendingFlip}
+                    className=" px-8 border-b-4 border-blue-600 rounded-b"
+                  >
+                    Pending
+                  </button>
+                ) : (
+                  <button onClick={pendingFlip} className=" px-8  rounded-b">
+                    Pending
+                  </button>
+                )}
               </div>
               <div className="flex  px-2 py-1 gap-5">
                 <button className=" border-[1px] rounded px-10 py-1 hover:shadow-md">
@@ -93,14 +120,7 @@ export const SpecificORg = () => {
             </div>
           </nav>
 
-          <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-            <div>
-              <Link to={`branch`}>Branch 1111</Link>{" "}
-            </div>
-            <div>BRANCH 2</div>
-            <div>BRANCH 4</div>
-            <div>BRANCH 5</div>
-          </section>
+          <section className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 "></section>
         </div>
       ) : (
         <div>
