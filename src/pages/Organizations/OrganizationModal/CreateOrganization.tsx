@@ -13,28 +13,28 @@ export const CreateOrganization = () => {
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
+    console.log("Clicked");
+
     mutation.mutate({
-      organization: newOrg,
+      name: newOrg,
     });
   };
 
   return (
-    <>
-      <form
-        onSubmit={onHandleSubmit}
-        className=" border-2 shadow-lg  absolute rounded right-[35%] top-[40%]"
-      >
-        <div className=" text-center p-10">
-          <input
-            type="text"
-            className="border px-6 py-2 rounded"
-            onChange={(e) => setNewORg(e.target.value)}
-            required
-          />
-          <h1 className="text-3xl p-5">Enter Organization Name</h1>
-          <button>Submit</button>
-        </div>
-      </form>
-    </>
+    <form
+      className=" border-2 shadow-lg bg-white p-6  absolute rounded top-[37%] right-[35%] "
+      onSubmit={onHandleSubmit}
+    >
+      <div className=" text-center ">
+        <input
+          type="text"
+          className="border px-6 py-2 rounded"
+          onChange={(e) => setNewORg(e.target.value)}
+          required
+        />
+        <h1 className="text-3xl p-5">Enter Organization Name</h1>
+        <button>Submit</button>
+      </div>
+    </form>
   );
 };

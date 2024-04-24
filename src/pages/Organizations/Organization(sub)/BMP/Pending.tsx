@@ -2,9 +2,13 @@ import { Link } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
 export const Pending = ({ id }) => {
   const axiosRequest = useAxiosRefreshRequest();
   const [pending, setPending] = useState([]);
+  const [kebabIsOpen, setKebabIsopen] = useState(false);
 
   console.log(id);
 
@@ -72,24 +76,35 @@ export const Pending = ({ id }) => {
     },
   });
 
-  //for approving pending user
-
   console.log(pending);
 
   return (
-    <div className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-      <h1>Pending</h1>
-
+    <div className="p-4 flex justify-center">
       {pending &&
         pending.map((item) => (
-          <div>
-            <li>{item.name}</li>
-            {/* {console.log("USER EMAIL", item.email)} */}
-            <button onClick={() => approve(item.email)}>Accept</button>
-            <button onClick={() => decline(item.email)}>Decline</button>
+          <div className="w-[50%] flex p-5 justify-between border shadow-md">
+            <div>
+              <p>{item.name}</p>
+            </div>
+
+            <div className="flex  gap-4 ">
+              <button
+                className="border p-2 px-2 rounded shadow-md"
+                onClick={() => approve(item.email)}
+              >
+                {/* <FaCheck /> */}
+                ACCEPT
+              </button>
+              <button
+                className="border p-2 px-2 rounded shadow-md"
+                onClick={() => decline(item.email)}
+              >
+                {/* <ImCross /> */}
+                DECLINE
+              </button>
+            </div>
           </div>
         ))}
-
       {/* {pending && pending.map((pen) => {
             <li></li>
         } )} */}

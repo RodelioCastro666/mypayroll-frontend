@@ -15,22 +15,30 @@ export const Register = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [matchPass, setMatchPass] = useState("");
 
   // crete NewUser
   const mutation = useMutation({
     mutationFn: (userCredentials) => registerUser(userCredentials),
+    onSettled(data) {
+      console.log("refresh", data.headers["refresh-token"]);
+      console.log("accesss", data.headers["access-token"]);
+      navigate("/login");
+    },
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    mutation.mutate({
-      firstName: firstname,
-      lastName: lastname,
-      email: email,
-      password: password,
-    });
+    if (matchPass === password) {
+      mutation.mutate({
+        firstName: firstname,
+        lastName: lastname,
+        email: email,
+        password: password,
+      });
 
-    console.log(firstname, lastname, email, password);
+      console.log(firstname, lastname, email, password);
+    }
   };
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);
 
@@ -119,14 +127,14 @@ export const Register = () => {
               Password Confirmation
             </label>
             <div className="relative">
-              {/* <input
+              <input
                 type={hiddenPassword ? "password" : "text"}
                 name=""
                 id="passwordConfirmation"
                 required
-                // onChange={(e) => setMatchPassword(e.target.value)}
+                onChange={(e) => setMatchPass(e.target.value)}
                 className="w-full rounded border-[1px] border-gray-500 px-4 py-1"
-              /> */}
+              />
               <button
                 className="absolute right-2 top-1/4"
                 onClick={() => setHiddenPassword((prev) => !prev)}
@@ -146,7 +154,10 @@ export const Register = () => {
             </Link>
           </div>
           <div className="col-span-2">
-            <button className="w-full rounded bg-black px-4 py-1.5 text-white">
+            <button
+              type="submit"
+              className="w-full rounded bg-black px-4 py-1.5 text-white"
+            >
               Create Account
             </button>
           </div>

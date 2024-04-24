@@ -23,15 +23,16 @@ export const Routes = () => {
 
   const routesForPublic = [
     {
-      path: "/login",
-      element: <Login />,
-      errorElement: <ErrorPage />,
-    },
-    {
       path: "/register",
       element: <Register />,
       errorElement: <ErrorPage />,
     },
+    {
+      path: "/login",
+      element: <Login />,
+      errorElement: <ErrorPage />,
+    },
+
     {
       path: "*",
       element: <ErrorPage />,
@@ -40,12 +41,12 @@ export const Routes = () => {
 
   const routesForNotAuthenticated = [
     {
-      path: "/login",
-      element: <Login />,
-    },
-    {
       path: "/register",
       element: <Register />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
   ];
 

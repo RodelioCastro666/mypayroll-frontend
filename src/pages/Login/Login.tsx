@@ -29,7 +29,7 @@ export const Login = () => {
     onSuccess: (data) => {
       console.log("refresh", data.headers["refresh-token"]);
       console.log("accesss", data.headers["access-token"]);
-      setAccessToken(data.headers["access-token"]);
+      setAccessToken(data.headers["access-token"]); // change
       setRefreshToken(data.headers["refresh-token"]);
       navigate("/dashboard", { replace: true });
     },

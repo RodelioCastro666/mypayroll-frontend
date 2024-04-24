@@ -40,13 +40,13 @@ export const Dashboard = () => {
   // };
 
   console.log(access_token);
-  //const refresh = useRefreshRequest();
+  const refresh = useRefreshRequest();
   console.log(access_token);
   return (
     <div className="w-full h-full bg-red-100">
-      {/* Dashboard Screenddd
+      Dashboard Screenddd
       <button onClick={() => setAccessToken()}>RESET</button>
-      <button onClick={() => refresh()}>Refresh</button> */}
+      <button onClick={() => refresh()}>Refresh</button>
       ddd
       <button onClick={() => localStorage.removeItem("token")}>LOGOUT</button>
     </div>

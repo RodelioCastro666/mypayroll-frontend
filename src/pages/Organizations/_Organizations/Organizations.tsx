@@ -5,7 +5,11 @@ import { CreateOrganization } from "../OrganizationModal/CreateOrganization";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { JoinModal } from "../OrganizationModal/JoinModal";
-
+import { useAuth } from "../../../auth/AuthProvider";
+import kebabIcon from "../../../Assets/icons8-menu-vertical-64.png";
+import { useRef } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Kebab from "./kebab";
 export const Organizations = () => {
   const [organization, setOrganization] = useState([]);
   const axiosRequest = useAxiosRefreshRequest();
@@ -13,6 +17,8 @@ export const Organizations = () => {
 
   const [createOrgModal, setCreateOrgModal] = useState(false);
   const [joinModal, setJoinModal] = useState(false);
+
+  const { access_token, refresh_token } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
@@ -35,7 +41,7 @@ export const Organizations = () => {
       isMounted = false;
       controller.abort();
     };
-  }, [axiosRequest]);
+  }, []);
 
   // const getOrganizations = async () => {
   //   return await axiosRequest.get("/organizations");
@@ -63,23 +69,11 @@ export const Organizations = () => {
     },
   });
 
-  const onHandleSubmit = (e) => {
-    e.preventDefault();
-    mutation.mutate({
-      organization: newOrg,
-    });
-    console.log();
-
-    setCreateOrgModal(false);
-
-    // return () => {
-    //   isMounted = false;
-    //   controller.abort();
-    // }
-  };
+  console.log(access_token);
+  console.log(refresh_token);
 
   return (
-    <div className="grid grid-rows-[50px_1fr] h-full">
+    <div className="grid grid-rows-[50px_1fr]   ">
       <nav>
         <div className=" px-4 py-1 border-b-[1px] flex justify-end gap-3">
           <button
@@ -96,61 +90,43 @@ export const Organizations = () => {
           </button>
         </div>
       </nav>
-      <section className=" h-full grid grid-cols-4 grid-rows-3 p-10 gap-10 ">
+
+      <section className=" h-full grid grid-cols-4 grid-rows-2 p-10 gap-10   ">
+        {createOrgModal && <CreateOrganization />}
+        {joinModal && <JoinModal />}
+
         {organization
           ? organization.map((org) => (
               <div key={org.id} className="border rounded-md p-4 ">
-                <div className="flex flex-col gap-10 px-4 py-4">
-                  <div className=" h-[70px] text-wrap">
-                    <h1 className="text-xl font-medium ">{org.organization}</h1>
+                <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
+                  <div className="flex justify-between items-center h-[70px]  ">
+                    <h1 className="text-xl font-medium hover:underline">
+                      {org.name}
+                    </h1>
+                    <Kebab />
                   </div>
                   <div className="flex flex-col gap-1 text-sm">
                     <p>
                       Creator: <span>{org.created_by}</span>
                     </p>
+
                     <p>
                       CREATED DATE: <span>{org.modified_at}</span>
                     </p>
                     <p>
-                      Member Count: <span>0</span>
+                      Member Count: <span>{org.membersCount}</span>
                     </p>
                   </div>
-                  <div className="flex justify-end items-center border-t">
-                    <button>
-                      <Link to={`${org.id}`}>VIEW</Link>
+                  <div className="flex justify-end items-center border-t  p-2">
+                    <button className="hover:underline">
+                      <Link to={`${org.organizationUniqueName}`}>View</Link>
                     </button>
                   </div>
                 </div>
               </div>
             ))
           : null}
-
-        {/* // <div key={org.id} className="bg-red-100">
-              //   {console.log(org.id)}
-              //   <Link to={`${org.id}`}>{org.organization}kkkk</Link>
-              // </div> */}
       </section>
-
-      <>
-        {createOrgModal && (
-          <form
-            onSubmit={onHandleSubmit}
-            className=" border-2 shadow-lg  absolute rounded right-[35%] top-[40%]"
-          >
-            <div className=" text-center p-10">
-              <input
-                type="text"
-                className="border px-6 py-2 rounded"
-                onChange={(e) => setNewORg(e.target.value)}
-                required
-              />
-              <h1 className="text-3xl p-5">Enter Organization Name</h1>
-              <button>Submit</button>
-            </div>
-          </form>
-        )}
-        {joinModal && <JoinModal />}
-      </>
     </div>
   );
 };

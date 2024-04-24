@@ -19,9 +19,8 @@ export const AuthProvider = ({ children }) => {
   const [access_token, setAccessToken_] = useState(
     localStorage.getItem("token")
   );
-  const [refresh_token, setRefreshToken_] = useState(
-    localStorage.getItem("token")
-  );
+  const [refresh_token, setRefreshToken_] = useState();
+  // localStorage.getItem("token");
 
   // This function is used to set the new token value.
   // It updates the token state using setToken_() and stores the
@@ -50,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");
     }
-  }, [refresh_token, access_token]);
+  }, [access_token]);
 
   // The context value includes the token and setToken function.
   // The token value is used as a dependency for memoization.

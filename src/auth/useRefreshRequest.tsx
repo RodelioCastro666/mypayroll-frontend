@@ -5,16 +5,20 @@ export const useRefreshRequest = () => {
   const { setAccessToken } = useAuth();
   const { refresh_token } = useAuth();
   const { setRefreshToken } = useAuth();
+  const { access_token } = useAuth();
+
+  console.log("userREFRESH", refresh_token);
 
   const refresh = async () => {
     try {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + refresh_token;
       axios.defaults.withCredentials = true;
-      const response = await axios.post("/auth/refresh", {});
+      const response = await axios.post("/auth/refresh");
 
       setRefreshToken(response.headers["refresh-token"]);
       setAccessToken(response.headers["access-token"]);
+      axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
       return response.headers["access-token"];
     } catch (error) {
       console.log("====================================");
