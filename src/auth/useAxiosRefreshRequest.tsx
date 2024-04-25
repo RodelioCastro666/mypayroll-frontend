@@ -16,9 +16,8 @@ export const useAxiosRefreshRequest = () => {
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
-          prevRequest.axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${newAccessToken}`;
+          console.log(newAccessToken);
+          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosRefreshRequest(prevRequest);
         }
 

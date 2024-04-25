@@ -48,8 +48,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (access_token) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
-      axiosRefreshRequest.defaults.headers.common["Authorization"] =
-        "Bearer " + access_token;
     } else {
       delete axios.defaults.headers.common["Authorization"];
     }
