@@ -17,10 +17,13 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   //token represents the authentication token.
   const [access_token, setAccessToken_] = useState(
-    localStorage.getItem("token")
+    localStorage.getItem("access_token")
   );
-  const [refresh_token, setRefreshToken_] = useState();
-  // localStorage.getItem("token");
+  const [refresh_token, setRefreshToken_] = useState(
+    localStorage.getItem("refresh_token")
+  );
+
+  const [organization, setOrganization_] = useState([]);
 
   // This function is used to set the new token value.
   // It updates the token state using setToken_() and stores the
@@ -33,6 +36,10 @@ export const AuthProvider = ({ children }) => {
     setRefreshToken_(newToken);
   };
 
+  const setOrganization = (org) => {
+    setOrganization_(org);
+  };
+
   //This effect runs whenever the token value changes.
   //If the token exists, it sets the
   //authorization header in axios.
@@ -43,11 +50,8 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
       axiosRefreshRequest.defaults.headers.common["Authorization"] =
         "Bearer " + access_token;
-      // console.log("Bearer " + token);
-      localStorage.setItem("token", access_token);
     } else {
       delete axios.defaults.headers.common["Authorization"];
-      localStorage.removeItem("token");
     }
   }, [access_token]);
 
@@ -59,8 +63,10 @@ export const AuthProvider = ({ children }) => {
       access_token,
       setAccessToken,
       setRefreshToken,
+      setOrganization,
+      organization,
     }),
-    [refresh_token, access_token]
+    [refresh_token, access_token, organization]
   );
 
   return (

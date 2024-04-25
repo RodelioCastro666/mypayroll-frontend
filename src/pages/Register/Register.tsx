@@ -20,15 +20,13 @@ export const Register = () => {
   // crete NewUser
   const mutation = useMutation({
     mutationFn: (userCredentials) => registerUser(userCredentials),
-    onSettled(data) {
+    onSuccesss(data) {
       console.log("refresh", data.headers["refresh-token"]);
       console.log("accesss", data.headers["access-token"]);
       navigate("/login");
     },
   });
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     if (matchPass === password) {
       mutation.mutate({
         firstName: firstname,
@@ -38,6 +36,7 @@ export const Register = () => {
       });
 
       console.log(firstname, lastname, email, password);
+      navigate("/login");
     }
   };
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);

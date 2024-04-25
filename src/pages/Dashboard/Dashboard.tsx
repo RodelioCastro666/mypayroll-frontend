@@ -48,7 +48,15 @@ export const Dashboard = () => {
       <button onClick={() => setAccessToken()}>RESET</button>
       <button onClick={() => refresh()}>Refresh</button>
       ddd
-      <button onClick={() => localStorage.removeItem("token")}>LOGOUT</button>
+      <button
+        onClick={() => {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          setAccessToken();
+        }}
+      >
+        LOGOUT
+      </button>
     </div>
   );
 };

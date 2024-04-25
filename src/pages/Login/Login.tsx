@@ -29,9 +29,11 @@ export const Login = () => {
     onSuccess: (data) => {
       console.log("refresh", data.headers["refresh-token"]);
       console.log("accesss", data.headers["access-token"]);
-      setAccessToken(data.headers["access-token"]); // change
+      setAccessToken(data.headers["access-token"]);
       setRefreshToken(data.headers["refresh-token"]);
       navigate("/dashboard", { replace: true });
+      localStorage.setItem("access_token", data.headers["access-token"]);
+      localStorage.setItem("refresh_token", data.headers["refresh-token"]);
     },
     onError: (error) => {
       console.log(error);

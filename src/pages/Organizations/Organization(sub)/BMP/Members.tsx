@@ -59,31 +59,36 @@ export const Members = ({ id }) => {
         <div className="w-[50%] flex flex-col justify-start gap-2 p-2">
           <h1 className="p-2 text-2xl font-semibold ">CREATOR</h1>
           <div className="border-y-[1px] border-blue-400 "></div>
-
-          <div className=" p-2  flex items-center gap-5 ">
-            <CgProfile className="w-[30px] h-[30px]" />
-            <p>BASTA AKo</p>
-          </div>
+          {members &&
+            members.map((member) =>
+              member.role === "owner" ? (
+                <div className=" p-2  flex items-center gap-5 ">
+                  <CgProfile className="w-[30px] h-[30px]" />
+                  <p>{member.name}</p>
+                </div>
+              ) : null
+            )}
         </div>
-
         <div className="w-[50%] flex flex-col  items-start border-b">
           <h1 className="p-2 text-lg">MEMBERS:</h1>
           <div className="border-y-[1px] border-blue-400 w-full"></div>
           {members &&
-            members.map((member) => (
-              <div
-                key={member.id}
-                className="w-full p-5 border-b flex  justify-between  gap-5 "
-              >
-                <div className="flex items-center gap-3">
-                  <CgProfile className="w-[30px] h-[30px]" />
-                  <span>{member.name}</span>
+            members.map((member) =>
+              member.role === "member" ? (
+                <div
+                  key={member.id}
+                  className="w-full p-5 border-b flex  justify-between  gap-5 "
+                >
+                  <div className="flex items-center gap-3">
+                    <CgProfile className="w-[30px] h-[30px]" />
+                    <span>{member.name}</span>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <img className="w-[20px] h-[20px]" src={kebab} alt="" />
+                  </div>
                 </div>
-                <div className="flex justify-center items-center">
-                  <img className="w-[20px] h-[20px]" src={kebab} alt="" />
-                </div>
-              </div>
-            ))}
+              ) : null
+            )}
         </div>
       </div>
     </>
