@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
 
-export const Members = ({ id }) => {
+export const Members = (props: string) => {
   const axiosRequest = useAxiosRefreshRequest();
   const [members, setMembers] = useState([]);
 
@@ -16,7 +16,7 @@ export const Members = ({ id }) => {
     const getMembers = async () => {
       try {
         const response = await axiosRequest.get(
-          `/organizations/${id}/members/`,
+          `/organizations/${props.uniqueName}/members/`,
           {
             signal: controller.signal,
           }
@@ -35,7 +35,7 @@ export const Members = ({ id }) => {
       isMounted = false;
       controller.abort();
     };
-  }, [axiosRequest, id]);
+  }, []);
 
   return (
     <>
@@ -62,7 +62,7 @@ export const Members = ({ id }) => {
           {members &&
             members.map((member) =>
               member.role === "owner" ? (
-                <div className=" p-2  flex items-center gap-5 ">
+                <div key={member.id} className=" p-2  flex items-center gap-5 ">
                   <CgProfile className="w-[30px] h-[30px]" />
                   <p>{member.name}</p>
                 </div>

@@ -5,13 +5,14 @@ import { Login } from "./pages/Login/Login";
 import { Register } from "./pages/Register/Register";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Employees } from "./pages/Employees/Employees";
-import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/Organizations";
-
+import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/OrganizationsLayout";
+import { Departments } from "./pages/Organizations/_Organization(branch)/_Organization/Departments";
 import { ErrorPage } from "./ErroPage";
 
 import { Organizations } from "./pages/Organizations/_Organizations/Organizations";
 
 import { BMP } from "./pages/Organizations/Organization(sub)/BMP/BMP";
+import { DMP } from "./pages/Organizations/_Organization(branch)/_Organization/DMP";
 
 //This functional component acts as the entry point for
 //configuring the application routes.
@@ -74,12 +75,12 @@ export const Routes = () => {
             },
 
             {
-              path: ":id",
+              path: ":orgAlias",
               element: <BMP />,
             },
             {
-              path: ":id/branch",
-              element: <></>,
+              path: ":orgAlias/branches/:branchAlias/departments/",
+              element: <DMP />,
             },
           ],
         },

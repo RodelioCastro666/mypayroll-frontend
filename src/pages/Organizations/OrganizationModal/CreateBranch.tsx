@@ -1,66 +1,41 @@
-// import { useMutation } from "@tanstack/react-query";
-// import { useState } from "react";
-// import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
-
-// export const JoinModal = () => {
-//   const [join, setJoin] = useState("");
-//   const axiosRequest = useAxiosRefreshRequest();
-
-//   const mutation = useMutation({
-//     mutationFn: async (credential) =>
-//       await axiosRequest.post("/organizations/join", credential),
-//   });
-
-//   const onHandleSubmit = (e) => {
-//     e.preventDefault();
-//     mutation.mutate({
-//       invitationCode: join,
-//     });
-//   };
-
-//   return (
-//     <form onSubmit={onHandleSubmit}>
-//       <div className=" text-center ">
-//         <input
-//           type="text"
-//           className="border px-6 py-2 rounded"
-//           onChange={(e) => setJoin(e.target.value)}
-//           required
-//         />
-//         <h1 className="text-3xl p-5">Join</h1>
-//         <button>Join</button>
-//       </div>
-//     </form>
-//   );
-// };
-
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
+import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "../../../auth/AuthProvider";
 import { toast } from "sonner";
 
-interface ICreateOrgModalProps {
-  isOpen: boolean;
-  closeModal(): void;
-}
-
-export const JoinOrganization = (props: ICreateOrgModalProps) => {
-  const [join, setJoin] = useState("");
+export default function CreateBranch(props) {
+  const [newBranch, setNewBranch] = useState("");
   const axiosRequest = useAxiosRefreshRequest();
 
+  const { setBranch } = useAuth();
+
   const mutation = useMutation({
-    mutationFn: async (credential) =>
-      await axiosRequest.post("/organizations/join", credential),
+    mutationFn: async (credential): Promise<IOrg> => {
+      const response = await axiosRequest.post(
+        `organizations/${props.uniqueName}/branches`,
+        credential
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setBranch((prev) => [...prev, data]);
+      toast.success("The branch has been successfully set up.");
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        toast.error("The branch has already been created.");
+      }
+    },
   });
 
   const onHandleSubmit = () => {
     mutation.mutate({
-      invitationCode: join,
+      name: newBranch,
     });
     props.closeModal();
-    toast.success("The organization has been successfully joined.");
   };
   return (
     <>
@@ -94,14 +69,14 @@ export const JoinOrganization = (props: ICreateOrgModalProps) => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Join Organization
+                    Create Branch
                   </Dialog.Title>
-                  <div className="mt-2">
+                  <div className="mt-2  ">
                     <input
                       className="px-4 py-2 w-full border rounded"
                       type="text"
-                      placeholder="Enter invitation code"
-                      onChange={(e) => setJoin(e.target.value)}
+                      placeholder="Enter Organization Name"
+                      onChange={(e) => setNewBranch(e.target.value)}
                     />
                   </div>
 
@@ -118,7 +93,7 @@ export const JoinOrganization = (props: ICreateOrgModalProps) => {
                       className="inline-flex  rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={onHandleSubmit}
                     >
-                      Join
+                      Create
                     </button>
                   </div>
                 </Dialog.Panel>
@@ -129,4 +104,4 @@ export const JoinOrganization = (props: ICreateOrgModalProps) => {
       </Transition>
     </>
   );
-};
+}

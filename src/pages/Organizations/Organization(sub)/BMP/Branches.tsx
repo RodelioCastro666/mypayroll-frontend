@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../../../auth/AuthProvider";
+interface Branches {
+  uniqueName: string;
+}
 
-export const Branches = ({ id }) => {
+export const Branches = (props: Branches) => {
   const axiosRequest = useAxiosRefreshRequest();
-  const [branches, setBranches] = useState([]);
 
-  console.log(id);
+  const { branches, setBranch } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
@@ -15,19 +18,23 @@ export const Branches = ({ id }) => {
     const getBranches = async () => {
       try {
         const response = await axiosRequest.get(
-          `/organizations/${id}/branches`,
+          `/organizations/${props.uniqueName}/branches`,
           {
             signal: controller.signal,
           }
         );
+        console.log(response.data);
 
-        isMounted && setBranches(response);
+        isMounted && setBranch(response.data);
       } catch (error) {
         console.log(error);
       }
     };
+
     getBranches();
+    console.log("====================================");
     console.log(branches);
+    console.log("====================================");
     return () => {
       isMounted = false;
       controller.abort();
@@ -35,14 +42,30 @@ export const Branches = ({ id }) => {
   }, []);
 
   return (
-    <div className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 ">
-      {/* {branches
-        ? branches.map((branch) => {
-            <div >
-              <Link to={`branch`}>Branch 1111</Link>
-            </div>;
-          })
-        : null} */}
-    </div>
+    <>
+      <div className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 relative">
+        {branches
+          ? branches.map((branch) => (
+              <div key={branch.alias} className="border rounded-md p-4 ">
+                <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
+                  <div className="flex justify-between items-center h-[70px]  ">
+                    <h1 className="text-xl font-medium hover:underline">
+                      {branch.name}
+                    </h1>
+                  </div>
+
+                  <div className="flex justify-end items-center border-t  p-2">
+                    <button className="hover:underline">
+                      <Link to={`branches/${branch.alias}/departments/`}>
+                        View
+                      </Link>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
+    </>
   );
 };

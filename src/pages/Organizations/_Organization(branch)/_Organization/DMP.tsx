@@ -1,32 +1,28 @@
 import { useState } from "react";
+import { Departments } from "./Departments";
 import { useParams } from "react-router-dom";
-
-import { Branches } from "./Branches";
-import { Members } from "./Members";
-import { Pending } from "./Pending";
-
-import { CreateMember } from "../../OrganizationModal/CreateMember";
-import CreateBranch from "../../OrganizationModal/CreateBranch";
-
-export const BMP = () => {
-  const { orgAlias } = useParams();
-
-  const [branchHighLight, setBranchHighLight] = useState(true);
+import CreateDepartment from "../../OrganizationModal/CreateDepartment";
+export const DMP = () => {
+  const [departmentHighLight, setDepartmentHighLight] = useState(true);
   const [memberHighLight, setMembertHighLight] = useState(false);
   const [pendingHighLight, setPendingHighLight] = useState(false);
 
-  const [createMemberModal, setCreateMemberModal] = useState(false);
-  const [isOpenCreateBranchModal, setIsOpenCreateMOdal] = useState(false);
+  const { orgAlias } = useParams();
+  const { branchAlias } = useParams();
 
-  const creaBranchModalClose = () => {
-    setIsOpenCreateMOdal(false);
+  //   const [createMemberModal, setCreateMemberModal] = useState(false);
+  const [isOpenCreateDeparmentModal, setIsOpenCreateDepartmentMOdal] =
+    useState(false);
+
+  const creaDepartmentModalClose = () => {
+    setIsOpenCreateDepartmentMOdal(false);
   };
 
   const branchFlip = () => {
-    if (branchHighLight) {
+    if (departmentHighLight) {
       null;
     } else {
-      setBranchHighLight((prev) => !prev);
+      setDepartmentHighLight((prev) => !prev);
       setMembertHighLight(false);
       setPendingHighLight(false);
     }
@@ -36,7 +32,7 @@ export const BMP = () => {
       null;
     } else {
       setMembertHighLight((prev) => !prev);
-      setBranchHighLight(false);
+      setDepartmentHighLight(false);
       setPendingHighLight(false);
     }
   };
@@ -45,7 +41,7 @@ export const BMP = () => {
       null;
     } else {
       setPendingHighLight((prev) => !prev);
-      setBranchHighLight(false);
+      setDepartmentHighLight(false);
       setMembertHighLight(false);
     }
   };
@@ -54,16 +50,16 @@ export const BMP = () => {
       <nav>
         <div className=" px-4  border-b-[1px] flex justify-between gap-3">
           <div className="flex  gap-5 relative">
-            {branchHighLight ? (
+            {departmentHighLight ? (
               <button
                 onClick={branchFlip}
                 className=" px-8 border-b-4 border-blue-600 rounded-b"
               >
-                Branch
+                Deparment
               </button>
             ) : (
               <button onClick={branchFlip} className=" px-8 rounded-b">
-                Branch
+                Deparment
               </button>
             )}
 
@@ -84,27 +80,27 @@ export const BMP = () => {
                 onClick={pendingFlip}
                 className=" px-8 border-b-4 border-blue-600 rounded-b"
               >
-                Pending
+                Positions
               </button>
             ) : (
               <button onClick={pendingFlip} className=" px-8  rounded-b">
-                Pending
+                Positions
               </button>
             )}
           </div>
           <div className="flex  px-2 py-1 gap-5">
-            {memberHighLight && (
+            {/* {memberHighLight && (
               <button
                 onClick={() => setCreateMemberModal((prev) => !prev)}
                 className=" border rounded px-10 py-1 hover:shadow-md "
               >
                 Create
               </button>
-            )}
+            )} */}
 
-            {branchHighLight && (
+            {departmentHighLight && (
               <button
-                onClick={() => setIsOpenCreateMOdal(true)}
+                onClick={() => setIsOpenCreateDepartmentMOdal(true)}
                 className=" border rounded px-10 py-1 hover:shadow-md "
               >
                 Create
@@ -119,17 +115,20 @@ export const BMP = () => {
       </nav>
       <section>
         {
-          <CreateBranch
-            isOpen={isOpenCreateBranchModal}
-            closeModal={creaBranchModalClose}
-            uniqueName={orgAlias}
+          <CreateDepartment
+            isOpen={isOpenCreateDeparmentModal}
+            closeModal={creaDepartmentModalClose}
+            orgAlias={orgAlias}
+            branchAlias={branchAlias}
           />
         }
-        {branchHighLight && <Branches uniqueName={orgAlias} />}
-        {memberHighLight && <Members uniqueName={orgAlias} />}
-        {pendingHighLight && <Pending uniqueName={orgAlias} />}
+        {departmentHighLight && (
+          <Departments orgAlias={orgAlias} branchAlias={branchAlias} />
+        )}
+        {/* {memberHighLight && <Members uniqueName={uniqueName} />}
+        {pendingHighLight && <Pending uniqueName={uniqueName} />} */}
       </section>
-      {createMemberModal && <CreateMember uniqueName={orgAlias} />}
+      {/* {createMemberModal && <CreateMember uniqueName={uniqueName} />} */}
     </div>
   );
 };

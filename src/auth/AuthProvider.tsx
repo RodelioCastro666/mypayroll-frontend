@@ -1,6 +1,6 @@
 import axios from "../api/axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { axiosRefreshRequest } from "../api/axios";
+
 //createContext() creates an empty context object that will be used to
 //share the authentication state and functions between components.
 const AuthContext = createContext();
@@ -25,19 +25,30 @@ export const AuthProvider = ({ children }) => {
 
   const [organization, setOrganization_] = useState([]);
 
+  const [branches, setBranch_] = useState([]);
+  const [departments, setDepartment_] = useState([]);
+
   // This function is used to set the new token value.
   // It updates the token state using setToken_() and stores the
   // token value in the local storage using localStorage.setItem().
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setAccessToken = (newToken) => {
     setAccessToken_(newToken);
+    localStorage.setItem("access_token", newToken);
   };
   const setRefreshToken = (newToken) => {
     setRefreshToken_(newToken);
+    localStorage.setItem("refresh_token", newToken);
   };
 
   const setOrganization = (org) => {
     setOrganization_(org);
+  };
+  const setBranch = (branch) => {
+    setBranch_(branch);
+  };
+  const setDepartment = (depart) => {
+    setDepartment_(depart);
   };
 
   //This effect runs whenever the token value changes.
@@ -63,8 +74,12 @@ export const AuthProvider = ({ children }) => {
       setRefreshToken,
       setOrganization,
       organization,
+      branches,
+      setBranch,
+      setDepartment,
+      departments,
     }),
-    [refresh_token, access_token, organization]
+    [refresh_token, access_token, organization, branches, departments]
   );
 
   return (

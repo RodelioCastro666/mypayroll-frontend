@@ -5,17 +5,15 @@ import { useMutation } from "@tanstack/react-query";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
-export const Pending = ({ id }) => {
+export const Pending = ({ uniqueName }) => {
   const axiosRequest = useAxiosRefreshRequest();
   const [pending, setPending] = useState([]);
   const [kebabIsOpen, setKebabIsopen] = useState(false);
 
-  console.log(id);
-
   const getPending = async () => {
     try {
       const response = await axiosRequest.get(
-        `/organizations/${id}/members/pending`
+        `/organizations/${uniqueName}/members/pending`
         //   {
         //     signal: controller.signal,
         //   }

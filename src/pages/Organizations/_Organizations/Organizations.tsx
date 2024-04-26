@@ -2,20 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import CreateOrganization from "../OrganizationModal/CreateOrganization";
-import { useQuery } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
 import { JoinOrganization } from "../OrganizationModal/JoinOrganization";
 import { useAuth } from "../../../auth/AuthProvider";
-import kebabIcon from "../../../Assets/icons8-menu-vertical-64.png";
 
 import Kebab from "./kebab";
 export const Organizations = () => {
-  // const [organization, setOrganization] = useState([]);
   const axiosRequest = useAxiosRefreshRequest();
 
   const { organization, setOrganization } = useAuth();
-
-  const { access_token, refresh_token } = useAuth();
 
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const [isOpenJoinModal, setIsOpenJoinModal] = useState(false);
@@ -46,10 +40,6 @@ export const Organizations = () => {
   const createModalClose = () => {
     setIsOpenCreateModal(false);
   };
-
-  console.log(access_token);
-  console.log(refresh_token);
-  console.log(organization);
 
   return (
     <div className="grid grid-rows-[50px_1fr]   ">
@@ -97,7 +87,7 @@ export const Organizations = () => {
                     </p>
 
                     <p>
-                      CREATED DATE: <span>{org.modified_at}</span>
+                      CREATED DATE: <span>{org.created_at}</span>
                     </p>
                     <p>
                       Member Count: <span>{org.membersCount}</span>
@@ -105,7 +95,7 @@ export const Organizations = () => {
                   </div>
                   <div className="flex justify-end items-center border-t  p-2">
                     <button className="hover:underline">
-                      <Link to={`${org.organizationUniqueName}`}>View</Link>
+                      <Link to={`${org.alias}`}>View</Link>
                     </button>
                   </div>
                 </div>

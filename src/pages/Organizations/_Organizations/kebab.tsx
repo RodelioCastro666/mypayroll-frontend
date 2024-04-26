@@ -4,8 +4,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Kebab = ({ invitationCode }) => {
   const [kebabIsOpen, setKebabIsopen] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
-  const [invCode] = useState(invitationCode);
+  const [setIsCopied] = useState(false);
 
   const onCopyText = () => {
     setIsCopied(true);

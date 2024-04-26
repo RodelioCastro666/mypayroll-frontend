@@ -9,7 +9,7 @@ export const AuthenticatedRoutes = () => {
   if (!access_token) {
     return <Navigate to="/login" />;
   }
-  console.log(access_token);
+
   return (
     <div className="grid grid-rows-[60px_1fr] h-screen">
       <Header />

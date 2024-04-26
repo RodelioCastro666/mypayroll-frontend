@@ -45,6 +45,7 @@ import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../../auth/AuthProvider";
+import { toast } from "sonner";
 
 interface ICreateOrgModalProps {
   isOpen: boolean;
@@ -75,11 +76,16 @@ export default function CreateOrganization(props: ICreateOrgModalProps) {
     },
     onSuccess: (data) => {
       setOrganization((prev) => [...prev, data]);
+      toast.success("Organization has been created");
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        toast.error("The Organization has already been created.");
+      }
     },
   });
 
   const onHandleSubmit = () => {
-    console.log("Clicked");
     mutation.mutate({
       name: newOrg,
     });
