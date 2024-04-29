@@ -55,7 +55,7 @@ export const Pending = ({ uniqueName }) => {
   const declinemutation = useMutation({
     mutationFn: async (credential) =>
       await axiosRequest.post(
-        `/organizations/${id}/members/decline`,
+        `/organizations/${uniqueName}/members/decline`,
         credential
       ),
     onSuccess: (data) => {
@@ -66,7 +66,7 @@ export const Pending = ({ uniqueName }) => {
   const mutation = useMutation({
     mutationFn: async (credential) =>
       await axiosRequest.post(
-        `/organizations/${id}/members/approval`,
+        `/organizations/${uniqueName}/members/approval`,
         credential
       ),
     onSuccess: (data) => {

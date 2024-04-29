@@ -1,42 +1,71 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useState } from "react";
-import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useAuth } from "../../../auth/AuthProvider";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../../../auth/AuthProvider";
+import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 
-export default function CreateBranch(props) {
-  const [newBranch, setNewBranch] = useState("");
+interface IUpdateOrgModalProps {
+  isOpen: boolean;
+  closeModal(): void;
+  orgAlias: string;
+}
+
+interface IOrg {
+  id: string;
+  name: string;
+  alias: string;
+  invitation: string;
+  created: string;
+  modified: string;
+  created_at: string;
+  modified_at: string;
+  created_by: string;
+}
+
+export const UpdateOrganization = (props: IUpdateOrgModalProps) => {
+  const queryClient = useQueryClient();
+  const [updateOrg, setUpdateOrg] = useState("");
   const axiosRequest = useAxiosRefreshRequest();
-
-  const { setBranch } = useAuth();
+  const { organization, setOrganization } = useAuth();
 
   const mutation = useMutation({
     mutationFn: async (credential): Promise<IOrg> => {
-      const response = await axiosRequest.post(
-        `organizations/${props.orgAlias}/branches`,
+      const response = await axiosRequest.patch(
+        `/organizations/${props.orgAlias}`,
         credential
       );
       return response.data;
     },
     onSuccess: (data) => {
-      setBranch((prev) => [...prev, data]);
-      toast.success("The branch has been successfully set up.");
+      queryClient.setQueryData(["org", { name: props.orgAlias }], data);
+      console.log("OnSuccess");
+
+      const updateData = organization.map((org) => {
+        if (org.alias === props.orgAlias) {
+          return { ...org, name: updateOrg };
+        }
+        return org;
+      });
+      setOrganization([...updateData]);
+      toast.success("Organization has been updated");
     },
     onError: (error) => {
-      if (error.response.status === 409) {
-        toast.error("The branch has already been created.");
-      }
+      console.log(error);
     },
   });
 
   const onHandleSubmit = () => {
     mutation.mutate({
-      name: newBranch,
+      name: updateOrg,
     });
+    console.log("HandleSubmit");
     props.closeModal();
   };
+
   return (
     <>
       <Transition appear show={props.isOpen} as={Fragment}>
@@ -69,14 +98,14 @@ export default function CreateBranch(props) {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Create Branch
+                    Update Organization
                   </Dialog.Title>
                   <div className="mt-2  ">
                     <input
                       className="px-4 py-2 w-full border rounded"
                       type="text"
-                      placeholder="Enter Organization Name"
-                      onChange={(e) => setNewBranch(e.target.value)}
+                      placeholder="Enter New Organization Name"
+                      onChange={(e) => setUpdateOrg(e.target.value)}
                     />
                   </div>
 
@@ -104,4 +133,4 @@ export default function CreateBranch(props) {
       </Transition>
     </>
   );
-}
+};

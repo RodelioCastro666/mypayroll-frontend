@@ -1,32 +1,37 @@
-import { useEffect, useRef, useState } from "react";
-import axios from "../../api/axios";
+import { useState } from "react";
+import { useAuth } from "../../auth/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../../requestCalls/requestUser";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // const USER_VALIDATION = /^[A-z][A-z0-9-_]{3,23}$/;
 // const PASSWORD_VALIDATION = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 export const Register = () => {
+  const { setAccessToken } = useAuth();
+  const { setRefreshToken } = useAuth();
   // User Credentials
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [matchPass, setMatchPass] = useState("");
+  const navigate = useNavigate();
 
   // crete NewUser
   const mutation = useMutation({
     mutationFn: (userCredentials) => registerUser(userCredentials),
-    onSuccesss(data) {
-      console.log("refresh", data.headers["refresh-token"]);
-      console.log("accesss", data.headers["access-token"]);
-      navigate("/login");
+    onSuccesss: (data) => {},
+    onError: (error) => {
+      console.log(error);
     },
   });
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (matchPass === password) {
       mutation.mutate({
         firstName: firstname,
@@ -35,10 +40,24 @@ export const Register = () => {
         password: password,
       });
 
-      console.log(firstname, lastname, email, password);
-      navigate("/login");
+      if (mutation.isSuccess) {
+        console.log("refresh", mutation.data.headers["refresh-token"]);
+        console.log("accesss", mutation.data.headers["access-token"]);
+        setAccessToken(mutation.data.headers["access-token"]);
+        setRefreshToken(mutation.data.headers["refresh-token"]);
+        navigate("/dashboard", { replace: true });
+        localStorage.setItem(
+          "access_token",
+          mutation.data.headers["access-token"]
+        );
+        localStorage.setItem(
+          "refresh_token",
+          mutation.data.headers["refresh-token"]
+        );
+      }
     }
   };
+
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);
 
   return (
@@ -123,7 +142,7 @@ export const Register = () => {
               htmlFor="passwordConfirmation"
               className="mb-1 text-gray-500"
             >
-              Password Confirmation
+              Password Confirmationsss
             </label>
             <div className="relative">
               <input
@@ -153,10 +172,7 @@ export const Register = () => {
             </Link>
           </div>
           <div className="col-span-2">
-            <button
-              type="submit"
-              className="w-full rounded bg-black px-4 py-1.5 text-white"
-            >
+            <button className="w-full rounded bg-black px-4 py-1.5 text-white">
               Create Account
             </button>
           </div>

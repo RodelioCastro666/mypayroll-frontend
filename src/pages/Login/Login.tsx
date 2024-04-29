@@ -115,7 +115,7 @@ export const Login = () => {
           </button>
           <div className="flex flex-row items-center justify-center gap-1 text-sm text-gray-500">
             <span>No account?</span>
-            <Link to="/registration" className="text-blue-500">
+            <Link to="/register" className="text-blue-500">
               Create One
             </Link>
           </div>

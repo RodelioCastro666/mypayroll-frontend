@@ -2,8 +2,9 @@ import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest"
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../../auth/AuthProvider";
+import { Kebab } from "./BranchKebab";
 interface Branches {
-  uniqueName: string;
+  orgAlias: string;
 }
 
 export const Branches = (props: Branches) => {
@@ -18,7 +19,7 @@ export const Branches = (props: Branches) => {
     const getBranches = async () => {
       try {
         const response = await axiosRequest.get(
-          `/organizations/${props.uniqueName}/branches`,
+          `/organizations/${props.orgAlias}/branches`,
           {
             signal: controller.signal,
           }
@@ -32,9 +33,7 @@ export const Branches = (props: Branches) => {
     };
 
     getBranches();
-    console.log("====================================");
-    console.log(branches);
-    console.log("====================================");
+
     return () => {
       isMounted = false;
       controller.abort();
@@ -52,6 +51,7 @@ export const Branches = (props: Branches) => {
                     <h1 className="text-xl font-medium hover:underline">
                       {branch.name}
                     </h1>
+                    <Kebab />
                   </div>
 
                   <div className="flex justify-end items-center border-t  p-2">

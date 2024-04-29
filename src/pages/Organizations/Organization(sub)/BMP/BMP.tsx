@@ -122,14 +122,14 @@ export const BMP = () => {
           <CreateBranch
             isOpen={isOpenCreateBranchModal}
             closeModal={creaBranchModalClose}
-            uniqueName={orgAlias}
+            orgAlias={orgAlias}
           />
         }
-        {branchHighLight && <Branches uniqueName={orgAlias} />}
-        {memberHighLight && <Members uniqueName={orgAlias} />}
-        {pendingHighLight && <Pending uniqueName={orgAlias} />}
+        {branchHighLight && <Branches orgAlias={orgAlias} />}
+        {memberHighLight && <Members orgAlias={orgAlias} />}
+        {pendingHighLight && <Pending orgAlias={orgAlias} />}
       </section>
-      {createMemberModal && <CreateMember uniqueName={orgAlias} />}
+      {createMemberModal && <CreateMember orgAlias={orgAlias} />}
     </div>
   );
 };
