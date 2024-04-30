@@ -54,19 +54,6 @@ export const BMP = () => {
       <nav>
         <div className=" px-4  border-b-[1px] flex justify-between gap-3">
           <div className="flex  gap-5 relative">
-            {branchHighLight ? (
-              <button
-                onClick={branchFlip}
-                className=" px-8 border-b-4 border-blue-600 rounded-b"
-              >
-                Branch
-              </button>
-            ) : (
-              <button onClick={branchFlip} className=" px-8 rounded-b">
-                Branch
-              </button>
-            )}
-
             {memberHighLight ? (
               <button
                 onClick={memberFlip}
@@ -79,6 +66,31 @@ export const BMP = () => {
                 Members
               </button>
             )}
+            {branchHighLight ? (
+              <button
+                onClick={branchFlip}
+                className=" px-8 border-b-4 border-blue-600 rounded-b"
+              >
+                Branch
+              </button>
+            ) : (
+              <button onClick={branchFlip} className=" px-8 rounded-b">
+                Branch
+              </button>
+            )}
+            {pendingHighLight ? (
+              <button
+                onClick={pendingFlip}
+                className=" px-8 border-b-4 border-blue-600 rounded-b"
+              >
+                Department
+              </button>
+            ) : (
+              <button onClick={pendingFlip} className=" px-8  rounded-b">
+                Department
+              </button>
+            )}
+
             {pendingHighLight ? (
               <button
                 onClick={pendingFlip}

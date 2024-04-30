@@ -45,6 +45,37 @@ export const Members = (props: IMemberProps) => {
 
   return (
     <>
+      {/* <table className="w-full  h-full table-auto text-center  bg-red-100">
+      <tr className=" ">
+        <th className="">MEMBER</th>
+        <th className="">MEMBERSHIP</th>
+        <th className="">STATUS</th>
+        <th className="">ROLE</th>
+        <th className="">JOIN DATE</th>
+        <th className=" ">ACTIONS</th>
+      </tr>
+
+      <tbody className="p-10">
+        <tr className="p-10">
+          <td>Rodelio</td>
+          <td>Accepted</td>
+          <td>Status</td>
+          <td>Creator</td>
+          <td>April 30, 2024 at 9:36 AM GMT+8</td>
+          <td>:</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <td>Rodelio</td>
+          <td>Accepted</td>
+          <td>Status</td>
+          <td>Creator</td>
+          <td>April 30, 2024 at 9:36 AM GMT+8</td>
+          <td>:</td>
+        </tr>
+      </tbody>
+    </table> */}
       <div className=" flex flex-col   items-center p-10 gap-5 ">
         <div className="w-[50%] flex flex-col justify-start gap-2 p-2">
           <h1 className="p-2 text-2xl font-semibold ">CREATOR</h1>
@@ -59,7 +90,7 @@ export const Members = (props: IMemberProps) => {
               ) : null
             )}
         </div>
-        <div className="w-[50%] flex flex-col  items-start border-b">
+        <div className="w-[50%] flex flex-col  items-start border-b ">
           <h1 className="p-2 text-lg">MEMBERS:</h1>
           <div className="border-y-[1px] border-blue-400 w-full"></div>
           {members &&
@@ -67,13 +98,13 @@ export const Members = (props: IMemberProps) => {
               member.role === "member" ? (
                 <div
                   key={member.id}
-                  className="w-full p-5 border-b flex  justify-between  gap-5 relative"
+                  className="w-full p-5 border-b flex  justify-between   gap-5 relative"
                 >
                   <div className="flex items-center gap-3">
                     <CgProfile className="w-[30px] h-[30px]" />
                     <span>{member.name}</span>
                   </div>
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-center items-center ">
                     <MemberKebab
                       userEmail={member.email}
                       orgAlias={props.orgAlias}

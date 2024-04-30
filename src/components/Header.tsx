@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useAxiosRefreshRequest } from "../auth/useAxiosRefreshRequest";
 
 export const Header = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [name, setName] = useState({});
   const axiosRequest = useAxiosRefreshRequest();
 

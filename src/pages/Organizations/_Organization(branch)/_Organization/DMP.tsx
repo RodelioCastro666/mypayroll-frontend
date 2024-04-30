@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Departments } from "./Departments";
+import { Departments } from "../../Organization(sub)/BMP/Departments";
 import { useParams } from "react-router-dom";
 import CreateDepartment from "../../OrganizationModal/CreateDepartment";
 export const DMP = () => {
