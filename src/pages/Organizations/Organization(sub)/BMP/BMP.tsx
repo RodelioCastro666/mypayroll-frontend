@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Branches } from "./Branches";
 import { Members } from "./Members";
 import { Pending } from "./Pending";
-
+import { Departments } from "./Departments";
 import { CreateMember } from "../../OrganizationModal/CreateMember";
 import CreateBranch from "../../OrganizationModal/CreateBranch";
 
@@ -14,6 +14,7 @@ export const BMP = () => {
   const [branchHighLight, setBranchHighLight] = useState(true);
   const [memberHighLight, setMembertHighLight] = useState(false);
   const [pendingHighLight, setPendingHighLight] = useState(false);
+  const [departmentHighLight, setDepartmentHighLight] = useState(false);
 
   const [createMemberModal, setCreateMemberModal] = useState(false);
   const [isOpenCreateBranchModal, setIsOpenCreateMOdal] = useState(false);
@@ -29,6 +30,7 @@ export const BMP = () => {
       setBranchHighLight((prev) => !prev);
       setMembertHighLight(false);
       setPendingHighLight(false);
+      setDepartmentHighLight(false);
     }
   };
   const memberFlip = () => {
@@ -38,6 +40,7 @@ export const BMP = () => {
       setMembertHighLight((prev) => !prev);
       setBranchHighLight(false);
       setPendingHighLight(false);
+      setDepartmentHighLight(false);
     }
   };
   const pendingFlip = () => {
@@ -45,6 +48,17 @@ export const BMP = () => {
       null;
     } else {
       setPendingHighLight((prev) => !prev);
+      setBranchHighLight(false);
+      setMembertHighLight(false);
+      setDepartmentHighLight(false);
+    }
+  };
+  const departmentFlip = () => {
+    if (departmentHighLight) {
+      null;
+    } else {
+      setDepartmentHighLight((prev) => !prev);
+      setPendingHighLight(false);
       setBranchHighLight(false);
       setMembertHighLight(false);
     }
@@ -78,15 +92,15 @@ export const BMP = () => {
                 Branch
               </button>
             )}
-            {pendingHighLight ? (
+            {departmentHighLight ? (
               <button
-                onClick={pendingFlip}
+                onClick={departmentFlip}
                 className=" px-8 border-b-4 border-blue-600 rounded-b"
               >
                 Department
               </button>
             ) : (
-              <button onClick={pendingFlip} className=" px-8  rounded-b">
+              <button onClick={departmentFlip} className=" px-8  rounded-b">
                 Department
               </button>
             )}
@@ -137,6 +151,7 @@ export const BMP = () => {
             orgAlias={orgAlias}
           />
         }
+        {departmentHighLight && <Departments orgAlias={orgAlias} />}
         {branchHighLight && <Branches orgAlias={orgAlias} />}
         {memberHighLight && <Members orgAlias={orgAlias} />}
         {pendingHighLight && <Pending orgAlias={orgAlias} />}

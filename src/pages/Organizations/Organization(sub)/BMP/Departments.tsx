@@ -20,7 +20,7 @@ export const Departments = (props: IDeparment) => {
     const getDepartments = async () => {
       try {
         const response = await axiosRequest.get(
-          `organizations/${props.orgAlias}/branches/${props.branchAlias}/departments`,
+          `organizations/${props.orgAlias}/departments`,
           {
             signal: controller.signal,
           }

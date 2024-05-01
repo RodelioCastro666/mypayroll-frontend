@@ -14,7 +14,6 @@ export const useRefreshRequest = () => {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + refresh_token;
 
-      axios.defaults.withCredentials = true;
       const response = await axios.post("/auth/refresh");
       console.log(response);
       setRefreshToken(response.headers["refresh-token"]);

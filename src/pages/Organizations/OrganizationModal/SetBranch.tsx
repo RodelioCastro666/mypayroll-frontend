@@ -2,12 +2,12 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useEffect } from "react";
 import { useAuth } from "../../../auth/AuthProvider";
+import { axiosRefreshRequest } from "../../../api/axios";
 
-import axios from "axios";
 interface IBranchProps {
   isOpen: boolean;
   closeModal: void;
@@ -26,6 +26,10 @@ export const SetBranch = (props: IBranchProps) => {
   const { branches, setBranch } = useAuth();
 
   const [departments, setDepartments] = useState();
+
+  const [departmentAlias, setDeparmtentAlias] = useState("");
+
+  const [isopenDepartmentOption, setIsOpenDepartmentOption] = useState(false);
   const axiosRequest = useAxiosRefreshRequest();
 
   useEffect(() => {
@@ -80,7 +84,7 @@ export const SetBranch = (props: IBranchProps) => {
     };
   };
 
-  const mutation = useMutation({
+  const mutationSetBranch = useMutation({
     mutationFn: async (credential): Promise<IBranch> => {
       const response = await axiosRequest.post(
         `/organizations/${props.orgAlias}/members/branch`,
@@ -92,19 +96,87 @@ export const SetBranch = (props: IBranchProps) => {
       console.log(data);
     },
   });
+  const mutationSetDepartment = useMutation({
+    mutationFn: async (credential) => {
+      const response = await axiosRequest.post(
+        `/organizations/${props.orgAlias}/members/department`,
+        credential
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
 
   const handleChangeBranch = (e) => {
     getDepartments(e.target.value);
+    setIsOpenDepartmentOption(true);
   };
 
+  const handleChangeDepartment = (e) => {
+    setDeparmtentAlias(e.target.value);
+  };
+
+  // const request1 = axiosRequest.post(
+  //   `/organizations/${props.orgAlias}/members/branch`,
+  //   {
+  //     email: props.userEmail,
+  //     branch: assignBranch,
+  //   }
+  // );
+
+  // // const request2 = axiosRequest.post(
+  // //   `/organizations/${props.orgAlias}/members/deparment`,
+  // //   {
+  // //     email: props.userEmail,
+  // //     branch: assignBranch,
+  // //     department: departmentAlias,
+  // //   }
+  // // );
+
+  // const request1 = mutationSetBranch.mutate({
+  //   email: props.userEmail,
+  //   branch: assignBranch,
+  // });
+
+  // const request2 = mutationSetDepartment.mutate({
+  //   email: props.userEmail,
+  //   branch: assignBranch,
+  //   department: departmentAlias,
+  // });
+
   const seTMembersBranch = () => {
-    // mutation.mutate({
+    // mutationSetBranch.mutate({
     //   email: props.userEmail,
     //   branch: assignBranch,
     // });
+    // mutationSetDepartment.mutate({
+    //   email: props.userEmail,
+    //   branch: assignBranch,
+    //   department: departmentAlias,
+    // });
+    Promise.all([
+      mutationSetBranch.mutate({
+        email: props.userEmail,
+        branch: assignBranch,
+      }),
+      mutationSetDepartment.mutate({
+        email: props.userEmail,
+        branch: assignBranch,
+        department: departmentAlias,
+      }),
+    ])
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     props.closeModal();
   };
+
   return (
     <>
       <Transition appear show={props.isOpen} as={Fragment}>
@@ -139,7 +211,7 @@ export const SetBranch = (props: IBranchProps) => {
                   >
                     Create Branch
                   </Dialog.Title>
-                  <div className="mt-2  ">
+                  <div className="mt-2  flex flex-col gap-10">
                     <select
                       className=" px-4 py-2 w-full border rounded bg-red-100"
                       name="branches"
@@ -159,6 +231,30 @@ export const SetBranch = (props: IBranchProps) => {
                           </option>
                         ))}
                     </select>
+
+                    {isopenDepartmentOption ? (
+                      <select
+                        className=" px-4 py-2 w-full border rounded bg-red-100"
+                        name="branches"
+                        id=""
+                        //   onBeforeInput={handleChangeBranch}
+                        onChange={handleChangeDepartment}
+                      >
+                        <option value="">SELECT</option>
+                        {departments &&
+                          departments.map((departments) => (
+                            <option
+                              className=" w-full"
+                              value={departments.alias}
+                              key={departments.id}
+                            >
+                              {departments.name}
+                            </option>
+                          ))}
+                      </select>
+                    ) : (
+                      "AMEN"
+                    )}
                   </div>
 
                   <div className="mt-4  flex justify-end gap-4">
