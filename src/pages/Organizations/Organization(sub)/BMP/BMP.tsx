@@ -7,6 +7,7 @@ import { Pending } from "./Pending";
 import { Departments } from "./Departments";
 import { CreateMember } from "../../OrganizationModal/CreateMember";
 import CreateBranch from "../../OrganizationModal/CreateBranch";
+import CreateDepartment from "../../OrganizationModal/CreateDepartment";
 
 export const BMP = () => {
   const { orgAlias } = useParams();
@@ -18,9 +19,14 @@ export const BMP = () => {
 
   const [createMemberModal, setCreateMemberModal] = useState(false);
   const [isOpenCreateBranchModal, setIsOpenCreateMOdal] = useState(false);
+  const [isOpenCreateDepartmentModal, setIsOpenCreateDeparmtentModal] =
+    useState(false);
 
   const creaBranchModalClose = () => {
     setIsOpenCreateMOdal(false);
+  };
+  const creaDepartmentModalClose = () => {
+    setIsOpenCreateDeparmtentModal(false);
   };
 
   const branchFlip = () => {
@@ -136,6 +142,14 @@ export const BMP = () => {
                 Create
               </button>
             )}
+            {departmentHighLight && (
+              <button
+                onClick={() => setIsOpenCreateDeparmtentModal(true)}
+                className=" border rounded px-10 py-1 hover:shadow-md "
+              >
+                Create
+              </button>
+            )}
 
             <button className="  rounded px-10 py-1  hover:shadow-md text-white">
               Join
@@ -143,11 +157,18 @@ export const BMP = () => {
           </div>
         </div>
       </nav>
-      <section>
+      <section className="">
         {
           <CreateBranch
             isOpen={isOpenCreateBranchModal}
             closeModal={creaBranchModalClose}
+            orgAlias={orgAlias}
+          />
+        }
+        {
+          <CreateDepartment
+            isOpen={isOpenCreateDepartmentModal}
+            closeModal={creaDepartmentModalClose}
             orgAlias={orgAlias}
           />
         }

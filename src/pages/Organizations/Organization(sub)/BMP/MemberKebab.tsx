@@ -4,7 +4,7 @@ import { useAuth } from "../../../../auth/AuthProvider";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useEffect } from "react";
 
-import { SetBranch } from "../../OrganizationModal/SetBranch";
+import { SetBranchDept } from "../../OrganizationModal/SetBranch&Dept";
 interface MemberKebabProps {
   userEmail: string;
   orgAlias: string;
@@ -59,7 +59,7 @@ export const MemberKebab = (props: MemberKebabProps) => {
         //   </select>
         // </form> */}
 
-      <SetBranch
+      <SetBranchDept
         isOpen={isOpenSetBranchModal}
         closeModal={closeModalSetBranch}
         orgAlias={props.orgAlias}

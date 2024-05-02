@@ -21,7 +21,7 @@ interface IBranch {
   name: string;
 }
 
-export const SetBranch = (props: IBranchProps) => {
+export const SetBranchDept = (props: IBranchProps) => {
   const [assignBranch, setIsAssignbranch] = useState("");
   const { branches, setBranch } = useAuth();
 
@@ -99,7 +99,7 @@ export const SetBranch = (props: IBranchProps) => {
   const mutationSetDepartment = useMutation({
     mutationFn: async (credential) => {
       const response = await axiosRequest.post(
-        `/organizations/${props.orgAlias}/members/department`,
+        `/organizations/${props.orgAlias}/members/departmen`,
         credential
       );
       return response.data;
@@ -111,6 +111,8 @@ export const SetBranch = (props: IBranchProps) => {
 
   const handleChangeBranch = (e) => {
     getDepartments(e.target.value);
+    setIsAssignbranch(e.target.value);
+    console.log(assignBranch);
     setIsOpenDepartmentOption(true);
   };
 
@@ -118,44 +120,9 @@ export const SetBranch = (props: IBranchProps) => {
     setDeparmtentAlias(e.target.value);
   };
 
-  // const request1 = axiosRequest.post(
-  //   `/organizations/${props.orgAlias}/members/branch`,
-  //   {
-  //     email: props.userEmail,
-  //     branch: assignBranch,
-  //   }
-  // );
-
-  // // const request2 = axiosRequest.post(
-  // //   `/organizations/${props.orgAlias}/members/deparment`,
-  // //   {
-  // //     email: props.userEmail,
-  // //     branch: assignBranch,
-  // //     department: departmentAlias,
-  // //   }
-  // // );
-
-  // const request1 = mutationSetBranch.mutate({
-  //   email: props.userEmail,
-  //   branch: assignBranch,
-  // });
-
-  // const request2 = mutationSetDepartment.mutate({
-  //   email: props.userEmail,
-  //   branch: assignBranch,
-  //   department: departmentAlias,
-  // });
-
   const seTMembersBranch = () => {
-    // mutationSetBranch.mutate({
-    //   email: props.userEmail,
-    //   branch: assignBranch,
-    // });
-    // mutationSetDepartment.mutate({
-    //   email: props.userEmail,
-    //   branch: assignBranch,
-    //   department: departmentAlias,
-    // });
+    console.log(props.userEmail, assignBranch);
+    console.log(props.userEmail, assignBranch, departmentAlias);
     Promise.all([
       mutationSetBranch.mutate({
         email: props.userEmail,
@@ -216,7 +183,6 @@ export const SetBranch = (props: IBranchProps) => {
                       className=" px-4 py-2 w-full border rounded bg-red-100"
                       name="branches"
                       id=""
-                      //   onBeforeInput={handleChangeBranch}
                       onChange={handleChangeBranch}
                     >
                       <option value="">SELECT</option>
@@ -237,7 +203,6 @@ export const SetBranch = (props: IBranchProps) => {
                         className=" px-4 py-2 w-full border rounded bg-red-100"
                         name="branches"
                         id=""
-                        //   onBeforeInput={handleChangeBranch}
                         onChange={handleChangeDepartment}
                       >
                         <option value="">SELECT</option>

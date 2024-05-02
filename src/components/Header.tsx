@@ -2,33 +2,18 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { HiUserCircle } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useAxiosRefreshRequest } from "../auth/useAxiosRefreshRequest";
+import { useQuery } from "@tanstack/react-query";
 
 export const Header = () => {
-  const [name, setName] = useState({});
+  const [name, setName] = useState("");
   const axiosRequest = useAxiosRefreshRequest();
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+  const { data } = useQuery({
+    queryKey: ["Profile"],
+    queryFn: async () => await axiosRequest.get("/profiles/me"),
+  });
 
-    const getProfile = async () => {
-      try {
-        const response = await axiosRequest.get("/profiles/me", {
-          signal: controller.signal,
-        });
-        console.log(response.data);
-        isMounted && setName(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getProfile();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
+  console.log(data);
 
   return (
     <nav className="px-10 py-4 flex flex-row gap-4 justify-between border-b-[1px]">
@@ -38,7 +23,7 @@ export const Header = () => {
       </div>
       <div className="flex flex-row gap-3">
         <p>
-          <span>{name.fullName}</span>
+          <span>{data?.data.fullName}</span>
         </p>
         <HiUserCircle className="h-6 w-6" />
       </div>

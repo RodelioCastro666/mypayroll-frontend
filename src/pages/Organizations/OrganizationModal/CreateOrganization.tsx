@@ -1,49 +1,8 @@
-// import { useMutation } from "@tanstack/react-query";
-// import { useState } from "react";
-// import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
-
-// export const CreateOrganization = () => {
-//   const [newOrg, setNewORg] = useState("");
-//   const axiosRequest = useAxiosRefreshRequest();
-
-//   const mutation = useMutation({
-//     mutationFn: async (credential) =>
-//       await axiosRequest.post("/organizations", credential),
-//   });
-
-//   const onHandleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log("Clicked");
-
-//     mutation.mutate({
-//       name: newOrg,
-//     });
-//   };
-
-//   return (
-//     <form
-//       className="w-[300px] h-[300px]  border-2 shadow-lg bg-white p-6 absolute rounded top-0 bottom-0 left-0 right-0 m-auto "
-//       onSubmit={onHandleSubmit}
-//     >
-//       <div className=" text-center ">
-//         <input
-//           type="text"
-//           className="border px-6 py-2 rounded"
-//           onChange={(e) => setNewORg(e.target.value)}
-//           required
-//         />
-//         <h1 className="text-3xl p-5">Enter Organization Name</h1>
-//         <button>Submit</button>
-//       </div>
-//     </form>
-//   );
-// };
-
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../../auth/AuthProvider";
 import { toast } from "sonner";
 
@@ -67,15 +26,16 @@ interface IOrg {
 export default function CreateOrganization(props: ICreateOrgModalProps) {
   const [newOrg, setNewORg] = useState("");
   const axiosRequest = useAxiosRefreshRequest();
-  const { setOrganization } = useAuth();
+
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async (credential): Promise<IOrg> => {
       const response = await axiosRequest.post("/organizations", credential);
       return response.data;
     },
-    onSuccess: (data) => {
-      setOrganization((prev) => [...prev, data]);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Organizations"] });
       toast.success("Organization has been created");
     },
     onError: (error) => {

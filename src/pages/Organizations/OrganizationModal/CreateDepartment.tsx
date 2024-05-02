@@ -5,12 +5,12 @@ import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../../auth/AuthProvider";
 import { toast } from "sonner";
-
+import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 interface IDepartment {
   isOpen: void;
   closeModal: void;
   orgAlias: string;
-  branchAlias: string;
 }
 
 export default function CreateDepartment(props: IDepartment) {
@@ -18,18 +18,28 @@ export default function CreateDepartment(props: IDepartment) {
   const axiosRequest = useAxiosRefreshRequest();
 
   const { setDepartment } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [assignBranch, setAssignBranch] = useState("");
+
+  const { data: branches } = useQuery({
+    queryKey: ["Branches"],
+    queryFn: async () =>
+      await axiosRequest.get(`/organizations/${props.orgAlias}/branches`),
+  });
 
   const mutation = useMutation({
     mutationFn: async (credential): Promise<IDepartment> => {
       const response = await axiosRequest.post(
-        `organizations/${props.orgAlias}/branches/${props.branchAlias}/departments`,
+        `organizations/${props.orgAlias}/branches/${assignBranch}/departments`,
         credential
       );
 
       return response.data;
     },
-    onSuccess: (data) => {
-      setDepartment((prev) => [...prev, data]);
+    onSuccess: () => {
+      // setDepartment((prev) => [...prev, data]);
+      queryClient.invalidateQueries({ queryKey: ["Departments"] });
       toast.success("Deparment has been created");
     },
     onError: (error) => {
@@ -38,6 +48,11 @@ export default function CreateDepartment(props: IDepartment) {
       }
     },
   });
+
+  const handleChangeBranch = (e) => {
+    setAssignBranch(e.target.value);
+    console.log(e.target.value);
+  };
 
   const onHandleSubmit = () => {
     mutation.mutate({
@@ -80,6 +95,20 @@ export default function CreateDepartment(props: IDepartment) {
                   >
                     Create Department
                   </Dialog.Title>
+
+                  <div>
+                    <select
+                      onChange={handleChangeBranch}
+                      className=" px-4 py-2 w-full border rounded bg-red-100"
+                    >
+                      <option value="">Select A Department </option>
+                      {branches?.data.map((branch) => (
+                        <option id={branch.id} value={branch.branch_alias}>
+                          {branch.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="mt-2  ">
                     <input
                       className="px-4 py-2 w-full border rounded"

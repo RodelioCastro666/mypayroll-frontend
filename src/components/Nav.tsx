@@ -1,21 +1,15 @@
 import { Link } from "react-router-dom";
-import { RxDashboard } from "react-icons/rx";
-
+import { useAuth } from "../auth/AuthProvider";
 export const Nav = () => {
+  const { setAccessToken, setRefreshToken } = useAuth();
   return (
-    <nav className=" h-full  p-4 border-r-[1px]">
+    <nav className=" h-full  p-4 border-r-[1px] flex flex-col justify-between">
       <ul className="">
         <Link to="/">
           <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Home</li>
         </Link>
-        <Link to="/login">
-          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Login</li>
-        </Link>
 
         <Link to="/dashboard">
-          <div className="inline-block">
-            <RxDashboard className="" />
-          </div>
           <li className="px-5 py-3 hover:bg-gray-100 rounded-r inline-block">
             Dashboard
           </li>
@@ -33,6 +27,22 @@ export const Nav = () => {
         </Link>
         <Link to="/departments">
           <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Departmens</li>
+        </Link>
+      </ul>
+
+      <ul>
+        <Link>
+          <li
+            onClick={() => {
+              localStorage.removeItem("access_token");
+              localStorage.removeItem("refresh_token");
+              setAccessToken("");
+              setRefreshToken("");
+            }}
+            className="px-5 py-3 hover:bg-gray-100 rounded-r"
+          >
+            LogOut
+          </li>
         </Link>
       </ul>
     </nav>

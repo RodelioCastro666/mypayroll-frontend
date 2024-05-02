@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../../auth/AuthProvider";
 import { Kebab } from "./BranchKebab";
+import { useQuery } from "@tanstack/react-query";
 interface Branches {
   orgAlias: string;
 }
@@ -12,33 +13,14 @@ export const Branches = (props: Branches) => {
 
   const { branches, setBranch } = useAuth();
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+  const { data } = useQuery({
+    queryKey: ["branches"],
+    queryFn: async () =>
+      await axiosRequest.get(`/organizations/${props.orgAlias}/branches`),
+  });
 
-    const getBranches = async () => {
-      try {
-        const response = await axiosRequest.get(
-          `/organizations/${props.orgAlias}/branches`,
-          {
-            signal: controller.signal,
-          }
-        );
-        console.log(response.data);
-
-        isMounted && setBranch(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getBranches();
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
+  setBranch(data?.data);
+  console.log(data?.data);
 
   return (
     <>

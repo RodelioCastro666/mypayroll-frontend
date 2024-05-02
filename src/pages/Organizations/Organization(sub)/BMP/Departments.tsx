@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { useAuth } from "../../../../auth/AuthProvider";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
+import { useQuery } from "@tanstack/react-query";
 
 interface IDeparment {
   orgAlias: string;
@@ -13,38 +14,44 @@ export const Departments = (props: IDeparment) => {
 
   const { setDepartment, departments } = useAuth();
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   const controller = new AbortController();
 
-    const getDepartments = async () => {
-      try {
-        const response = await axiosRequest.get(
-          `organizations/${props.orgAlias}/departments`,
-          {
-            signal: controller.signal,
-          }
-        );
-        console.log(response.data);
+  //   const getDepartments = async () => {
+  //     try {
+  //       const response = await axiosRequest.get(
+  //         `organizations/${props.orgAlias}/departments`,
+  //         {
+  //           signal: controller.signal,
+  //         }
+  //       );
+  //       console.log(response.data);
 
-        isMounted && setDepartment(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //       isMounted && setDepartment(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    getDepartments();
+  //   getDepartments();
 
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
+  //   return () => {
+  //     isMounted = false;
+  //     controller.abort();
+  //   };
+  // }, []);
+
+  const { data: deparment } = useQuery({
+    queryKey: ["Departments"],
+    queryFn: async () =>
+      await axiosRequest.get(`organizations/${props.orgAlias}/departments`),
+  });
 
   return (
     <div className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 relative">
-      {departments
-        ? departments.map((department) => (
+      {deparment?.data
+        ? deparment.data.map((department) => (
             <div key={department.id} className="border rounded-md p-4 ">
               <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
                 <div className="flex justify-between items-center h-[70px]  ">

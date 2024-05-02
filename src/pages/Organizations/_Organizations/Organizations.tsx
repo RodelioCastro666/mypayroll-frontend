@@ -7,6 +7,7 @@ import { JoinOrganization } from "../OrganizationModal/JoinOrganization";
 import { useAuth } from "../../../auth/AuthProvider";
 
 import Kebab from "./kebab";
+import { useQuery } from "@tanstack/react-query";
 export const Organizations = () => {
   const axiosRequest = useAxiosRefreshRequest();
 
@@ -17,28 +18,12 @@ export const Organizations = () => {
 
   const [orgSearch, setOrgSearch] = useState<string>("");
 
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+  const { data } = useQuery({
+    queryKey: ["Organizations"],
+    queryFn: async () => await axiosRequest.get("/organizations"),
+  });
 
-    const getOrganization = async () => {
-      try {
-        const response = await axiosRequest.get("/organizations", {
-          signal: controller.signal,
-        });
-        console.log(response.data);
-        isMounted && setOrganization(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getOrganization();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
+  setOrganization(data?.data);
 
   const createModalClose = () => {
     setIsOpenCreateModal(false);

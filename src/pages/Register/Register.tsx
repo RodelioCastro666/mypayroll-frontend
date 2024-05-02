@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { registerUser } from "../../requestCalls/requestUser";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAxiosRefreshRequest } from "../../auth/useAxiosRefreshRequest";
 
 // const USER_VALIDATION = /^[A-z][A-z0-9-_]{3,23}$/;
 // const PASSWORD_VALIDATION = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -21,51 +22,71 @@ export const Register = () => {
   const [matchPass, setMatchPass] = useState("");
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
   // crete NewUser
   const mutation = useMutation({
-    mutationFn: (userCredentials) => registerUser(userCredentials),
-    onSuccesss: (data) => {},
-    onError: (error) => {
-      console.log(error);
+    mutationFn: async (userCredentials) => registerUser(userCredentials),
+    onSuccesss: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["Profile"] });
+      // console.log(data);
+      // console.log("refresh", mutation.data.headers["refresh-token"]);
+      // console.log("accesss", mutation.data.headers["access-token"]);
+      // setAccessToken(mutation.data.headers["access-token"]);
+      // setRefreshToken(mutation.data.headers["refresh-token"]);
+      // localStorage.setItem(
+      //   "access_token",
+      //   mutation.data.headers["access-token"]
+      // );
+      // localStorage.setItem(
+      //   "refresh_token",
+      //   mutation.data.headers["refresh-token"]
+      // );
+      // navigate("/dashboard", { replace: true });
+      // window.location.href = "/dashboard";
     },
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("click");
 
+    console.log(firstname, lastname, email, password);
     if (matchPass === password) {
+      console.log("matched");
+
       mutation.mutate({
         firstName: firstname,
         lastName: lastname,
         email: email,
         password: password,
       });
-
-      if (mutation.isSuccess) {
-        console.log("refresh", mutation.data.headers["refresh-token"]);
-        console.log("accesss", mutation.data.headers["access-token"]);
-        setAccessToken(mutation.data.headers["access-token"]);
-        setRefreshToken(mutation.data.headers["refresh-token"]);
-        navigate("/dashboard", { replace: true });
-        localStorage.setItem(
-          "access_token",
-          mutation.data.headers["access-token"]
-        );
-        localStorage.setItem(
-          "refresh_token",
-          mutation.data.headers["refresh-token"]
-        );
-      }
     }
   };
+
+  if (mutation.isSuccess) {
+    // console.log("KKK");
+    // console.log("success");
+    console.log(mutation.data);
+    // console.log("refresh", mutation.data.headers["refresh-token"]);
+    // console.log("accesss", mutation.data.headers["access-token"]);
+    setAccessToken(mutation.data.headers["access-token"]);
+    setRefreshToken(mutation.data.headers["refresh-token"]);
+    localStorage.setItem("access_token", mutation.data.headers["access-token"]);
+    localStorage.setItem(
+      "refresh_token",
+      mutation.data.headers["refresh-token"]
+    );
+
+    navigate("/dashboard", { replace: true });
+    queryClient.invalidateQueries({ queryKey: ["Profile"] });
+    window.location.reload(false);
+  }
 
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-[480px] flex-col gap-4 px-16"
-      >
+      <form className="flex w-[480px] flex-col gap-4 px-16">
         <div>
           <h1 className="mb-2 text-start text-3xl font-bold">
             Create your account
@@ -172,7 +193,10 @@ export const Register = () => {
             </Link>
           </div>
           <div className="col-span-2">
-            <button className="w-full rounded bg-black px-4 py-1.5 text-white">
+            <button
+              className="w-full rounded bg-black px-4 py-1.5 text-white"
+              onClick={handleSubmit}
+            >
               Create Account
             </button>
           </div>
@@ -186,51 +210,4 @@ export const Register = () => {
       </form>
     </div>
   );
-
-  {
-    /* <div className="h-screen flex justify-center items-center">
-        <form onSubmit={handleSubmit} action="">
-          <label htmlFor="username">Firstname:</label>
-          <input
-            type="text"
-            id="firstname"
-            onChange={(e) => setFirstname(e.target.value)}
-            required
-          />
-          <label htmlFor="username">Lastname:</label>
-          <input
-            type="text"
-            id="lastname"
-            onChange={(e) => setLastname(e.target.value)}
-            required
-          />
-          <label htmlFor="username">Email:</label>
-          <input
-            type="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-           <label htmlFor="confirm_password">
-                Confirm Password:
-            </label>
-            <input 
-            type="confirm_password" 
-            id="confirm_password"
-            required
-            onChange={(e) => setMatchPassword(e.target.value)}
-            /> 
-
-          <button>Register</button>
-        </form>
-      </div> */
-  }
 };

@@ -1,11 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useState } from "react";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "../../../auth/AuthProvider";
+
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 
 interface IUpdateOrgModalProps {
@@ -30,7 +30,6 @@ export const UpdateOrganization = (props: IUpdateOrgModalProps) => {
   const queryClient = useQueryClient();
   const [updateOrg, setUpdateOrg] = useState("");
   const axiosRequest = useAxiosRefreshRequest();
-  const { organization, setOrganization } = useAuth();
 
   const mutation = useMutation({
     mutationFn: async (credential): Promise<IOrg> => {
@@ -40,17 +39,9 @@ export const UpdateOrganization = (props: IUpdateOrgModalProps) => {
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(["org", { name: props.orgAlias }], data);
-      console.log("OnSuccess");
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Organizations"] });
 
-      const updateData = organization.map((org) => {
-        if (org.alias === props.orgAlias) {
-          return { ...org, name: updateOrg };
-        }
-        return org;
-      });
-      setOrganization([...updateData]);
       toast.success("Organization has been updated");
     },
     onError: (error) => {
@@ -62,7 +53,7 @@ export const UpdateOrganization = (props: IUpdateOrgModalProps) => {
     mutation.mutate({
       name: updateOrg,
     });
-    console.log("HandleSubmit");
+
     props.closeModal();
   };
 

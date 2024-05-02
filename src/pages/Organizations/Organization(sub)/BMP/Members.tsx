@@ -3,8 +3,11 @@ import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest"
 import { useState } from "react";
 import { useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
-
+import "../../../../index.css";
 import { MemberKebab } from "./MemberKebab";
+import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
+import { FaRegUserCircle } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 
 interface IMemberProps {
   userEmail: string;
@@ -15,106 +18,72 @@ export const Members = (props: IMemberProps) => {
   const axiosRequest = useAxiosRefreshRequest();
   const [members, setMembers] = useState([]);
 
+  const { data } = useQuery({
+    queryKey: ["Members"],
+    queryFn: async () => {
+      return await axiosRequest.get(
+        `/organizations/${props.orgAlias}/members/`
+      );
+    },
+  });
+
+  console.log(data?.data);
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
-    const getMembers = async () => {
-      try {
-        const response = await axiosRequest.get(
-          `/organizations/${props.orgAlias}/members/`,
-          {
-            signal: controller.signal,
-          }
-        );
-
-        isMounted && setMembers(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getMembers();
-    console.log(members);
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
+    setMembers(data?.data);
   }, []);
 
   return (
-    <>
-      {/* <table className="w-full  h-full table-auto text-center  bg-red-100">
-      <tr className=" ">
-        <th className="">MEMBER</th>
-        <th className="">MEMBERSHIP</th>
-        <th className="">STATUS</th>
-        <th className="">ROLE</th>
-        <th className="">JOIN DATE</th>
-        <th className=" ">ACTIONS</th>
-      </tr>
-
-      <tbody className="p-10">
-        <tr className="p-10">
-          <td>Rodelio</td>
-          <td>Accepted</td>
-          <td>Status</td>
-          <td>Creator</td>
-          <td>April 30, 2024 at 9:36 AM GMT+8</td>
-          <td>:</td>
-        </tr>
-      </tbody>
-      <tbody>
-        <tr>
-          <td>Rodelio</td>
-          <td>Accepted</td>
-          <td>Status</td>
-          <td>Creator</td>
-          <td>April 30, 2024 at 9:36 AM GMT+8</td>
-          <td>:</td>
-        </tr>
-      </tbody>
-    </table> */}
-      <div className=" flex flex-col   items-center p-10 gap-5 ">
-        <div className="w-[50%] flex flex-col justify-start gap-2 p-2">
-          <h1 className="p-2 text-2xl font-semibold ">CREATOR</h1>
-          <div className="border-y-[1px] border-blue-400 "></div>
-          {members &&
+    <section className=" p-4">
+      <table className=" w-full text-start">
+        <thead>
+          <tr>
+            <th>Member</th>
+            <th>Membership</th>
+            <th>Status</th>
+            <th>Role</th>
+            <th>join Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* {members &&
             members.map((member) =>
               member.role === "owner" ? (
-                <div key={member.id} className=" p-2  flex items-center gap-5 ">
-                  <CgProfile className="w-[30px] h-[30px]" />
-                  <p>{member.name}</p>
-                </div>
+                <tr key={member.id} className="font-bold text-red-500 ">
+                  <td className="">
+                    <CgProfile className="w-[25px] h-[25px] inline-block mr-2" />
+                    {member.user.firstName} {member.user.lastName}
+                  </td>
+                  <td>{member.membership}</td>
+                  <td>1961</td>
+                  <td className="font-bold">{member.role}</td>
+                  <td>{member.updatedAt}</td>
+                  <td>
+                    <img className="w-[20px]" src={kebab} alt="" />
+                  </td>
+                </tr>
               ) : null
-            )}
-        </div>
-        <div className="w-[50%] flex flex-col  items-start border-b ">
-          <h1 className="p-2 text-lg">MEMBERS:</h1>
-          <div className="border-y-[1px] border-blue-400 w-full"></div>
+            )} */}
           {members &&
             members.map((member) =>
               member.role === "member" ? (
-                <div
-                  key={member.id}
-                  className="w-full p-5 border-b flex  justify-between   gap-5 relative"
-                >
-                  <div className="flex items-center gap-3">
-                    <CgProfile className="w-[30px] h-[30px]" />
-                    <span>{member.name}</span>
-                  </div>
-                  <div className="flex justify-center items-center ">
-                    <MemberKebab
-                      userEmail={member.email}
-                      orgAlias={props.orgAlias}
-                    />
-                  </div>
-                </div>
+                <tr key={member.id}>
+                  <td className="">
+                    <CgProfile className="w-[25px] h-[25px] inline-block mr-2" />
+                    {member.user.firstName} {member.user.lastName}
+                  </td>
+                  <td>{member.membership}</td>
+                  <td>ACTIVE</td>
+                  <td>{member.role}</td>
+                  <td>{member.updatedAt}</td>
+                  <td>
+                    <img className="w-[20px]" src={kebab} alt="" />
+                  </td>
+                </tr>
               ) : null
             )}
-        </div>
-      </div>
-    </>
+        </tbody>
+      </table>
+    </section>
   );
 };

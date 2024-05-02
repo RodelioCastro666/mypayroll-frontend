@@ -10,6 +10,8 @@ export const Pending = ({ orgAlias }) => {
   const [pending, setPending] = useState([]);
   const [kebabIsOpen, setKebabIsopen] = useState(false);
 
+  const [isOpenAction, setIsOpenAction] = useState(false);
+
   const getPending = async () => {
     try {
       const response = await axiosRequest.get(
@@ -77,42 +79,63 @@ export const Pending = ({ orgAlias }) => {
   console.log(pending);
 
   return (
-    <div className="p-4 flex justify-center">
-      {pending &&
-        pending.map((item) => (
-          <div className="w-[50%] flex p-5 justify-between border shadow-md">
-            <div>
-              <p>{item.name}</p>
-            </div>
+    <div className=" p-4 flex flex-col justify-center">
+      <table className="table-auto ">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody className="relative">
+          {pending &&
+            pending.map((pendingUser) => (
+              <tr>
+                <td>{pendingUser.name}</td>
 
-            <div className="flex  gap-4 ">
-              <button
-                className="border p-2 px-2 rounded shadow-md"
-                onClick={() => approve(item.email)}
-              >
-                {/* <FaCheck /> */}
-                ACCEPT
-              </button>
-              <button
-                className="border p-2 px-2 rounded shadow-md"
-                onClick={() => decline(item.email)}
-              >
-                {/* <ImCross /> */}
-                DECLINE
-              </button>
-            </div>
-          </div>
-        ))}
-      {/* {pending && pending.map((pen) => {
-            <li></li>
-        } )} */}
-      {/* {branches
-        ? branches.map((branch) => {
-            <div >
-              <Link to={`branch`}>Branch 1111</Link>
-            </div>;
-          })
-        : null} */}
+                <td>
+                  <button
+                    onClick={() => approve(pendingUser.email)}
+                    className="border p-2 px-2 rounded shadow-md"
+                  >
+                    ACCEPT
+                  </button>
+                  <button
+                    className="border p-2 px-2 rounded shadow-md"
+                    onClick={() => decline(pendingUser.email)}
+                  >
+                    DECLINE
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </div>
+    // <div>
+    //   {pending &&
+    //     pending.map((pendingUser) => (
+    //       <div className="w-full flex p-5 justify-around items-center  ">
+    //         <div>
+    //           <p>{pendingUser.name}</p>
+    //         </div>
+
+    //         <div className="flex  gap-4 ">
+    //           <button
+    //             className="border p-2 px-2 rounded shadow-md"
+    //             onClick={() => approve(pendingUser.email)}
+    //           >
+    //             ACCEPT
+    //           </button>
+    //           <button
+    //             className="border p-2 px-2 rounded shadow-md"
+    //             onClick={() => decline(pendingUser.email)}
+    //           >
+    //             DECLINE
+    //           </button>
+    //         </div>
+    //       </div>
+    //     ))}
+    // </div>
   );
 };

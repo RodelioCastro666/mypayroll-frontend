@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-th{
-    padding: 20px;
-}
+
+
+@layer base {
+    th {
+      @apply text-left  py-5 border-b ;
+    }
+    td{
+        @apply text-left  py-5 border-b;
+    }
+    tr{
+        @apply even:bg-gray-100 odd:bg-white 
+    }
+    
+    
+  }

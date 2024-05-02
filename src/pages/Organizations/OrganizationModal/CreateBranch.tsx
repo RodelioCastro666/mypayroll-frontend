@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../../auth/AuthProvider";
 import { toast } from "sonner";
 
@@ -12,6 +12,8 @@ export default function CreateBranch(props) {
 
   const { setBranch } = useAuth();
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async (credential): Promise<IOrg> => {
       const response = await axiosRequest.post(
@@ -20,8 +22,8 @@ export default function CreateBranch(props) {
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      setBranch((prev) => [...prev, data]);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["branches"] });
       toast.success("The branch has been successfully set up.");
     },
     onError: (error) => {
