@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useState } from "react";
 import { useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 import "../../../../index.css";
-import { MemberKebab } from "./MemberKebab";
+
 import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
-import { FaRegUserCircle } from "react-icons/fa";
+
 import { useQuery } from "@tanstack/react-query";
 
 interface IMemberProps {
@@ -16,9 +15,8 @@ interface IMemberProps {
 
 export const Members = (props: IMemberProps) => {
   const axiosRequest = useAxiosRefreshRequest();
-  const [members, setMembers] = useState([]);
 
-  const { data } = useQuery({
+  const { data: members } = useQuery({
     queryKey: ["Members"],
     queryFn: async () => {
       return await axiosRequest.get(
@@ -26,11 +24,6 @@ export const Members = (props: IMemberProps) => {
       );
     },
   });
-
-  console.log(data?.data);
-  useEffect(() => {
-    setMembers(data?.data);
-  }, []);
 
   return (
     <section className=" p-4">
@@ -64,8 +57,8 @@ export const Members = (props: IMemberProps) => {
                 </tr>
               ) : null
             )} */}
-          {members &&
-            members.map((member) =>
+          {members.data &&
+            members.data.map((member) =>
               member.role === "member" ? (
                 <tr key={member.id}>
                   <td className="">

@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-
-import { useAuth } from "../../../../auth/AuthProvider";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,8 +8,6 @@ interface IDeparment {
 
 export const Departments = (props: IDeparment) => {
   const axiosRequest = useAxiosRefreshRequest();
-
-  const { setDepartment, departments } = useAuth();
 
   // useEffect(() => {
   //   let isMounted = true;

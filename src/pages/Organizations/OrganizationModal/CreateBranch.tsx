@@ -23,7 +23,7 @@ export default function CreateBranch(props) {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+      queryClient.invalidateQueries({ queryKey: ["Branches"] });
       toast.success("The branch has been successfully set up.");
     },
     onError: (error) => {

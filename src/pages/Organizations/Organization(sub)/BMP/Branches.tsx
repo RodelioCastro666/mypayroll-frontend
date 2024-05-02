@@ -14,7 +14,7 @@ export const Branches = (props: Branches) => {
   const { branches, setBranch } = useAuth();
 
   const { data } = useQuery({
-    queryKey: ["branches"],
+    queryKey: ["Branches"],
     queryFn: async () =>
       await axiosRequest.get(`/organizations/${props.orgAlias}/branches`),
   });
