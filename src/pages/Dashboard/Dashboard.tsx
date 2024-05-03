@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import axios from "../../api/axios";
 import { useRefreshRequest } from "../../auth/useRefreshRequest";
-
+import { useQueryClient } from "@tanstack/react-query";
 export const Dashboard = () => {
+  const queryClient = useQueryClient();
   const { setAccessToken } = useAuth();
 
   const { access_token } = useAuth();
@@ -11,6 +12,8 @@ export const Dashboard = () => {
   console.log(access_token);
 
   console.log(access_token);
+
+  queryClient.invalidateQueries({ queryKey: ["Profile"] });
   return (
     <div className="w-full h-full ">
       {/* Dashboard Screenddd

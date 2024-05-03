@@ -2,6 +2,7 @@ import { useState } from "react";
 import kebab from "../../../Assets/icons8-menu-vertical-64.png";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { UpdateOrganization } from "../OrganizationModal/UpdateOrganization";
+import { DeleteOrganizations } from "../OrganizationModal/DeleteOrganizations";
 import { toast } from "sonner";
 interface IKebabProps {
   invitationCode: string;

@@ -8,7 +8,7 @@ import { Employees } from "./pages/Employees/Employees";
 import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/OrganizationsLayout";
 import { Departments } from "./pages/Organizations/Organization(sub)/BMP/Departments";
 import { ErrorPage } from "./ErroPage";
-
+import { SpecificDeparmtent } from "./pages/Organizations/Organization(sub)/SpecificDepartment";
 import { Organizations } from "./pages/Organizations/_Organizations/Organizations";
 
 import { BMP } from "./pages/Organizations/Organization(sub)/BMP/BMP";
@@ -80,7 +80,7 @@ export const Routes = () => {
             },
             {
               path: ":orgAlias/branches/:branchAlias/departments/",
-              element: <DMP />,
+              element: <SpecificDeparmtent />,
             },
           ],
         },

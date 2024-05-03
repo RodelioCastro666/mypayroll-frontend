@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useQuery } from "@tanstack/react-query";
 
@@ -9,63 +10,64 @@ interface IDeparment {
 export const Departments = (props: IDeparment) => {
   const axiosRequest = useAxiosRefreshRequest();
 
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const controller = new AbortController();
+  const [departmentSearch, setDepartmentSearch] = useState("");
 
-  //   const getDepartments = async () => {
-  //     try {
-  //       const response = await axiosRequest.get(
-  //         `organizations/${props.orgAlias}/departments`,
-  //         {
-  //           signal: controller.signal,
-  //         }
-  //       );
-  //       console.log(response.data);
-
-  //       isMounted && setDepartment(response.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   getDepartments();
-
-  //   return () => {
-  //     isMounted = false;
-  //     controller.abort();
-  //   };
-  // }, []);
-
-  const { data: deparment } = useQuery({
+  const { data: deparments } = useQuery({
     queryKey: ["Departments"],
     queryFn: async () =>
       await axiosRequest.get(`organizations/${props.orgAlias}/departments`),
   });
 
-  return (
-    <div className=" h-full grid grid-cols-5 grid-rows-3 p-10 gap-10 relative">
-      {deparment?.data
-        ? deparment.data.map((department) => (
-            <div key={department.id} className="border rounded-md p-4 ">
-              <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
-                <div className="flex justify-between items-center h-[70px]  ">
-                  <h1 className="text-xl font-medium hover:underline">
-                    {department.name}
-                  </h1>
-                </div>
+  console.log(deparments?.data);
 
-                <div className="flex justify-end items-center border-t  p-2">
-                  <button className="hover:underline">
-                    {/* <Link to={`branches/${branch.alias}/departments/`}>
+  return (
+    <>
+      <div className="px-10  py-1 flex items-center ">
+        <input
+          className="w-[300px] border rounded px-4 py-1 "
+          type="search"
+          placeholder="Input Department to search"
+          onChange={(e) => setDepartmentSearch(e.target.value)}
+        />
+      </div>
+      <div className=" h-full grid grid-cols-5 grid-rows-3 py-5 px-10 gap-10 relative">
+        {deparments?.data &&
+          deparments.data
+            ?.filter((deparment) => {
+              if (departmentSearch === "") {
+                return deparment;
+              } else if (
+                deparment.name
+                  .toLowerCase()
+                  .includes(departmentSearch.toLowerCase())
+              ) {
+                return deparment;
+              }
+            })
+
+            .map((department) => (
+              <div key={department.id} className="border rounded-md p-4 ">
+                <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
+                  <div className="flex flex-col justify-between items-center h-[70px]  ">
+                    <h1 className="text-xl font-medium hover:underline">
+                      {department.name}
+                    </h1>
+                    <p className="text-xs">
+                      Created Date: {department.updatedAt} <span></span>
+                    </p>
+                  </div>
+
+                  <div className="flex justify-end items-center border-t  p-2">
+                    <button className="hover:underline">
+                      {/* <Link to={`branches/${branch.alias}/departments/`}>
                       View
                     </Link> */}
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        : null}
-    </div>
+            ))}
+      </div>
+    </>
   );
 };

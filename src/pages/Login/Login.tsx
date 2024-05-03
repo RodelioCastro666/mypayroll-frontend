@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../../requestCalls/requestUser";
-
+import { useQueryClient } from "@tanstack/react-query";
 import { FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
@@ -24,6 +24,8 @@ export const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (credentials) => loginUser(credentials),
     onSuccess: (data) => {
@@ -34,6 +36,8 @@ export const Login = () => {
       navigate("/dashboard", { replace: true });
       localStorage.setItem("access_token", data.headers["access-token"]);
       localStorage.setItem("refresh_token", data.headers["refresh-token"]);
+      queryClient.invalidateQueries({ queryKey: ["Profile"] });
+      window.location.reload(false);
     },
     onError: (error) => {
       console.log(error);
@@ -123,51 +127,4 @@ export const Login = () => {
       </div>
     </div>
   );
-
-  {
-    /* <div className="h-screen g-screen bg-[#F5F7F8] flex justify-center items-center text-center ">
-        <form className="containerSignUp" onSubmit={handleSubmit}>
-          <h1 className=" text-[2rem] tracking-wider ">Sign in to Payroll</h1>
-
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            className="inputSignUP"
-            type="email"
-            placeholder="Username"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
-            required
-          />
-
-          <label htmlFor="password">Password:</label>
-          <input
-            id="password"
-            className="inputSignUP"
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            required
-          />
-
-          <button className="btnLogin">Login</button>
-        </form>
-
-        <div className="mt-3">Create Account</div>
-        <div className="grid grid-cols-[1fr_30px_1fr] justify-center items-center">
-          <hr className="border-[1px] border-black" />
-          <span>or</span>
-          <hr className="border-[1px] border-black" />
-        </div>
-        <button className="btnLink">
-          <img className="inline-block mr-2 " src={googleLogo} alt="" />
-          Continue with Google
-        </button>
-        <button className="btnLink">
-          <img className="inline-block mr-2 " src={fbLogo} alt="" />
-          Continue with Facebook
-        </button>
-      </div> */
-  }
 };

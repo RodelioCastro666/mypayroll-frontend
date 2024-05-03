@@ -99,11 +99,17 @@ export default function CreateDepartment(props: IDepartment) {
                   <div>
                     <select
                       onChange={handleChangeBranch}
-                      className=" px-4 py-2 w-full border rounded bg-red-100"
+                      className=" px-4 py-2 w-full border rounded "
                     >
-                      <option value="">Select A Department </option>
+                      <option value="">
+                        Select a Branch for the deparment{" "}
+                      </option>
                       {branches?.data.map((branch) => (
-                        <option id={branch.id} value={branch.branch_alias}>
+                        <option
+                          className="p-2"
+                          id={branch.id}
+                          value={branch.branch_alias}
+                        >
                           {branch.name}
                         </option>
                       ))}

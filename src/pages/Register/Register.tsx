@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../../requestCalls/requestUser";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../auth/useAxiosRefreshRequest";
+import { useQueryClient } from "@tanstack/react-query";
 
 // const USER_VALIDATION = /^[A-z][A-z0-9-_]{3,23}$/;
 // const PASSWORD_VALIDATION = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -29,21 +30,6 @@ export const Register = () => {
     onSuccesss: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["Profile"] });
-      // console.log(data);
-      // console.log("refresh", mutation.data.headers["refresh-token"]);
-      // console.log("accesss", mutation.data.headers["access-token"]);
-      // setAccessToken(mutation.data.headers["access-token"]);
-      // setRefreshToken(mutation.data.headers["refresh-token"]);
-      // localStorage.setItem(
-      //   "access_token",
-      //   mutation.data.headers["access-token"]
-      // );
-      // localStorage.setItem(
-      //   "refresh_token",
-      //   mutation.data.headers["refresh-token"]
-      // );
-      // navigate("/dashboard", { replace: true });
-      // window.location.href = "/dashboard";
     },
   });
   const handleSubmit = async (e) => {
@@ -79,7 +65,6 @@ export const Register = () => {
 
     navigate("/dashboard", { replace: true });
     queryClient.invalidateQueries({ queryKey: ["Profile"] });
-    window.location.reload(false);
   }
 
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);

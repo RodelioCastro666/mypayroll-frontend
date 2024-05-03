@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { FaCheck } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
+
+import { toast } from "sonner";
 export const Pending = ({ orgAlias }) => {
   const axiosRequest = useAxiosRefreshRequest();
   const [pending, setPending] = useState([]);
@@ -71,7 +70,7 @@ export const Pending = ({ orgAlias }) => {
         `/organizations/${orgAlias}/members/approval`,
         credential
       ),
-    onSuccess: (data) => {
+    onSuccess: () => {
       getPending();
     },
   });
@@ -95,14 +94,20 @@ export const Pending = ({ orgAlias }) => {
 
                 <td>
                   <button
-                    onClick={() => approve(pendingUser.email)}
+                    onClick={() => {
+                      approve(pendingUser.email);
+                      toast.success("User successfully Accepted");
+                    }}
                     className="border p-2 px-2 rounded shadow-md"
                   >
                     ACCEPT
                   </button>
                   <button
                     className="border p-2 px-2 rounded shadow-md"
-                    onClick={() => decline(pendingUser.email)}
+                    onClick={() => {
+                      decline(pendingUser.email);
+                      toast.success("User successfully declined");
+                    }}
                   >
                     DECLINE
                   </button>

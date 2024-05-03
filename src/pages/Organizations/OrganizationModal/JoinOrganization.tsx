@@ -60,7 +60,7 @@ export const JoinOrganization = (props: ICreateOrgModalProps) => {
       invitationCode: join,
     });
     props.closeModal();
-    toast.success("The organization has been successfully sent a request.");
+    toast.success("Successfully sent a request.");
   };
   return (
     <>

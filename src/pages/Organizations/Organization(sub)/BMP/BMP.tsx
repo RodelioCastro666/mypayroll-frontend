@@ -70,9 +70,9 @@ export const BMP = () => {
     }
   };
   return (
-    <div className="grid grid-rows-[50px_1fr]">
-      <nav>
-        <div className=" px-4  border-b-[1px] flex justify-between gap-3">
+    <div className="grid grid-rows-[50px_1fr] ">
+      <nav className="">
+        <div className=" px-4   border-b-[1px] flex justify-between gap-3">
           <div className="flex  gap-5 relative">
             {memberHighLight ? (
               <button

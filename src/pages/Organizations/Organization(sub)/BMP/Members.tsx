@@ -25,6 +25,8 @@ export const Members = (props: IMemberProps) => {
     },
   });
 
+  console.log(members?.data);
+
   return (
     <section className=" p-4">
       <table className=" w-full text-start">
@@ -34,6 +36,8 @@ export const Members = (props: IMemberProps) => {
             <th>Membership</th>
             <th>Status</th>
             <th>Role</th>
+            <th>Branch</th>
+            <th>Department</th>
             <th>join Date</th>
             <th>Action</th>
           </tr>
@@ -57,7 +61,7 @@ export const Members = (props: IMemberProps) => {
                 </tr>
               ) : null
             )} */}
-          {members.data &&
+          {members?.data &&
             members.data.map((member) =>
               member.role === "member" ? (
                 <tr key={member.id}>
@@ -68,6 +72,10 @@ export const Members = (props: IMemberProps) => {
                   <td>{member.membership}</td>
                   <td>ACTIVE</td>
                   <td>{member.role}</td>
+                  <td>{member.branch ? member.branch : "Not yet Assigned"}</td>
+                  <td>
+                    {member.department ? member.department : "Not yet Assigned"}
+                  </td>
                   <td>{member.updatedAt}</td>
                   <td>
                     <img className="w-[20px]" src={kebab} alt="" />

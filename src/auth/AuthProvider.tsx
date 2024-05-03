@@ -89,6 +89,7 @@ export const AuthProvider = ({ children }) => {
 
 //useAuth is a custom hook that can be used in
 //components to access the authentication context.
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   return useContext(AuthContext);

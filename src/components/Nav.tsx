@@ -38,6 +38,7 @@ export const Nav = () => {
               localStorage.removeItem("refresh_token");
               setAccessToken("");
               setRefreshToken("");
+              localStorage.removeItem("token");
             }}
             className="px-5 py-3 hover:bg-gray-100 rounded-r"
           >
