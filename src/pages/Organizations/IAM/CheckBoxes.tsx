@@ -1,11 +1,6 @@
 import { CheckBox } from "./CheckBox";
 import { useState } from "react";
 export const CheckBoxes = ({ title }) => {
-  //   const listOptions = [
-  //     { id: "branch", action: "Create" },
-  //     { id: "branch", action: "Read" },
-  //   ];
-
   const listOptions = ["Create", "Read", "Update", "Delete"];
   const [selected, setSelected] = useState([]);
 
@@ -45,7 +40,7 @@ export const CheckBoxes = ({ title }) => {
       {listOptions.map((list) => {
         return (
           <CheckBox
-            value={selected[].includes(list)}
+            value={selected.action.includes(list)}
             name={list}
             updateValue={handleSelect}
           >
