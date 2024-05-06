@@ -1,57 +1,32 @@
-import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
-import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { toast } from "sonner";
 export const Pending = ({ orgAlias }) => {
   const axiosRequest = useAxiosRefreshRequest();
-  const [pending, setPending] = useState([]);
-  const [kebabIsOpen, setKebabIsopen] = useState(false);
 
-  const [isOpenAction, setIsOpenAction] = useState(false);
+  const queryClient = useQueryClient();
 
-  const getPending = async () => {
-    try {
-      const response = await axiosRequest.get(
-        `/organizations/${orgAlias}/members/pending`
-        //   {
-        //     signal: controller.signal,
-        //   }
-      );
+  const { data } = useQuery({
+    queryKey: ["Pending"],
+    queryFn: async () =>
+      await axiosRequest.get(`/organizations/${orgAlias}/members/pending`),
+  });
 
-      //isMounted &&
-      setPending(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    // let isMounted = true;
-    // const controller = new AbortController();
-
-    getPending();
-
-    // return () => {
-    //   isMounted = false;
-    //   controller.abort();
-    // };
-  }, []);
+  const pending = data?.data;
+  console.log(pending);
 
   const approve = (userEmail) => {
     mutation.mutate({
       email: userEmail,
     });
-
-    setPending();
   };
   const decline = (userEmail) => {
     declinemutation.mutate({
       email: userEmail,
     });
-
-    setPending();
   };
   const declinemutation = useMutation({
     mutationFn: async (credential) =>
@@ -59,8 +34,8 @@ export const Pending = ({ orgAlias }) => {
         `/organizations/${orgAlias}/members/decline`,
         credential
       ),
-    onSuccess: (data) => {
-      getPending();
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Pending"] });
     },
   });
 
@@ -71,7 +46,7 @@ export const Pending = ({ orgAlias }) => {
         credential
       ),
     onSuccess: () => {
-      getPending();
+      queryClient.invalidateQueries({ queryKey: ["Pending"] });
     },
   });
 
@@ -117,30 +92,5 @@ export const Pending = ({ orgAlias }) => {
         </tbody>
       </table>
     </div>
-    // <div>
-    //   {pending &&
-    //     pending.map((pendingUser) => (
-    //       <div className="w-full flex p-5 justify-around items-center  ">
-    //         <div>
-    //           <p>{pendingUser.name}</p>
-    //         </div>
-
-    //         <div className="flex  gap-4 ">
-    //           <button
-    //             className="border p-2 px-2 rounded shadow-md"
-    //             onClick={() => approve(pendingUser.email)}
-    //           >
-    //             ACCEPT
-    //           </button>
-    //           <button
-    //             className="border p-2 px-2 rounded shadow-md"
-    //             onClick={() => decline(pendingUser.email)}
-    //           >
-    //             DECLINE
-    //           </button>
-    //         </div>
-    //       </div>
-    //     ))}
-    // </div>
   );
 };

@@ -8,6 +8,7 @@ import { Departments } from "./Departments";
 import { CreateMember } from "../../OrganizationModal/CreateMember";
 import CreateBranch from "../../OrganizationModal/CreateBranch";
 import CreateDepartment from "../../OrganizationModal/CreateDepartment";
+import { IAM } from "../../IAM/IAM";
 
 export const BMP = () => {
   const { orgAlias } = useParams();
@@ -16,6 +17,7 @@ export const BMP = () => {
   const [memberHighLight, setMembertHighLight] = useState(false);
   const [pendingHighLight, setPendingHighLight] = useState(false);
   const [departmentHighLight, setDepartmentHighLight] = useState(false);
+  const [iAmHighLight, setIAMHighLight] = useState(false);
 
   const [createMemberModal, setCreateMemberModal] = useState(false);
   const [isOpenCreateBranchModal, setIsOpenCreateMOdal] = useState(false);
@@ -37,6 +39,7 @@ export const BMP = () => {
       setMembertHighLight(false);
       setPendingHighLight(false);
       setDepartmentHighLight(false);
+      setIAMHighLight(false);
     }
   };
   const memberFlip = () => {
@@ -47,6 +50,7 @@ export const BMP = () => {
       setBranchHighLight(false);
       setPendingHighLight(false);
       setDepartmentHighLight(false);
+      setIAMHighLight(false);
     }
   };
   const pendingFlip = () => {
@@ -57,6 +61,7 @@ export const BMP = () => {
       setBranchHighLight(false);
       setMembertHighLight(false);
       setDepartmentHighLight(false);
+      setIAMHighLight(false);
     }
   };
   const departmentFlip = () => {
@@ -64,6 +69,18 @@ export const BMP = () => {
       null;
     } else {
       setDepartmentHighLight((prev) => !prev);
+      setPendingHighLight(false);
+      setBranchHighLight(false);
+      setMembertHighLight(false);
+      setIAMHighLight(false);
+    }
+  };
+  const iAMflip = () => {
+    if (iAmHighLight) {
+      null;
+    } else {
+      setIAMHighLight((prev) => !prev);
+      setDepartmentHighLight(false);
       setPendingHighLight(false);
       setBranchHighLight(false);
       setMembertHighLight(false);
@@ -123,6 +140,18 @@ export const BMP = () => {
                 Pending
               </button>
             )}
+            {iAmHighLight ? (
+              <button
+                onClick={iAMflip}
+                className=" px-8 border-b-4 border-blue-600 rounded-b"
+              >
+                IAM
+              </button>
+            ) : (
+              <button onClick={iAMflip} className=" px-8  rounded-b">
+                IAM
+              </button>
+            )}
           </div>
           <div className="flex  px-2 py-1 gap-5">
             {memberHighLight && (
@@ -176,6 +205,7 @@ export const BMP = () => {
         {branchHighLight && <Branches orgAlias={orgAlias} />}
         {memberHighLight && <Members orgAlias={orgAlias} />}
         {pendingHighLight && <Pending orgAlias={orgAlias} />}
+        {iAmHighLight && <IAM orgAlias={orgAlias} />}
       </section>
       {createMemberModal && <CreateMember orgAlias={orgAlias} />}
     </div>

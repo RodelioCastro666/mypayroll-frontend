@@ -148,7 +148,7 @@ export const Register = () => {
               htmlFor="passwordConfirmation"
               className="mb-1 text-gray-500"
             >
-              Password Confirmationsss
+              Password Confirmations
             </label>
             <div className="relative">
               <input

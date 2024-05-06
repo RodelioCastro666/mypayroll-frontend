@@ -6,13 +6,12 @@ import { Register } from "./pages/Register/Register";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Employees } from "./pages/Employees/Employees";
 import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/OrganizationsLayout";
-import { Departments } from "./pages/Organizations/Organization(sub)/BMP/Departments";
+
 import { ErrorPage } from "./ErroPage";
 import { SpecificDeparmtent } from "./pages/Organizations/Organization(sub)/SpecificDepartment";
 import { Organizations } from "./pages/Organizations/_Organizations/Organizations";
 
 import { BMP } from "./pages/Organizations/Organization(sub)/BMP/BMP";
-import { DMP } from "./pages/Organizations/_Organization(branch)/_Organization/DMP";
 
 //This functional component acts as the entry point for
 //configuring the application routes.

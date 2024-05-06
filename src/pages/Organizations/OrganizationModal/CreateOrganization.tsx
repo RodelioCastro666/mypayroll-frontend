@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "../../../auth/AuthProvider";
+
 import { toast } from "sonner";
 
 interface ICreateOrgModalProps {

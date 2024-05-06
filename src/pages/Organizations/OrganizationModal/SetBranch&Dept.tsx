@@ -99,7 +99,7 @@ export const SetBranchDept = (props: IBranchProps) => {
   const mutationSetDepartment = useMutation({
     mutationFn: async (credential) => {
       const response = await axiosRequest.post(
-        `/organizations/${props.orgAlias}/members/departmen`,
+        `/organizations/${props.orgAlias}/members/department`,
         credential
       );
       return response.data;
