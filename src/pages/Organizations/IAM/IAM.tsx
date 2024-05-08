@@ -1,10 +1,17 @@
+import { useState } from "react";
 import { CreateIAM } from "./CreateIAM";
-
+import { useQuery } from "@tanstack/react-query";
+import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 interface IAMprops {
   orgAlias: string;
 }
 
 export const IAM = (props: IAMprops) => {
+  // const axiosRequest = useAxiosRefreshRequest();
+
+  // //change the Ui from dipslaying IAM to creating IAM
+  // const [isOpenCreateLayout, setIsOpenCreateLayout] = useState("");
+
   console.log(props.orgAlias);
   return (
     // <section className="p-4">

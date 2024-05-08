@@ -186,7 +186,7 @@ export const BMP = () => {
           </div>
         </div>
       </nav>
-      <section className="">
+      <section className="w-full  h-full">
         {
           <CreateBranch
             isOpen={isOpenCreateBranchModal}

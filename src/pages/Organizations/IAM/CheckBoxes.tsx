@@ -1,12 +1,19 @@
 import { CheckBox } from "./CheckBox";
 import { useState } from "react";
+
 export const CheckBoxes = ({ title }) => {
   const listOptions = ["Create", "Read", "Update", "Delete"];
   const [selected, setSelected] = useState([]);
 
+  const [selectedParam, setselectedParam] = useState([]);
+
   const handleSelect = (value, name) => {
     if (value) {
-      setSelected([...selected, { action: name, subject: "branch" }]);
+      setSelected([...selected, name]);
+      setselectedParam([
+        ...selectedParam,
+        { action: name.toLowerCase(), subject: title.toLowerCase() },
+      ]);
     } else {
       setSelected(selected.filter((item) => item.action !== name));
     }
@@ -16,6 +23,12 @@ export const CheckBoxes = ({ title }) => {
     if (value) {
       // if true
       setSelected(listOptions); // select all
+      listOptions.map((list) => {
+        setselectedParam([
+          ...selectedParam,
+          { action: list.toLowerCase(), subject: title.toLowerCase() },
+        ]);
+      });
     } else {
       // if false
       setSelected([]); // unselect all
@@ -24,12 +37,14 @@ export const CheckBoxes = ({ title }) => {
 
   const onHandleSubmit = () => {
     console.log(selected);
+
+    console.log(selectedParam);
   };
 
   return (
     <div>
-      <h1>{title}</h1>
-      <button onClick={() => onHandleSubmit()}>PPP</button>
+      <h1></h1>
+      <button onClick={() => onHandleSubmit()}>xxxx</button>
       <CheckBox
         name="all"
         value={selected.length === listOptions.length}
@@ -40,7 +55,7 @@ export const CheckBoxes = ({ title }) => {
       {listOptions.map((list) => {
         return (
           <CheckBox
-            value={selected.action.includes(list)}
+            value={selected.includes(list)}
             name={list}
             updateValue={handleSelect}
           >

@@ -53,43 +53,78 @@ export const Pending = ({ orgAlias }) => {
   console.log(pending);
 
   return (
-    <div className=" p-4 flex flex-col justify-center">
-      <table className="table-auto ">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody className="relative">
-          {pending &&
-            pending.map((pendingUser) => (
-              <tr>
+    <div className="w-full h-full p-2">
+      <div className="flex items-center  justify-start  py-1">
+        <input
+          className="w-[300px] border rounded px-4 py-1"
+          type="search"
+          placeholder="Input Name to search"
+          onChange={(e) => setMemberSearch(e.target.value)}
+        />
+      </div>
+      <table className=" w-full h-full  px-2 text-start">
+        <tr className="flex justify-around">
+          <th className="">Name</th>
+          <th>Actions</th>
+        </tr>
+
+        {pending &&
+          pending.map((pendingUser) => (
+            <>
+              <tr className="flex justify-around ">
                 <td>{pendingUser.name}</td>
 
                 <td>
-                  <button
-                    onClick={() => {
-                      approve(pendingUser.email);
-                      toast.success("User successfully Accepted");
-                    }}
-                    className="border p-2 px-2 rounded shadow-md"
-                  >
-                    ACCEPT
-                  </button>
-                  <button
-                    className="border p-2 px-2 rounded shadow-md"
-                    onClick={() => {
-                      decline(pendingUser.email);
-                      toast.success("User successfully declined");
-                    }}
-                  >
-                    DECLINE
-                  </button>
+                  <div className="flex justify-center items-center">
+                    <button
+                      onClick={() => {
+                        approve(pendingUser.email);
+                        toast.success("User successfully Accepted");
+                      }}
+                      className="border p-2 px-2 rounded shadow-md"
+                    >
+                      ACCEPT
+                    </button>
+                    <button
+                      className="border p-2 px-2 rounded shadow-md"
+                      onClick={() => {
+                        decline(pendingUser.email);
+                        toast.success("User successfully declined");
+                      }}
+                    >
+                      DECLINE
+                    </button>
+                  </div>
                 </td>
               </tr>
-            ))}
-        </tbody>
+              <tr className="flex justify-around">
+                <td>{pendingUser.name}</td>
+
+                <td>
+                  <div className="flex justify-center items-center">
+                    <button
+                      onClick={() => {
+                        approve(pendingUser.email);
+                        toast.success("User successfully Accepted");
+                      }}
+                      className="border p-2 px-2 rounded shadow-md"
+                    >
+                      ACCEPT
+                    </button>
+                    <button
+                      className="border p-2 px-2 rounded shadow-md"
+                      onClick={() => {
+                        decline(pendingUser.email);
+                        toast.success("User successfully declined");
+                      }}
+                    >
+                      DECLINE
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </>
+          ))}
       </table>
     </div>
   );

@@ -3,11 +3,9 @@ import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest"
 import { CgProfile } from "react-icons/cg";
 import "../../../../index.css";
 
-import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
-
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-
+import { MemberKebab } from "./MemberKebab";
 interface IMemberProps {
   userEmail: string;
   orgAlias: string;
@@ -29,11 +27,11 @@ export const Members = (props: IMemberProps) => {
 
   const membersList = members?.data;
 
-  console.log(members?.data);
+  console.log(membersList);
 
   return (
     <section className=" p-4">
-      <div className="flex items-center  justify-center px-4 py-1">
+      <div className="flex items-center  justify-start  py-1">
         <input
           className="w-[300px] border rounded px-4 py-1"
           type="search"
@@ -41,7 +39,7 @@ export const Members = (props: IMemberProps) => {
           onChange={(e) => setMemberSearch(e.target.value)}
         />
       </div>
-      <table className=" w-full text-start">
+      <table className=" w-full text-start relative">
         <thead>
           <tr>
             <th>Member</th>
@@ -54,6 +52,11 @@ export const Members = (props: IMemberProps) => {
             <th>Action</th>
           </tr>
         </thead>
+        {/* <tbody>
+          {membersList.map((member) => (
+            <div>{member.user.firstName}</div>
+          ))}
+        </tbody> */}
         <tbody>
           {membersList &&
             membersList
@@ -67,9 +70,10 @@ export const Members = (props: IMemberProps) => {
                 ) {
                   return member;
                 }
+                console.log(member.user);
               })
               .map((member) =>
-                member.role === "member" ? (
+                member.role?.name !== "owner" ? (
                   <tr key={member.id}>
                     <td className="">
                       <CgProfile className="w-[25px] h-[25px] inline-block mr-2" />
@@ -77,18 +81,23 @@ export const Members = (props: IMemberProps) => {
                     </td>
                     <td>{member.membership}</td>
                     <td>ACTIVE</td>
-                    <td>{member.role}</td>
+                    <td>{member.role ? member.role.name : "not assigned"}</td>
                     <td>
-                      {member.branch ? member.branch : "Not yet Assigned"}
+                      {member.branch
+                        ? member.branch.branch_alias
+                        : "not assigned"}
                     </td>
                     <td>
                       {member.department
-                        ? member.department
-                        : "Not yet Assigned"}
+                        ? member.department.alias
+                        : "not assigned"}
                     </td>
                     <td>{member.updatedAt}</td>
-                    <td>
-                      <img className="w-[20px]" src={kebab} alt="" />
+                    <td className="relative">
+                      <MemberKebab
+                        orgAlias={props.orgAlias}
+                        userEmail={member.user.email}
+                      />
                     </td>
                   </tr>
                 ) : null

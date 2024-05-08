@@ -6,7 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useEffect } from "react";
 import { useAuth } from "../../../auth/AuthProvider";
-import { axiosRefreshRequest } from "../../../api/axios";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface IBranchProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ export const SetBranchDept = (props: IBranchProps) => {
   const [isopenDepartmentOption, setIsOpenDepartmentOption] = useState(false);
   const axiosRequest = useAxiosRefreshRequest();
 
+  const queryClient = useQueryClient();
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -92,9 +94,15 @@ export const SetBranchDept = (props: IBranchProps) => {
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["Members"],
+      });
+      // toast.success("Successfully set");
     },
+    // onError: () => {
+    //   toast.error("Failed to set");
+    // },
   });
   const mutationSetDepartment = useMutation({
     mutationFn: async (credential) => {
@@ -104,8 +112,14 @@ export const SetBranchDept = (props: IBranchProps) => {
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["Members"],
+      });
+      toast.success("Successfully set");
+    },
+    onError: () => {
+      toast.error("Failed to set");
     },
   });
 

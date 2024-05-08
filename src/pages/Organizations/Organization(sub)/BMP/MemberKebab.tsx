@@ -1,8 +1,5 @@
 import { useState } from "react";
 import kebab from "../../../../Assets/icons8-menu-vertical-64.png";
-import { useAuth } from "../../../../auth/AuthProvider";
-import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
-import { useEffect } from "react";
 
 import { SetBranchDept } from "../../OrganizationModal/SetBranch&Dept";
 interface MemberKebabProps {
@@ -31,10 +28,10 @@ export const MemberKebab = (props: MemberKebabProps) => {
       />
 
       {kebabIsOpen && (
-        <div className="absolute flex flex-col gap-3 rounded bg-white  px-4 py-4  top-14 right-2 border  h-auto  ">
+        <div className="absolute flex flex-col gap-3 rounded bg-white  px-10 py-4  top-22 right-5 border  h-auto  ">
           <button
             onClick={() => setIsOpenBranchModal(true)}
-            className="px-2 border py-2  text-xs rounded"
+            className="px-6 border py-2  text-xs rounded"
           >
             Manage Member
           </button>
