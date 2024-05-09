@@ -12,8 +12,6 @@ export const Header = () => {
     queryFn: async () => await axiosRequest.get("/profiles/me"),
   });
 
-  console.log(data?.data);
-
   return (
     <nav className="px-10 py-4 flex flex-row gap-4 justify-between border-b-[1px]">
       <div className="flex flex-row gap-3">

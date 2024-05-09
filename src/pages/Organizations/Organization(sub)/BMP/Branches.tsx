@@ -48,7 +48,7 @@ export const Branches = (props: Branches) => {
             })
 
             .map((branch) => (
-              <div key={branch.alias} className="border rounded-md p-4 ">
+              <div key={branch.id} className="border rounded-md p-4 ">
                 <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
                   <div className="flex justify-between items-center h-[70px]  ">
                     <h1 className="text-xl font-medium hover:underline">

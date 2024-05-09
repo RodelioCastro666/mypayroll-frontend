@@ -97,32 +97,6 @@ export const Pending = ({ orgAlias }) => {
                   </div>
                 </td>
               </tr>
-              <tr className="flex justify-around">
-                <td>{pendingUser.name}</td>
-
-                <td>
-                  <div className="flex justify-center items-center">
-                    <button
-                      onClick={() => {
-                        approve(pendingUser.email);
-                        toast.success("User successfully Accepted");
-                      }}
-                      className="border p-2 px-2 rounded shadow-md"
-                    >
-                      ACCEPT
-                    </button>
-                    <button
-                      className="border p-2 px-2 rounded shadow-md"
-                      onClick={() => {
-                        decline(pendingUser.email);
-                        toast.success("User successfully declined");
-                      }}
-                    >
-                      DECLINE
-                    </button>
-                  </div>
-                </td>
-              </tr>
             </>
           ))}
       </table>

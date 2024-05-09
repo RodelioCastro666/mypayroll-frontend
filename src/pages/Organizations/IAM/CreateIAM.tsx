@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useState } from "react";
 import { CheckBox } from "./CheckBox";
+import { toast } from "sonner";
 
 interface CreateIAMprops {
   orgAlias: string;
@@ -160,12 +161,13 @@ export const CreateIAM = (props: CreateIAMprops) => {
     },
     onSuccess: () => {
       console.log("SUCCESS");
+      toast.success("Successfully created");
     },
   });
 
   const onHandleSubmit = () => {
-    console.log(selectedParamBranch);
-    console.log(selectedParamDeparment);
+    // console.log(selectedParamBranch);
+    // console.log(selectedParamDeparment);
 
     // console.log(
     //   owner,
@@ -176,7 +178,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
     // );
 
     setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-    console.log(totalCheckParam);
+    // console.log(totalCheckParam);
 
     mutation.mutate({
       name: owner,
@@ -287,7 +289,9 @@ export const CreateIAM = (props: CreateIAMprops) => {
             </div>
           </div>
 
-          <button className="border px-5 py-2 rounded">SUBMIT</button>
+          <button onClick={onHandleSubmit} className="border px-5 py-2 rounded">
+            SUBMIT
+          </button>
         </div>
       </div>
     </div>

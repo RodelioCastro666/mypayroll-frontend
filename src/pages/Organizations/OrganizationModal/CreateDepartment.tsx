@@ -106,6 +106,7 @@ export default function CreateDepartment(props: IDepartment) {
                       </option>
                       {branches?.data.map((branch) => (
                         <option
+                          key={branch.id}
                           className="p-2"
                           id={branch.id}
                           value={branch.branch_alias}

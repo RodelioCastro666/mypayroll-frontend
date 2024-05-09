@@ -62,16 +62,10 @@ export const SetBranchDept = (props: IBranchProps) => {
     };
   }, []);
 
-  let isMounted = true;
-  const controller = new AbortController();
-
   const getDepartments = async (assignBranch) => {
     try {
       const response = await axiosRequest.get(
-        `/organizations/${props.orgAlias}/branches/${assignBranch}/departments`,
-        {
-          signal: controller.signal,
-        }
+        `/organizations/${props.orgAlias}/branches/${assignBranch}/departments`
       );
       console.log(response.data);
 
@@ -79,11 +73,6 @@ export const SetBranchDept = (props: IBranchProps) => {
     } catch (error) {
       console.log(error);
     }
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
   };
 
   const mutationSetBranch = useMutation({
@@ -156,6 +145,7 @@ export const SetBranchDept = (props: IBranchProps) => {
       });
 
     props.closeModal();
+    setIsOpenDepartmentOption(false);
   };
 
   return (
@@ -199,7 +189,8 @@ export const SetBranchDept = (props: IBranchProps) => {
                       id=""
                       onChange={handleChangeBranch}
                     >
-                      <option value="">SELECT</option>
+                      <option value="df">Select a branch</option>
+
                       {branches &&
                         branches.map((branch) => (
                           <option
@@ -219,7 +210,7 @@ export const SetBranchDept = (props: IBranchProps) => {
                         id=""
                         onChange={handleChangeDepartment}
                       >
-                        <option value="">SELECT</option>
+                        <option value="df">Select a department</option>
                         {departments &&
                           departments.map((departments) => (
                             <option
@@ -232,7 +223,7 @@ export const SetBranchDept = (props: IBranchProps) => {
                           ))}
                       </select>
                     ) : (
-                      "AMEN"
+                      <p className="text-center">Select a Branch First</p>
                     )}
                   </div>
 

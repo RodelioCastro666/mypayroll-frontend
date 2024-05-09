@@ -17,23 +17,29 @@ export const MemberKebab = (props: MemberKebabProps) => {
   };
 
   return (
-    <>
+    <div>
       <img
         onClick={() => {
           setKebabIsopen((prev) => !prev);
         }}
-        className="w-[20px] cursor-pointer absolute top-[10] right-1"
+        className="w-[20px] cursor-pointer absolute top-[10] right-14"
         src={kebab}
         alt=""
       />
 
       {kebabIsOpen && (
-        <div className="absolute flex flex-col gap-3 rounded bg-white  px-10 py-4  top-22 right-5 border  h-auto  ">
+        <div className=" flex justify-center absolute gap-5 rounded bg-white  px-10 py-2   top-2 right-20 border  h-auto  ">
           <button
             onClick={() => setIsOpenBranchModal(true)}
-            className="px-6 border py-2  text-xs rounded"
+            className="px-10 border py-1   rounded"
           >
-            Manage Member
+            Manage
+          </button>
+          <button
+            onClick={() => setIsOpenBranchModal(true)}
+            className="px-10 border py-1   rounded"
+          >
+            Dummy
           </button>
         </div>
       )}
@@ -62,6 +68,6 @@ export const MemberKebab = (props: MemberKebabProps) => {
         orgAlias={props.orgAlias}
         userEmail={props.userEmail}
       />
-    </>
+    </div>
   );
 };

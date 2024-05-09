@@ -18,5 +18,6 @@
     "titleBar.inactiveBackground": "#4793af99",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "4793AF"
+  "peacock.color": "4793AF",
+  "files.refactoring.autoSave": false
 }

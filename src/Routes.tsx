@@ -6,11 +6,11 @@ import { Register } from "./pages/Register/Register";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Employees } from "./pages/Employees/Employees";
 import { OrganizationsLayout } from "./pages/Organizations/All_Organizations/OrganizationsLayout";
-
+import { ManageMemberLayout } from "./pages/Organizations/ManageMember/ManageMemberLayout";
 import { ErrorPage } from "./ErroPage";
 import { SpecificDeparmtent } from "./pages/Organizations/Organization(sub)/SpecificDepartment";
 import { Organizations } from "./pages/Organizations/_Organizations/Organizations";
-
+import { ManageMember } from "./pages/Organizations/ManageMember/ManageMember";
 import { BMP } from "./pages/Organizations/Organization(sub)/BMP/BMP";
 
 //This functional component acts as the entry point for
@@ -76,6 +76,16 @@ export const Routes = () => {
             {
               path: ":orgAlias",
               element: <BMP />,
+            },
+            {
+              path: ":orgAlias/members/*",
+              element: <ManageMemberLayout />,
+              children: [
+                {
+                  path: "*",
+                  element: <ManageMember />,
+                },
+              ],
             },
             {
               path: ":orgAlias/branches/:branchAlias/departments/",

@@ -2,10 +2,12 @@ import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest"
 
 import { CgProfile } from "react-icons/cg";
 import "../../../../index.css";
-
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { MemberKebab } from "./MemberKebab";
+// import { MemberKebab } from "./MemberKebab";
+
+import { CiMenuKebab } from "react-icons/ci";
 interface IMemberProps {
   userEmail: string;
   orgAlias: string;
@@ -16,14 +18,16 @@ export const Members = (props: IMemberProps) => {
 
   const [memberSearch, setMemberSearch] = useState("");
 
-  const { data: members } = useQuery({
+  const { data: members, error } = useQuery({
     queryKey: ["Members"],
     queryFn: async () => {
       return await axiosRequest.get(
         `/organizations/${props.orgAlias}/members/`
       );
     },
+    retry: false,
   });
+  console.log(error);
 
   const membersList = members?.data;
 
@@ -52,11 +56,7 @@ export const Members = (props: IMemberProps) => {
             <th>Action</th>
           </tr>
         </thead>
-        {/* <tbody>
-          {membersList.map((member) => (
-            <div>{member.user.firstName}</div>
-          ))}
-        </tbody> */}
+
         <tbody>
           {membersList &&
             membersList
@@ -93,11 +93,14 @@ export const Members = (props: IMemberProps) => {
                         : "not assigned"}
                     </td>
                     <td>{member.updatedAt}</td>
-                    <td className="relative">
-                      <MemberKebab
+                    <td className="relative ">
+                      {/* <MemberKebab
                         orgAlias={props.orgAlias}
                         userEmail={member.user.email}
-                      />
+                      /> */}
+                      <Link to={`members/`}>
+                        <CiMenuKebab className="text-black  " />
+                      </Link>
                     </td>
                   </tr>
                 ) : null
