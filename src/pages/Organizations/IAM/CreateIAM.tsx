@@ -30,12 +30,15 @@ export const CreateIAM = (props: CreateIAMprops) => {
         ...selectedParamBranch,
         { action: name.toLowerCase(), subject: "branch" },
       ]);
+      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
     } else {
       setSelectedBranch(selectedBranch.filter((item) => item !== name));
       setselectedParamBranch(
         selectedParamBranch.filter((item) => item.action !== name.toLowerCase())
       );
+      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
     }
+    setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
   };
 
   const handleSelectDepartment = (value, name) => {
@@ -45,6 +48,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
         ...selectedParamDeparment,
         { action: name.toLowerCase(), subject: "department" },
       ]);
+      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
     } else {
       setSelectedDepartment(selectedDepartment.filter((item) => item !== name));
       setselectedParamDepartment(
@@ -52,7 +56,9 @@ export const CreateIAM = (props: CreateIAMprops) => {
           (item) => item.action !== name.toLowerCase()
         )
       );
+      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
     }
+    setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
   };
 
   function selectAllbranch(value) {
@@ -60,13 +66,11 @@ export const CreateIAM = (props: CreateIAMprops) => {
       // if true
       setselectedParamBranch([]);
       setSelectedBranch(listOptions); // select all
-      listOptions.map((list) => {
-        setselectedParamBranch((prev) => [
-          ...prev,
-          { action: list.toLowerCase(), subject: "branch" },
-        ]);
-        console.log(list);
-      });
+
+      setselectedParamBranch((prev) => [
+        ...prev,
+        { action: "all", subject: "branch" },
+      ]);
 
       console.log(selectedParamBranch);
     } else {
@@ -80,13 +84,11 @@ export const CreateIAM = (props: CreateIAMprops) => {
       // if true
       setselectedParamDepartment([]);
       setSelectedDepartment(listOptions); // select all
-      listOptions.map((list) => {
-        setselectedParamDepartment((prev) => [
-          ...prev,
-          { action: list.toLowerCase(), subject: "department" },
-        ]);
-        console.log(list);
-      });
+
+      setselectedParamDepartment((prev) => [
+        ...prev,
+        { action: "all", subject: "department" },
+      ]);
 
       console.log(selectedParamDeparment);
     } else {
@@ -168,28 +170,35 @@ export const CreateIAM = (props: CreateIAMprops) => {
   const onHandleSubmit = () => {
     // console.log(selectedParamBranch);
     // console.log(selectedParamDeparment);
-
-    // console.log(
-    //   owner,
-    //   branchId,
-    //   departmentId,
-    //   selectedParamBranch,
-    //   selectedParamDeparment
-    // );
-
     setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-    // console.log(totalCheckParam);
+    console.log("owner", owner);
+    console.log("branchId", branchId);
+    console.log("departmentId", departmentId);
+    console.log("selectedParamBranch", selectedParamBranch);
+    console.log("selectedParamDeparment", selectedParamDeparment);
+
+    console.log("totalPAram", totalCheckParam);
 
     mutation.mutate({
       name: owner,
-      branchId: branchId,
-      departmentId: departmentId,
+      branchId: branchId ? branchId : null,
+      departmentId: departmentId ? departmentId : null,
       permissions: totalCheckParam,
     });
   };
 
   return (
     <div className=" ">
+      <button
+        onClick={() =>
+          setTotalCheckParam([
+            ...selectedParamBranch,
+            ...selectedParamDeparment,
+          ])
+        }
+      >
+        Temporary
+      </button>
       <div className="flex flex-col justify-center">
         <div className=" flex flex-col items-center gap-5">
           <div className="p-5">
@@ -203,10 +212,10 @@ export const CreateIAM = (props: CreateIAMprops) => {
 
           <div className=" p-5 flex gap-10">
             <select
-              className="px-10 py-2 border rounded"
+              className="px-10 py-2 border rounded text-xs"
               onChange={onHandleBranchChange}
             >
-              <option value="" key="">
+              <option value={null} key="">
                 Select a Branch
               </option>
               {branches &&
@@ -221,12 +230,12 @@ export const CreateIAM = (props: CreateIAMprops) => {
                 ))}
             </select>
             <select
-              className="px-10 py-2 border rounded"
+              className="px-8 py-2 border rounded text-xs"
               onChange={onHandleDeaprtmentChange}
               name=""
               id=""
             >
-              <option value="">Select a Department</option>
+              <option value={null}>Select a Department</option>
               {departments
                 ? departments.map((departments) => (
                     <option

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useOutletContext } from "react-router-dom";
@@ -17,9 +17,13 @@ export const ManageMember = () => {
   const [isOpenDepartmentOption, setIsOpenDepartmentOption] =
     useState<boolean>(false);
 
-  const [orgAlias, members] = useOutletContext();
+  //crederntials for setting role
 
-  console.log(members[0]);
+  const [rolerId, setroleId] = useState<string>("");
+
+  const [orgAlias, members, memberId, user, branch, deparment] =
+    useOutletContext();
+  console.log("✨", branch, deparment);
 
   const { data: branches } = useQuery({
     queryKey: ["Branches"],
@@ -45,11 +49,66 @@ export const ManageMember = () => {
   const { data: roles } = useQuery({
     queryKey: ["Roles"],
     queryFn: async () => {
-      return await axiosRequest.get(`/organizations/${orgAlias}/iam`);
+      return await axiosRequest.get(
+        `/organizations/${orgAlias}/iam/roles?branch=${
+          members.branch ? members.branch.branch_alias : ""
+        }&department=${members.department ? members.department.alias : ""}`
+      );
     },
   });
 
-  console.log(roles);
+  // console.log(members.userEmail);
+
+  const mutation = useMutation({
+    mutationFn: async (credential) => {
+      return await axiosRequest.post(
+        `/organizations/${orgAlias}/iam/role`,
+        credential
+      );
+    },
+    onSuccess: () => {
+      console.log("SUCCESSS");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+  const mutationSetBranch = useMutation({
+    mutationFn: async (credential): Promise<IBranch> => {
+      const response = await axiosRequest.post(
+        `/organizations/${orgAlias}/members/branch`,
+        credential
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["Members"],
+      });
+      // toast.success("Successfully set");
+    },
+    // onError: () => {
+    //   toast.error("Failed to set");
+    // },
+  });
+  const mutationSetDepartment = useMutation({
+    mutationFn: async (credential) => {
+      const response = await axiosRequest.post(
+        `/organizations/${orgAlias}/members/department`,
+        credential
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["Members"],
+      });
+      toast.success("Successfully set");
+    },
+    onError: () => {
+      toast.error("Failed to set");
+    },
+  });
 
   const handleSelectedBranch = (e) => {
     setIsAssignbranch(e.target.value);
@@ -67,6 +126,41 @@ export const ManageMember = () => {
     console.log(assignedBranch);
     console.log(assignedDepartment);
     console.log(count);
+    Promise.all([
+      mutationSetBranch.mutate({
+        id: user.id,
+        branch: assignedBranch,
+      }),
+      mutationSetDepartment.mutate({
+        id: user.id,
+        branch: assignedBranch,
+        department: assignedDepartment,
+      }),
+    ])
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const onSetSubmitRole = () => {
+    console.log("ROLE SUBMIT");
+    console.log(memberId, rolerId);
+    mutation.mutate({
+      memberId: memberId,
+      roleId: rolerId,
+    });
+  };
+
+  const onhandleSelectedRole = (
+    e: React.ChangeEventHandler<HTMLSelectElement>
+  ) => {
+    setroleId(
+      e.target.options[e.target.selectedIndex].getAttribute("data-key")
+    );
+    console.log("ROLE value selected");
   };
 
   return (
@@ -82,7 +176,7 @@ export const ManageMember = () => {
         <div className=" grid grid-cols-3 grid-rows-5 gap-2">
           <div className="flex flex-col text-xs">
             <label htmlFor="">FirstName</label>
-            <input value={members[0].user.firstName} className="" type="text" />
+            <input className="" type="text" />
           </div>
           <div className="flex flex-col text-xs">
             <label htmlFor="">MiddleName</label>
@@ -90,7 +184,7 @@ export const ManageMember = () => {
           </div>
           <div className="flex flex-col text-xs">
             <label htmlFor="">LastName</label>
-            <input value={members[0].user.lastName} className="" type="text" />
+            <input className="" type="text" />
           </div>
           <div className="flex flex-col text-xs">
             <label htmlFor="">BirthDate</label>
@@ -228,13 +322,23 @@ export const ManageMember = () => {
       <div className="border px-10 py-5 w-[80%] rounded">
         <p>Set Role</p>
         <div className="mt-2  grid grid-cols-3 gap-2">
-          <select name="" id="">
+          <select onChange={onhandleSelectedRole} name="" id="">
             <option value="">Select Role</option>
             {roles &&
               roles.data.map((role) => (
-                <option value={role.id}>{role.name}</option>
+                <option data-key={role.id} value={role.id}>
+                  {role.name}
+                </option>
               ))}
           </select>
+        </div>
+        <div className=" flex justify-end">
+          <button
+            onClick={onSetSubmitRole}
+            className="inline-flex  rounded-md border   px-4 py-2 text-sm font-medium text-blue-900"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

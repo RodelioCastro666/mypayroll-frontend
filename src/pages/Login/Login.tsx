@@ -3,7 +3,7 @@ import fbLogo from "../../Assets/devicon_facebook.png";
 import "./style.css";
 import { useEffect, useRef, useState } from "react";
 
-import axios from "../../api/axios";
+import { Toaster, toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
@@ -26,11 +26,9 @@ export const Login = () => {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: (credentials) => loginUser(credentials),
-    onSuccess: (data) => {
-      console.log("refresh", data.headers["refresh-token"]);
-      console.log("accesss", data.headers["access-token"]);
+  const handleClick = (data) => {
+    setTimeout(() => {
+      navigate("/dashboard", { replace: true });
       setAccessToken(data.headers["access-token"]);
       setRefreshToken(data.headers["refresh-token"]);
       navigate("/dashboard", { replace: true });
@@ -38,6 +36,17 @@ export const Login = () => {
       localStorage.setItem("refresh_token", data.headers["refresh-token"]);
       queryClient.invalidateQueries({ queryKey: ["Profile"] });
       window.location.reload(false);
+    }, 1000);
+  };
+
+  const mutation = useMutation({
+    mutationFn: (credentials) => loginUser(credentials),
+    onSuccess: (data) => {
+      console.log("refresh", data.headers["refresh-token"]);
+      console.log("accesss", data.headers["access-token"]);
+      toast.success("Successfully Login");
+
+      handleClick(data);
     },
     onError: (error) => {
       console.log(error);
@@ -57,6 +66,7 @@ export const Login = () => {
 
   return (
     <div>
+      <Toaster richColors />
       <div className="flex h-screen items-center justify-center">
         <form
           onSubmit={handleSubmit}

@@ -78,7 +78,7 @@ export const Routes = () => {
               element: <BMP />,
             },
             {
-              path: ":orgAlias/members/*",
+              path: ":orgAlias/members/:memberId/*",
               element: <ManageMemberLayout />,
               children: [
                 {

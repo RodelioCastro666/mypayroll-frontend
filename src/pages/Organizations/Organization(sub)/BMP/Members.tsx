@@ -98,7 +98,7 @@ export const Members = (props: IMemberProps) => {
                         orgAlias={props.orgAlias}
                         userEmail={member.user.email}
                       /> */}
-                      <Link to={`members/`}>
+                      <Link to={`members/${member.id}`}>
                         <CiMenuKebab className="text-black  " />
                       </Link>
                     </td>

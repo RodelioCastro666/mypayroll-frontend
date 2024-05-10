@@ -15,7 +15,7 @@
         @apply even:bg-gray-100  odd:bg-white 
     }
     input[type=text]{
-      @apply px-4 py-1 border rounded h-[30px]
+      @apply px-4 py-1 border rounded h-[40px]
     }
     input[type=radio]{
       @apply  border rounded h-[30px]
