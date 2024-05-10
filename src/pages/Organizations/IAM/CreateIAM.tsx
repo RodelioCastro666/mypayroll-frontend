@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useState } from "react";
 import { CheckBox } from "./CheckBox";
@@ -22,6 +22,8 @@ export const CreateIAM = (props: CreateIAMprops) => {
   const [selectedParamDeparment, setselectedParamDepartment] = useState([]);
 
   const [totalCheckParam, setTotalCheckParam] = useState([]);
+
+  const queryClient = useQueryClient();
 
   const handleSelectBranch = (value, name) => {
     if (value) {
@@ -164,6 +166,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
     onSuccess: () => {
       console.log("SUCCESS");
       toast.success("Successfully created");
+      queryClient.invalidateQueries({ queryKey: ["Roles"] });
     },
   });
 

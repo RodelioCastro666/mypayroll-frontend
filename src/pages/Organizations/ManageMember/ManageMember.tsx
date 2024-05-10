@@ -19,11 +19,10 @@ export const ManageMember = () => {
 
   //crederntials for setting role
 
-  const [rolerId, setroleId] = useState<string>("");
+  const [roleId, setroleId] = useState<string>("");
 
   const [orgAlias, members, memberId, user, branch, deparment] =
     useOutletContext();
-  console.log("✨", branch, deparment);
 
   const { data: branches } = useQuery({
     queryKey: ["Branches"],
@@ -39,8 +38,6 @@ export const ManageMember = () => {
       );
 
       setDepartments(res.data);
-      console.log(departments);
-      console.log(assignedBranch);
     } catch (error) {
       console.log(error);
     }
@@ -55,9 +52,8 @@ export const ManageMember = () => {
         }&department=${members.department ? members.department.alias : ""}`
       );
     },
+    refetchOnWindowFocus: false,
   });
-
-  // console.log(members.userEmail);
 
   const mutation = useMutation({
     mutationFn: async (credential) => {
@@ -123,9 +119,6 @@ export const ManageMember = () => {
   };
 
   const onSetSubmit = () => {
-    console.log(assignedBranch);
-    console.log(assignedDepartment);
-    console.log(count);
     Promise.all([
       mutationSetBranch.mutate({
         id: user.id,
@@ -147,10 +140,12 @@ export const ManageMember = () => {
 
   const onSetSubmitRole = () => {
     console.log("ROLE SUBMIT");
-    console.log(memberId, rolerId);
+    console.log(memberId);
+    console.log(roleId);
+
     mutation.mutate({
       memberId: memberId,
-      roleId: rolerId,
+      roleId: roleId,
     });
   };
 
@@ -160,7 +155,6 @@ export const ManageMember = () => {
     setroleId(
       e.target.options[e.target.selectedIndex].getAttribute("data-key")
     );
-    console.log("ROLE value selected");
   };
 
   return (
