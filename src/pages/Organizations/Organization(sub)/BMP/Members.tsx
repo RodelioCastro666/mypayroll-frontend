@@ -60,7 +60,7 @@ export const Members = (props: IMemberProps) => {
         <tbody>
           {membersList &&
             membersList
-              ?.filter((member) => {
+              .filter((member) => {
                 if (memberSearch === "") {
                   return member;
                 } else if (

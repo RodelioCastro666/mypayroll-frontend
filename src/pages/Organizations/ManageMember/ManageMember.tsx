@@ -52,7 +52,6 @@ export const ManageMember = () => {
         }&department=${members.department ? members.department.alias : ""}`
       );
     },
-    refetchOnWindowFocus: false,
   });
 
   const mutation = useMutation({

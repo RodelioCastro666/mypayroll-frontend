@@ -11,8 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 export const Organizations = () => {
   const axiosRequest = useAxiosRefreshRequest();
 
-  const { organization, setOrganization } = useAuth();
-
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenJoinModal, setIsOpenJoinModal] = useState<boolean>(false);
 
@@ -23,7 +21,9 @@ export const Organizations = () => {
     queryFn: async () => await axiosRequest.get("/organizations"),
   });
 
-  setOrganization(data?.data);
+  // setOrganization(data?.data);
+
+  const organization = data?.data;
 
   const createModalClose = () => {
     setIsOpenCreateModal(false);
@@ -33,7 +33,7 @@ export const Organizations = () => {
     <div className="grid grid-rows-[50px_1fr]   ">
       <nav>
         <div className=" flex justify-between border-b-[1px]">
-          <div className="flex items-center  justify-center px-4 py-1">
+          <div className="flex items-center  justify-center px-4 ">
             <input
               className="w-[300px] border rounded px-4 py-1"
               type="search"
@@ -41,16 +41,17 @@ export const Organizations = () => {
               onChange={(e) => setOrgSearch(e.target.value)}
             />
           </div>
-          <div className=" px-4 py-1  flex justify-end gap-3">
+          <div className=" px-6 py-1 flex justify-evenly  gap-5">
             <button
               onClick={() => setIsOpenCreateModal(true)}
-              className=" border-[1px] rounded px-10 py-1 hover:shadow-md"
+              // className=" border-[1px] rounded px-10 py-1 hover:shadow-md"
+              className="my-custom-style px-10 "
             >
               Create
             </button>
             <button
               onClick={() => setIsOpenJoinModal(true)}
-              className=" border-[1px] rounded px-10  hover:shadow-md"
+              className="my-custom-style px-10 "
             >
               Join
             </button>
@@ -84,7 +85,7 @@ export const Organizations = () => {
                 <div className="flex flex-col gap-10 px-4 py-4  text-wrap relative">
                   <div className="flex justify-between items-center h-[70px]  relative">
                     <h1 className="text-xl font-medium hover:underline">
-                      {org.name}
+                      <Link to={`${org.alias}`}>{org.name}</Link>
                     </h1>
                     <Kebab
                       invitationCode={org.invitation}
@@ -104,7 +105,7 @@ export const Organizations = () => {
                     </p>
                   </div>
                   <div className="flex justify-end items-center border-t  p-2">
-                    <button className="hover:underline">
+                    <button className="my-custom-style mt-2">
                       <Link to={`${org.alias}`}>View</Link>
                     </button>
                   </div>

@@ -26,9 +26,8 @@ export const Login = () => {
 
   const queryClient = useQueryClient();
 
-  const handleClick = (data) => {
+  const loginDelay = (data) => {
     setTimeout(() => {
-      navigate("/dashboard", { replace: true });
       setAccessToken(data.headers["access-token"]);
       setRefreshToken(data.headers["refresh-token"]);
       navigate("/dashboard", { replace: true });
@@ -46,7 +45,7 @@ export const Login = () => {
       console.log("accesss", data.headers["access-token"]);
       toast.success("Successfully Login");
 
-      handleClick(data);
+      loginDelay(data);
     },
     onError: (error) => {
       console.log(error);

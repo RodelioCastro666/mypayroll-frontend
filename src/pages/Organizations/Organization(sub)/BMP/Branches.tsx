@@ -11,8 +11,6 @@ interface Branches {
 export const Branches = (props: Branches) => {
   const axiosRequest = useAxiosRefreshRequest();
 
-  const { branches, setBranch } = useAuth();
-
   const [branchSearch, setBranchSearch] = useState<string>("");
 
   const { data } = useQuery({
@@ -21,7 +19,7 @@ export const Branches = (props: Branches) => {
       await axiosRequest.get(`/organizations/${props.orgAlias}/branches`),
   });
 
-  setBranch(data?.data);
+  const branches = data?.data;
   console.log(data?.data);
 
   return (

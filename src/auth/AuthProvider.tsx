@@ -23,8 +23,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.getItem("refresh_token")
   );
 
-  const [organization, setOrganization_] = useState([]);
-
   const [branches, setBranch_] = useState([]);
   const [departments, setDepartment_] = useState([]);
 
@@ -41,9 +39,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("refresh_token", newToken);
   };
 
-  const setOrganization = (org) => {
-    setOrganization_(org);
-  };
   const setBranch = (branch) => {
     setBranch_(branch);
   };
@@ -72,14 +67,13 @@ export const AuthProvider = ({ children }) => {
       access_token,
       setAccessToken,
       setRefreshToken,
-      setOrganization,
-      organization,
+
       branches,
       setBranch,
       setDepartment,
       departments,
     }),
-    [refresh_token, access_token, organization, branches, departments]
+    [refresh_token, access_token, branches, departments]
   );
 
   return (

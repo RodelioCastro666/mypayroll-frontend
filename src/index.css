@@ -15,17 +15,22 @@
         @apply even:bg-gray-100  odd:bg-white 
     }
     input[type=text]{
-      @apply px-4 py-1 border rounded h-[40px]
+      @apply px-4 py-1 border rounded 
     }
     input[type=radio]{
       @apply  border rounded h-[30px]
     }
-    button{
-      @apply hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-    }
+   
+  
     select{
-      @apply  border rounded h-[30px]  px-4 py-2 w-full
+      @apply  border rounded h-[40px] w-[230px]  px-4 py-2 
     }
     
     
+  }
+
+  @layer components {
+    .my-custom-style {
+      @apply text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center  
+    }
   }

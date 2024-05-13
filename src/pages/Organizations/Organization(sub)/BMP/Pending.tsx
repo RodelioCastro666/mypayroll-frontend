@@ -4,9 +4,11 @@ import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest"
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { toast } from "sonner";
+import { useState } from "react";
 export const Pending = ({ orgAlias }) => {
   const axiosRequest = useAxiosRefreshRequest();
 
+  const [pendingSearch, setPendingSearch] = useState("");
   const queryClient = useQueryClient();
 
   const { data } = useQuery({
@@ -59,7 +61,7 @@ export const Pending = ({ orgAlias }) => {
           className="w-[300px] border rounded px-4 py-1"
           type="search"
           placeholder="Input Name to search"
-          onChange={(e) => setMemberSearch(e.target.value)}
+          onChange={(e) => setPendingSearch(e.target.value)}
         />
       </div>
       <table className=" w-full h-full  px-2 text-start">
@@ -69,8 +71,19 @@ export const Pending = ({ orgAlias }) => {
         </tr>
 
         {pending &&
-          pending.map((pendingUser) => (
-            <>
+          pending
+            .filter((pendingUser) => {
+              if (pendingSearch === "") {
+                return pendingUser;
+              } else if (
+                pendingUser.name
+                  .toLowerCase()
+                  .includes(pendingSearch.toLowerCase())
+              ) {
+                return pendingUser;
+              }
+            })
+            .map((pendingUser) => (
               <tr className="flex justify-around ">
                 <td>{pendingUser.name}</td>
 
@@ -97,8 +110,7 @@ export const Pending = ({ orgAlias }) => {
                   </div>
                 </td>
               </tr>
-            </>
-          ))}
+            ))}
       </table>
     </div>
   );

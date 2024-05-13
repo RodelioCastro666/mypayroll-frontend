@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../../requestCalls/requestUser";
-
+import { toast, Toaster } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -49,28 +49,38 @@ export const Register = () => {
     }
   };
 
+  const registerDelay = () => {
+    setTimeout(() => {
+      setAccessToken(mutation.data.headers["access-token"]);
+      setRefreshToken(mutation.data.headers["refresh-token"]);
+      localStorage.setItem(
+        "access_token",
+        mutation.data.headers["access-token"]
+      );
+      localStorage.setItem(
+        "refresh_token",
+        mutation.data.headers["refresh-token"]
+      );
+
+      navigate("/dashboard", { replace: true });
+      queryClient.invalidateQueries({ queryKey: ["Profile"] });
+    }, 1000);
+  };
+
   if (mutation.isSuccess) {
     // console.log("KKK");
     // console.log("success");
     console.log(mutation.data);
-    // console.log("refresh", mutation.data.headers["refresh-token"]);
-    // console.log("accesss", mutation.data.headers["access-token"]);
-    setAccessToken(mutation.data.headers["access-token"]);
-    setRefreshToken(mutation.data.headers["refresh-token"]);
-    localStorage.setItem("access_token", mutation.data.headers["access-token"]);
-    localStorage.setItem(
-      "refresh_token",
-      mutation.data.headers["refresh-token"]
-    );
 
-    navigate("/dashboard", { replace: true });
-    queryClient.invalidateQueries({ queryKey: ["Profile"] });
+    toast.success("Successfully Registered");
+    registerDelay();
   }
 
   const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);
 
   return (
     <div className="flex h-screen items-center justify-center">
+      <Toaster richColors />
       <form className="flex w-[480px] flex-col gap-4 px-16">
         <div>
           <h1 className="mb-2 text-start text-3xl font-bold">

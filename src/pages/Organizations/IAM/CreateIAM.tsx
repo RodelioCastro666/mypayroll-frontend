@@ -1,104 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
-import { useState } from "react";
-import { CheckBox } from "./CheckBox";
+import { useId, useState } from "react";
+import { CheckBoxes } from "./CheckBoxes";
 import { toast } from "sonner";
+import { Action, Subject, actions, subjects } from ".";
 
 interface CreateIAMprops {
   orgAlias: string;
+  onClose: void;
+}
+interface IPermission {
+  subject: string;
+  action: string;
 }
 
 export const CreateIAM = (props: CreateIAMprops) => {
-  const listOptions = ["Create", "Read", "Update", "Delete"];
-
   const [owner, setOwner] = useState("");
   const [branchId, setBranchId] = useState("");
   const [departmentId, setDepartmentId] = useState("");
 
-  const [selectedBranch, setSelectedBranch] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState([]);
+  const id = useId();
 
-  const [selectedParamBranch, setselectedParamBranch] = useState([]);
-  const [selectedParamDeparment, setselectedParamDepartment] = useState([]);
-
-  const [totalCheckParam, setTotalCheckParam] = useState([]);
+  const [permissions, setPermissions] = useState<IPermission[]>([]);
+  const [disableBranchCheck, setDisableBranchCheck] = useState(false);
+  const [disableDepartmentCheck, setDisableDepartmentCheck] = useState(false);
+  const [disabled, setDisabled] = useState([]);
 
   const queryClient = useQueryClient();
-
-  const handleSelectBranch = (value, name) => {
-    if (value) {
-      setSelectedBranch([...selectedBranch, name]);
-      setselectedParamBranch([
-        ...selectedParamBranch,
-        { action: name.toLowerCase(), subject: "branch" },
-      ]);
-      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-    } else {
-      setSelectedBranch(selectedBranch.filter((item) => item !== name));
-      setselectedParamBranch(
-        selectedParamBranch.filter((item) => item.action !== name.toLowerCase())
-      );
-      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-    }
-    setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-  };
-
-  const handleSelectDepartment = (value, name) => {
-    if (value) {
-      setSelectedDepartment([...selectedDepartment, name]);
-      setselectedParamDepartment([
-        ...selectedParamDeparment,
-        { action: name.toLowerCase(), subject: "department" },
-      ]);
-      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-    } else {
-      setSelectedDepartment(selectedDepartment.filter((item) => item !== name));
-      setselectedParamDepartment(
-        selectedParamDeparment.filter(
-          (item) => item.action !== name.toLowerCase()
-        )
-      );
-      setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-    }
-    setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
-  };
-
-  function selectAllbranch(value) {
-    if (value) {
-      // if true
-      setselectedParamBranch([]);
-      setSelectedBranch(listOptions); // select all
-
-      setselectedParamBranch((prev) => [
-        ...prev,
-        { action: "all", subject: "branch" },
-      ]);
-
-      console.log(selectedParamBranch);
-    } else {
-      // if false
-      setSelectedBranch([]); // unselect all
-      setselectedParamBranch([]);
-    }
-  }
-  function selectAllDepartment(value) {
-    if (value) {
-      // if true
-      setselectedParamDepartment([]);
-      setSelectedDepartment(listOptions); // select all
-
-      setselectedParamDepartment((prev) => [
-        ...prev,
-        { action: "all", subject: "department" },
-      ]);
-
-      console.log(selectedParamDeparment);
-    } else {
-      // if false
-      setSelectedDepartment([]); // unselect all
-      setselectedParamDepartment([]);
-    }
-  }
 
   const axiosRequest = useAxiosRefreshRequest();
 
@@ -167,40 +95,89 @@ export const CreateIAM = (props: CreateIAMprops) => {
       console.log("SUCCESS");
       toast.success("Successfully created");
       queryClient.invalidateQueries({ queryKey: ["Roles"] });
+      queryClient.invalidateQueries({ queryKey: ["Members"] });
     },
   });
 
+  const handleCheckBox = (e) => {
+    const { name, value, checked } = e.target;
+    console.log(name + "-" + value);
+
+    if (value === "manage" && name === "branch") {
+      console.log("JJJJJJJ");
+      setPermissions([]);
+      setPermissions([{ action: "manage", subject: name }]);
+      setDisabled([...disabled, name]);
+      setDisableBranchCheck(true);
+    } else if (value === "manage" && name === "department") {
+      console.log("JJJJJJJ");
+      setPermissions([]);
+      setPermissions([{ action: "manage", subject: name }]);
+      setDisabled([...disabled, name]);
+      setDisableDepartmentCheck(true);
+    }
+
+    if (checked) {
+      setPermissions([...permissions, { action: value, subject: name }]);
+    } else {
+      setPermissions(
+        permissions.filter(
+          (permission) =>
+            permission.action !== value || permission.subject !== name
+        )
+      );
+      if (value === "manage" && name === "branch") {
+        setDisabled([]);
+      } else if (value === "manage" && name === "department") {
+        setDisabled([]);
+      }
+
+      permissions.forEach((permission) => {
+        console.log(permission.action === value);
+      });
+    }
+    console.log(permissions);
+  };
+
   const onHandleSubmit = () => {
-    // console.log(selectedParamBranch);
-    // console.log(selectedParamDeparment);
-    setTotalCheckParam([...selectedParamBranch, ...selectedParamDeparment]);
     console.log("owner", owner);
     console.log("branchId", branchId);
     console.log("departmentId", departmentId);
-    console.log("selectedParamBranch", selectedParamBranch);
-    console.log("selectedParamDeparment", selectedParamDeparment);
-
-    console.log("totalPAram", totalCheckParam);
 
     mutation.mutate({
       name: owner,
       branchId: branchId ? branchId : null,
       departmentId: departmentId ? departmentId : null,
-      permissions: totalCheckParam,
+      permissions: permissions,
     });
   };
 
   return (
     <div className=" ">
+      {/* <button className="my-custom-style" onClick={props.onClose}>
+        back
+      </button> */}
       <button
-        onClick={() =>
-          setTotalCheckParam([
-            ...selectedParamBranch,
-            ...selectedParamDeparment,
-          ])
-        }
+        onClick={props.onClose}
+        type="button"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-5"
       >
-        Temporary
+        <svg
+          class="w-5 h-5 rotate-180"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M1 5h12m0 0L9 1m4 4L9 9"
+          />
+        </svg>
+        <span class="sr-only">Icon description</span>
       </button>
       <div className="flex flex-col justify-center">
         <div className=" flex flex-col items-center gap-5">
@@ -215,7 +192,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
 
           <div className=" p-5 flex gap-10">
             <select
-              className="px-10 py-2 border rounded text-xs"
+              className="px-10 py-2 border rounded "
               onChange={onHandleBranchChange}
             >
               <option value={null} key="">
@@ -233,7 +210,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
                 ))}
             </select>
             <select
-              className="px-8 py-2 border rounded text-xs"
+              className="px-8 py-2 border rounded "
               onChange={onHandleDeaprtmentChange}
               name=""
               id=""
@@ -253,56 +230,47 @@ export const CreateIAM = (props: CreateIAMprops) => {
                 : null}
             </select>
           </div>
-          <h1 className="text-xl">PERMISSIONS</h1>
-          <div className="flex justify-around  w-[50%]">
-            <span className="text-lg">Branch</span>{" "}
-            <span className="text-lg">Department</span>
-          </div>
-          <div className="flex justify-around  w-[50%]">
-            <div>
-              <CheckBox
-                name="all"
-                value={selectedBranch.length === listOptions.length}
-                updateValue={selectAllbranch}
-              >
-                Manage
-              </CheckBox>
-              {listOptions.map((list) => {
-                return (
-                  <CheckBox
-                    value={selectedBranch.map((sel) => sel).includes(list)}
-                    name={list}
-                    updateValue={handleSelectBranch}
-                  >
-                    {list}
-                  </CheckBox>
-                );
-              })}
-            </div>
-            <div>
-              <CheckBox
-                name="all"
-                value={selectedDepartment.length === listOptions.length}
-                updateValue={selectAllDepartment}
-              >
-                Manage
-              </CheckBox>
-              {listOptions.map((list) => {
-                return (
-                  <CheckBox
-                    value={selectedDepartment.map((sel) => sel).includes(list)}
-                    name={list}
-                    updateValue={handleSelectDepartment}
-                  >
-                    {list}
-                  </CheckBox>
-                );
-              })}
-            </div>
-          </div>
+          <h1 className="text-xl">PERMISSION</h1>
 
-          <button onClick={onHandleSubmit} className="border px-5 py-2 rounded">
-            SUBMIT
+          <div className="flex justify-around bg-red-200  w-[50%]"></div>
+
+          <div className="flex w-[50%] justify-around ">
+            {subjects.map((subject, index) => (
+              <div className="mb-5" key={`${id}_${index}`}>
+                <h1 className="mb-5 text-lg">{subject.toLocaleUpperCase()}</h1>
+                {actions.map((action, index) => (
+                  <div key={`${id}_${index}`}>
+                    <input
+                      id={id}
+                      disabled={
+                        disabled.includes(subject) && action !== "manage"
+                      }
+                      type="checkbox"
+                      name={subject}
+                      value={action}
+                      onChange={handleCheckBox}
+                      checked={permissions.some(
+                        (permission) =>
+                          permission.action === action &&
+                          permission.subject == subject
+                      )}
+                    />
+                    <label htmlFor={id}>{action}</label>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          {/* <div>
+            {permissions.map((permission, index) => (
+              <div key={index}>
+                {permission.subject} - {permission.action}
+              </div>
+            ))}
+          </div> */}
+
+          <button onClick={onHandleSubmit} class="my-custom-style">
+            Submit
           </button>
         </div>
       </div>

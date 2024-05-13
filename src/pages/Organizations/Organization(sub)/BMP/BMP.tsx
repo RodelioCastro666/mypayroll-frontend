@@ -157,7 +157,7 @@ export const BMP = () => {
             {memberHighLight && (
               <button
                 onClick={() => setCreateMemberModal((prev) => !prev)}
-                className=" border rounded px-10 py-1 hover:shadow-md "
+                className="my-custom-style px-10"
               >
                 Create
               </button>
@@ -166,7 +166,7 @@ export const BMP = () => {
             {branchHighLight && (
               <button
                 onClick={() => setIsOpenCreateMOdal(true)}
-                className=" border rounded px-10 py-1 hover:shadow-md "
+                className="my-custom-style px-10"
               >
                 Create
               </button>
@@ -174,7 +174,7 @@ export const BMP = () => {
             {departmentHighLight && (
               <button
                 onClick={() => setIsOpenCreateDeparmtentModal(true)}
-                className=" border rounded px-10 py-1 hover:shadow-md "
+                className="my-custom-style px-10"
               >
                 Create
               </button>
