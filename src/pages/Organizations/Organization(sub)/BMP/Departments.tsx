@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../../auth/useAxiosRefreshRequest";
 import { useQuery } from "@tanstack/react-query";
-
+import { EditDepartment } from "../../OrganizationModal/EditDepartment";
 interface IDeparment {
   orgAlias: string;
   branchAlias: string;
@@ -12,11 +12,22 @@ export const Departments = (props: IDeparment) => {
 
   const [departmentSearch, setDepartmentSearch] = useState("");
 
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+
+  const [branchAlias, setBranchAlias] = useState("");
+  const [deptAlias, setDepartmentAlias] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
+
   const { data: deparments } = useQuery({
     queryKey: ["Departments"],
     queryFn: async () =>
       await axiosRequest.get(`organizations/${props.orgAlias}/departments`),
   });
+
+  const openEditModal = (branchAlias) => {
+    setIsOpenEditModal(true);
+    setBranchAlias(branchAlias);
+  };
 
   console.log(deparments?.data);
 
@@ -58,15 +69,28 @@ export const Departments = (props: IDeparment) => {
                   </div>
 
                   <div className="flex justify-end items-center border-t  p-2">
-                    <button className="hover:underline">
-                      {/* <Link to={`branches/${branch.alias}/departments/`}>
-                      View
-                    </Link> */}
+                    <button
+                      onClick={() => {
+                        openEditModal(department.branch.branch_alias);
+                        setDepartmentAlias(department.alias);
+                        setDepartmentName(department.name);
+                      }}
+                      className="hover:underline"
+                    >
+                      Edit
                     </button>
                   </div>
                 </div>
               </div>
             ))}
+        <EditDepartment
+          isOpen={isOpenEditModal}
+          closeModal={() => setIsOpenEditModal(false)}
+          orgAlias={props.orgAlias}
+          branchAlias={branchAlias}
+          deptAlias={deptAlias}
+          deptName={departmentName}
+        />
       </div>
     </>
   );

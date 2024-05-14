@@ -26,12 +26,13 @@ export const Register = () => {
   const queryClient = useQueryClient();
   // crete NewUser
   const mutation = useMutation({
-    mutationFn: async (userCredentials) => registerUser(userCredentials),
+    mutationFn: async (userCredentials) => await registerUser(userCredentials),
     onSuccesss: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["Profile"] });
     },
   });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("click");
@@ -68,11 +69,8 @@ export const Register = () => {
   };
 
   if (mutation.isSuccess) {
-    // console.log("KKK");
-    // console.log("success");
     console.log(mutation.data);
 
-    toast.success("Successfully Registered");
     registerDelay();
   }
 

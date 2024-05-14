@@ -1,21 +1,19 @@
-import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthProvider";
-import axios from "../../api/axios";
-import { useRefreshRequest } from "../../auth/useRefreshRequest";
+import { PolarBear } from "../../components/EmptyPages";
 import { useQueryClient } from "@tanstack/react-query";
 export const Dashboard = () => {
   const queryClient = useQueryClient();
-  const { setAccessToken } = useAuth();
 
   const { access_token } = useAuth();
+  const { refresh_token } = useAuth();
 
-  console.log(access_token);
+  console.log("ACCESS" + refresh_token);
 
-  console.log(access_token);
+  console.log("REFRESH" + access_token);
 
   queryClient.invalidateQueries({ queryKey: ["Profile"] });
   return (
-    <div className="w-full h-full ">
+    <div className="w-full h-screen flex flex-col justify-center items-center">
       {/* Dashboard Screenddd
       <button onClick={() => setAccessToken()}>RESET</button>
       <button onClick={() => refresh()}>Refresh</button>
@@ -29,6 +27,7 @@ export const Dashboard = () => {
       >
         LOGOUT
       </button> */}
+      <PolarBear content="Nothing to see here yet" />
     </div>
   );
 };

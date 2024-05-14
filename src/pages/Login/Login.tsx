@@ -1,7 +1,6 @@
-import googleLogo from "../../Assets/flat-color-icons_google.png";
-import fbLogo from "../../Assets/devicon_facebook.png";
 import "./style.css";
-import { useEffect, useRef, useState } from "react";
+
+import { useState, useEffect } from "react";
 
 import { Toaster, toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export const Login = () => {
   const { setAccessToken } = useAuth();
@@ -25,14 +25,19 @@ export const Login = () => {
   const [password, setPassword] = useState("");
 
   const queryClient = useQueryClient();
+  const [login] = useSearchParams();
+
+  console.log(login.get("at"));
+  console.log(login.get("rf"));
 
   const loginDelay = (data) => {
     setTimeout(() => {
       setAccessToken(data.headers["access-token"]);
       setRefreshToken(data.headers["refresh-token"]);
-      navigate("/dashboard", { replace: true });
+
       localStorage.setItem("access_token", data.headers["access-token"]);
       localStorage.setItem("refresh_token", data.headers["refresh-token"]);
+      navigate("/dashboard", { replace: true });
       queryClient.invalidateQueries({ queryKey: ["Profile"] });
       window.location.reload(false);
     }, 1000);
@@ -50,6 +55,18 @@ export const Login = () => {
     onError: (error) => {
       console.log(error);
     },
+  });
+
+  useEffect(() => {
+    if (login.get("at") && login.get("rf")) {
+      toast.success("GOOGLE AUTH SUCCESS");
+      setAccessToken(login.get("at"));
+      setRefreshToken(login.get("rf"));
+
+      localStorage.setItem("access_token", login.get("at"));
+      localStorage.setItem("refresh_token", login.get("rf"));
+      navigate("/dashboard", { replace: true });
+    }
   });
 
   const handleSubmit = async (e) => {
@@ -114,13 +131,19 @@ export const Login = () => {
               </button>
             </div>
           </div>
-          <button className="rounded bg-[#0C0C0C] px-4 py-1.5 text-white">
+          <button
+            type="submit"
+            className="rounded bg-[#0C0C0C] px-4 py-1.5 text-white"
+          >
             Sign in
           </button>
           <span className="text-center text-sm text-gray-500">or</span>
           <button className="flex flex-row items-center justify-center gap-2 rounded border-[1px] border-black px-4 py-1.5">
             <FcGoogle />
-            Continue with Google
+            <a href="http://abc.com:3000/api/auth/google">
+              {" "}
+              Continue with Google
+            </a>
           </button>
           <button className="flex flex-row items-center justify-center gap-2 rounded border-[1px] border-black px-4 py-1.5">
             <FaFacebook color="#1877F2" />

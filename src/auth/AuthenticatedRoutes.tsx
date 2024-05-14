@@ -10,10 +10,10 @@ export const AuthenticatedRoutes = () => {
   }
 
   return (
-    <div className="grid grid-rows-[60px_1fr] h-screen">
+    <div className=" grid grid-rows-[60px_1fr] ">
       <Header user={name} />
 
-      <div className="grid grid-cols-[200px_1fr] grid-rows-1 ">
+      <div className=" grid grid-cols-[200px_1fr] grid-rows-1 ">
         <Nav />
         <Outlet />
       </div>

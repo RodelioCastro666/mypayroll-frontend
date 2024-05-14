@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import CreateOrganization from "../OrganizationModal/CreateOrganization";
 import { JoinOrganization } from "../OrganizationModal/JoinOrganization";
-
-import { useAuth } from "../../../auth/AuthProvider";
-
 import Kebab from "./kebab";
 import { useQuery } from "@tanstack/react-query";
+import { PolarBear } from "../../../components/EmptyPages";
+
 export const Organizations = () => {
   const axiosRequest = useAxiosRefreshRequest();
 
@@ -16,18 +15,32 @@ export const Organizations = () => {
 
   const [orgSearch, setOrgSearch] = useState<string>("");
 
-  const { data } = useQuery({
+  const {
+    data: organization,
+    isPending,
+
+    isError,
+  } = useQuery({
     queryKey: ["Organizations"],
     queryFn: async () => await axiosRequest.get("/organizations"),
+    retry: 3,
   });
-
-  // setOrganization(data?.data);
-
-  const organization = data?.data;
 
   const createModalClose = () => {
     setIsOpenCreateModal(false);
   };
+
+  if (isError) {
+    return (
+      <div className="h-screen flex justify-center bg-red-100">
+        <PolarBear content="ERROR" />
+      </div>
+    );
+  }
+  if (isPending) {
+    <div>LOADING</div>;
+    console.log("LOADING");
+  }
 
   return (
     <div className="grid grid-rows-[50px_1fr]   ">
@@ -70,7 +83,7 @@ export const Organizations = () => {
 
       <section className=" h-full grid grid-cols-4 grid-rows-2 p-10 gap-10  relative ">
         {organization &&
-          organization
+          organization.data
             ?.filter((org) => {
               if (orgSearch === "") {
                 return org;

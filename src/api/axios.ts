@@ -17,3 +17,8 @@ export const axiosRefreshRequest = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
+
+
+export const  axiosgoogleAuth = axios.create({
+  baseURL: "http://10.10.10.98:3000/api",
+})

@@ -1,63 +1,58 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Fragment, useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
-import { useMutation } from "@tanstack/react-query";
-
-import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-interface IDepartment {
+interface IEditDepartmentProps {
   isOpen: void;
   closeModal: void;
   orgAlias: string;
+  branchAlias: string;
+  deptAlias: string;
+  deptName: string;
 }
 
-export default function CreateDepartment(props: IDepartment) {
-  const [newDepartment, setNewDeparment] = useState("");
+export const EditDepartment = (props: IEditDepartmentProps) => {
   const axiosRequest = useAxiosRefreshRequest();
-
   const queryClient = useQueryClient();
 
-  const [assignBranch, setAssignBranch] = useState("");
+  const [editBranch, setEditBranch] = useState("");
+
+  const [deptAlias, setDeptAlias] = useState("");
 
   const { data: branches } = useQuery({
     queryKey: ["Branches"],
-    queryFn: async () =>
-      await axiosRequest.get(`/organizations/${props.orgAlias}/branches`),
+    queryFn: async () => {
+      return await axiosRequest.get(
+        `/organizations/${props.orgAlias}/branches`
+      );
+    },
   });
+
+  console.log(props.branchAlias);
 
   const mutation = useMutation({
-    mutationFn: async (credential): Promise<IDepartment> => {
-      const response = await axiosRequest.post(
-        `organizations/${props.orgAlias}/branches/${assignBranch}/departments`,
+    mutationFn: async (credential) => {
+      return await axiosRequest.patch(
+        `/organizations/${props.orgAlias}/branches/${props.branchAlias}/departments/${props.deptAlias}`,
         credential
       );
-
-      return response.data;
     },
-    onSuccess: () => {
-      // setDepartment((prev) => [...prev, data]);
+    onSuccess() {
+      console.log("SUCCESS EDIT");
       queryClient.invalidateQueries({ queryKey: ["Departments"] });
-      toast.success("Deparment has been created");
     },
     onError: (error) => {
-      if (error.response.status === 409) {
-        toast.error("The Department has already been created.");
-      }
+      console.log(error);
     },
   });
 
-  const handleChangeBranch = (e) => {
-    setAssignBranch(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const onHandleSubmit = () => {
+  const onhandleEditSubmit = () => {
     mutation.mutate({
-      name: newDepartment,
+      name: deptAlias,
     });
     props.closeModal();
+    console.log(deptAlias);
   };
 
   return (
@@ -92,35 +87,47 @@ export default function CreateDepartment(props: IDepartment) {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Create Department
+                    Edit Organization
                   </Dialog.Title>
 
                   <div>
                     <select
-                      onChange={handleChangeBranch}
+                      value={editBranch ? editBranch : props.branchAlias}
+                      onChange={(e) => setEditBranch(e.target.value)}
                       className=" px-4 py-2 w-full border rounded "
                     >
-                      <option value="">
-                        Select a Branch for the deparment{" "}
-                      </option>
-                      {branches?.data.map((branch) => (
-                        <option
-                          key={branch.id}
-                          className="p-2"
-                          id={branch.id}
-                          value={branch.branch_alias}
-                        >
-                          {branch.name}
-                        </option>
-                      ))}
+                      {branches?.data.map((branch) =>
+                        branch.branch_alias === props.branchAlias ? (
+                          <option
+                            selected
+                            key={branch.id}
+                            className="p-2"
+                            id={branch.id}
+                            value={branch.branch_alias}
+                          >
+                            {branch.name}
+                          </option>
+                        ) : (
+                          <option
+                            key={branch.id}
+                            className="p-2"
+                            id={branch.id}
+                            value={branch.branch_alias}
+                          >
+                            {branch.name}
+                          </option>
+                        )
+                      )}
                     </select>
                   </div>
+
                   <div className="mt-2  ">
                     <input
+                      value={deptAlias === "" ? props.deptAlias : deptAlias}
                       className="px-4 py-2 w-full border rounded"
                       type="text"
-                      placeholder="Enter Organization Name"
-                      onChange={(e) => setNewDeparment(e.target.value)}
+                      placeholder="Enter New  Name"
+                      onChange={(e) => setDeptAlias(e.target.value)}
                     />
                   </div>
 
@@ -135,7 +142,7 @@ export default function CreateDepartment(props: IDepartment) {
                     <button
                       type="button"
                       className="inline-flex  rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={onHandleSubmit}
+                      onClick={onhandleEditSubmit}
                     >
                       Create
                     </button>
@@ -148,4 +155,4 @@ export default function CreateDepartment(props: IDepartment) {
       </Transition>
     </>
   );
-}
+};
