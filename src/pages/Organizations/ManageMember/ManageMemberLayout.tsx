@@ -20,8 +20,8 @@ export const ManageMemberLayout = () => {
   const user = member?.data.user;
   const branch = member?.data.branch;
   const department = member?.data.department;
-  console.log("JUJUJU", member?.data);
 
+  console.log(member?.data.id);
   return (
     <div className="p-2 w-full h-full">
       {/* <aside></aside>

@@ -32,7 +32,7 @@ export const Departments = (props: IDeparment) => {
   console.log(deparments?.data);
 
   return (
-    <>
+    <div className="">
       <div className="px-10  py-1 flex items-center ">
         <input
           className="w-[300px] border rounded px-4 py-1 "
@@ -92,6 +92,6 @@ export const Departments = (props: IDeparment) => {
           deptName={departmentName}
         />
       </div>
-    </>
+    </div>
   );
 };

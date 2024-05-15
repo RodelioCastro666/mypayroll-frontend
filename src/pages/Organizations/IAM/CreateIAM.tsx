@@ -153,9 +153,6 @@ export const CreateIAM = (props: CreateIAMprops) => {
 
   return (
     <div className=" ">
-      {/* <button className="my-custom-style" onClick={props.onClose}>
-        back
-      </button> */}
       <button
         onClick={props.onClose}
         type="button"
@@ -176,7 +173,6 @@ export const CreateIAM = (props: CreateIAMprops) => {
             d="M1 5h12m0 0L9 1m4 4L9 9"
           />
         </svg>
-        <span class="sr-only">Icon description</span>
       </button>
       <div className="flex flex-col justify-center">
         <div className=" flex flex-col items-center gap-5">
@@ -260,13 +256,6 @@ export const CreateIAM = (props: CreateIAMprops) => {
               </div>
             ))}
           </div>
-          {/* <div>
-            {permissions.map((permission, index) => (
-              <div key={index}>
-                {permission.subject} - {permission.action}
-              </div>
-            ))}
-          </div> */}
 
           <button onClick={onHandleSubmit} class="my-custom-style">
             Submit

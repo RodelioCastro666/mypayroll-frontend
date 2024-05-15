@@ -22,7 +22,7 @@ export const Nav = () => {
 
   const { setAccessToken, setRefreshToken } = useAuth();
   return (
-    <nav className=" h-full  p-4 border-r-[1px] flex flex-col justify-between">
+    <nav className=" h-full bg-[#fefffc]  p-4 border-r-[1px] flex flex-col justify-between">
       <ul className="">
         <Link to="/">
           <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Home</li>
@@ -45,7 +45,7 @@ export const Nav = () => {
           <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Branches</li>
         </Link>
         <Link to="/departments">
-          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Departmens</li>
+          <li className="px-5 py-3 hover:bg-gray-100 rounded-r">Departments</li>
         </Link>
       </ul>
 

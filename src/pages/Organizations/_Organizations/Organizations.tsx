@@ -32,7 +32,7 @@ export const Organizations = () => {
 
   if (isError) {
     return (
-      <div className="h-screen flex justify-center bg-red-100">
+      <div className="h-screen flex justify-center ">
         <PolarBear content="ERROR" />
       </div>
     );
@@ -57,7 +57,6 @@ export const Organizations = () => {
           <div className=" px-6 py-1 flex justify-evenly  gap-5">
             <button
               onClick={() => setIsOpenCreateModal(true)}
-              // className=" border-[1px] rounded px-10 py-1 hover:shadow-md"
               className="my-custom-style px-10 "
             >
               Create
@@ -118,9 +117,9 @@ export const Organizations = () => {
                     </p>
                   </div>
                   <div className="flex justify-end items-center border-t  p-2">
-                    <button className="my-custom-style mt-2">
-                      <Link to={`${org.alias}`}>View</Link>
-                    </button>
+                    <Link to={`${org.alias}`}>
+                      <button className="my-custom-style mt-2">View</button>
+                    </Link>
                   </div>
                 </div>
               </div>

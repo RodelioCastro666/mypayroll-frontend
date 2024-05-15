@@ -10,7 +10,7 @@ export const AuthenticatedRoutes = () => {
   }
 
   return (
-    <div className=" grid grid-rows-[60px_1fr] ">
+    <div className="h-screen grid grid-rows-[60px_1fr] ">
       <Header user={name} />
 
       <div className=" grid grid-cols-[200px_1fr] grid-rows-1 ">

@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const ManageMember = () => {
   const axiosRequest = useAxiosRefreshRequest();
@@ -24,12 +25,16 @@ export const ManageMember = () => {
   const [orgAlias, members, memberId, user, branch, deparment] =
     useOutletContext();
 
+  const [roles, setRoles] = useState();
+
   const { data: branches } = useQuery({
     queryKey: ["Branches"],
     queryFn: async () => {
       return await axiosRequest.get(`/organizations/${orgAlias}/branches`);
     },
   });
+
+  console.log(user);
 
   const getDepartment = async (assignBranch) => {
     try {
@@ -43,16 +48,33 @@ export const ManageMember = () => {
     }
   };
 
-  const { data: roles } = useQuery({
-    queryKey: ["Roles"],
-    queryFn: async () => {
-      return await axiosRequest.get(
+  useEffect(() => {
+    const getRoles = async () => {
+      const response = await axiosRequest.get(
         `/organizations/${orgAlias}/iam/roles?branch=${
           members.branch ? members.branch.branch_alias : ""
         }&department=${members.department ? members.department.alias : ""}`
       );
-    },
-  });
+
+      setRoles(response.data);
+    };
+  }, []);
+  // const { data: roles, isSuccess } = useQuery({
+  //   queryKey: ["Roles"],
+  //   queryFn: async () => {
+  //     return await axiosRequest.get(
+  //       `/organizations/${orgAlias}/iam/roles?branch=${
+  //         members.branch ? members.branch.branch_alias : ""
+  //       }&department=${members.department ? members.department.alias : ""}`
+  //     );
+  //   },
+  //   refetchOnWindowFocus: false,
+  // });
+
+  // if (isSuccess) {
+  //   console.log("Fetch ROLEs");
+  //   window.location.reload(false);
+  // }
 
   const mutation = useMutation({
     mutationFn: async (credential) => {
@@ -80,6 +102,9 @@ export const ManageMember = () => {
       queryClient.invalidateQueries({
         queryKey: ["Members"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["Roles"],
+      });
       // toast.success("Successfully set");
     },
     // onError: () => {
@@ -95,6 +120,9 @@ export const ManageMember = () => {
       return response.data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["Roles"],
+      });
       queryClient.invalidateQueries({
         queryKey: ["Members"],
       });
@@ -157,8 +185,33 @@ export const ManageMember = () => {
   };
 
   return (
-    <div className=" w-full h-full flex flex-col items-center gap-10 rounded-md p-2">
+    <div className=" w-full h-full flex flex-col items-center gap-5 rounded-md p-2">
       {/* EMPLOYEE INFO */}
+      <div className="flex  w-full">
+        <Link to={`/organizations/${orgAlias}/members`}>
+          <button
+            type="button"
+            class="text-black   focus:ring-4 focus:outline-none font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2   ml-5"
+          >
+            <svg
+              class="w-5 h-5 rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
+            </svg>
+          </button>
+        </Link>
+      </div>
+
       <div className="border px-10 py-5 w-[80%] shadow-md flex flex-col gap-2 rounded">
         <h1 className="text-3xl border-b p-2">Employee Information</h1>
         {/* <div className="flex flex-col gap-4">

@@ -33,6 +33,7 @@
   },
   "proxy": "http://10.10.10.98:3000",
   "devDependencies": {
+    "@eslint/js": "^9.2.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
@@ -40,11 +41,14 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "globals": "^15.2.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
+    "typescript-eslint": "^7.9.0",
     "vite": "^5.2.0"
   },
   "description": "- [Atomic Design Guide 2](https://www.toptal.com/designers/ui/atomic-design-sketch)\r - [Atomic Design Guide 1](https://medium.com/@janelle.wg/atomic-design-pattern-how-to-structure-your-react-application-2bb4d9ca5f97)\r - [Atomic Design by Brad Frost](https://atomicdesign.bradfrost.com/)\r - [Git Branch Naming Convention](https://phoenixnap.com/kb/git-branch-name-convention)\r - [Git Cheat Sheet](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet)",

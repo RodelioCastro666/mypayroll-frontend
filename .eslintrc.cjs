@@ -14,6 +14,12 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "on"
+  },
+  {
+    "@typescript-eslint/no-explicit-any": "error"
+  }
     
   },
 }

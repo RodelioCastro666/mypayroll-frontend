@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 
 export const OrganizationsLayout = () => {
   return (
-    <div>
+    <div className="h-ful">
       <Toaster richColors />
 
       <Outlet />

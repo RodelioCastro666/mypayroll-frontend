@@ -12,7 +12,7 @@ import { SpecificDeparmtent } from "./pages/Organizations/Organization(sub)/Spec
 import { Organizations } from "./pages/Organizations/_Organizations/Organizations";
 import { ManageMember } from "./pages/Organizations/ManageMember/ManageMember";
 import { BMP } from "./pages/Organizations/Organization(sub)/BMP/BMP";
-
+import { Members } from "./pages/Organizations/Organization(sub)/BMP/Members";
 //This functional component acts as the entry point for
 //configuring the application routes.
 export const Routes = () => {
@@ -76,7 +76,14 @@ export const Routes = () => {
             {
               path: ":orgAlias",
               element: <BMP />,
+              children: [
+                {
+                  path: "members",
+                  element: <Members />,
+                },
+              ],
             },
+
             {
               path: ":orgAlias/members/:memberId/*",
               element: <ManageMemberLayout />,

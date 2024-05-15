@@ -38,16 +38,16 @@ const Kebab = (props: IKebabProps) => {
               onClick={() =>
                 toast.info(`Copied Invitation Code (${props.invitationCode})`)
               }
-              className="px-2 border py-2  text-xs rounded"
+              className="my-custom-style text-xs"
             >
               Copy Invitation Code
             </button>
           </CopyToClipboard>
           <button
             onClick={() => setIsOpenUpdateModal(true)}
-            className="px-2 border py-2  text-xs rounded"
+            className="my-custom-style text-xs "
           >
-            Update
+            Edit
           </button>
         </div>
       )}

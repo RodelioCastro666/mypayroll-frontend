@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-
+import { Outlet, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Branches } from "./Branches";
 import { Members } from "./Members";
 import { Pending } from "./Pending";
@@ -87,7 +87,7 @@ export const BMP = () => {
     }
   };
   return (
-    <div className="grid grid-rows-[50px_1fr] ">
+    <div className="grid grid-rows-[50px_1fr] bg-[#fefffc]">
       <nav className="">
         <div className=" px-4   border-b-[1px] flex justify-between gap-3">
           <div className="flex  gap-5 relative">
@@ -96,7 +96,7 @@ export const BMP = () => {
                 onClick={memberFlip}
                 className=" px-8 border-b-4 border-blue-600 rounded-b"
               >
-                Members
+                <Link to={`members`}>Members</Link>
               </button>
             ) : (
               <button onClick={memberFlip} className=" px-8  rounded-b">
@@ -203,7 +203,7 @@ export const BMP = () => {
         }
         {departmentHighLight && <Departments orgAlias={orgAlias} />}
         {branchHighLight && <Branches orgAlias={orgAlias} />}
-        {memberHighLight && <Members orgAlias={orgAlias} />}
+        {memberHighLight && <Outlet />}
         {pendingHighLight && <Pending orgAlias={orgAlias} />}
         {iAmHighLight && <IAM orgAlias={orgAlias} />}
       </section>

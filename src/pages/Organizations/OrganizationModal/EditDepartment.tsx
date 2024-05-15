@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useQueryClient } from "@tanstack/react-query";
 interface IEditDepartmentProps {
@@ -18,7 +18,7 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
 
   const [editBranch, setEditBranch] = useState("");
 
-  const [deptAlias, setDeptAlias] = useState("");
+  const [deptAlias, setDeptAlias] = useState<string>("");
 
   const { data: branches } = useQuery({
     queryKey: ["Branches"],
@@ -29,12 +29,22 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
     },
   });
 
-  console.log(props.branchAlias);
+  useEffect(() => {
+    setEditBranch(props.branchAlias);
+
+    return () => {
+      setEditBranch();
+    };
+  }, []);
+
+  console.log(editBranch);
 
   const mutation = useMutation({
     mutationFn: async (credential) => {
       return await axiosRequest.patch(
-        `/organizations/${props.orgAlias}/branches/${props.branchAlias}/departments/${props.deptAlias}`,
+        `/organizations/${props.orgAlias}/branches/${
+          editBranch === "" ? props.branchAlias : editBranch
+        }/departments/${props.deptAlias}`,
         credential
       );
     },
@@ -53,6 +63,9 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
     });
     props.closeModal();
     console.log(deptAlias);
+    console.log(editBranch);
+    setDeptAlias("");
+    setEditBranch("");
   };
 
   return (
@@ -91,8 +104,11 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
                   </Dialog.Title>
 
                   <div>
+                    <button onClick={() => console.log(editBranch)}>
+                      click
+                    </button>
                     <select
-                      value={editBranch ? editBranch : props.branchAlias}
+                      defaultValue={props.branchAlias}
                       onChange={(e) => setEditBranch(e.target.value)}
                       className=" px-4 py-2 w-full border rounded "
                     >
@@ -123,7 +139,7 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
 
                   <div className="mt-2  ">
                     <input
-                      value={deptAlias === "" ? props.deptAlias : deptAlias}
+                      defaultValue={props.deptName}
                       className="px-4 py-2 w-full border rounded"
                       type="text"
                       placeholder="Enter New  Name"
