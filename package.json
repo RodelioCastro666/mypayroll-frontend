@@ -47,9 +47,10 @@
     "globals": "^15.2.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.5",
     "typescript-eslint": "^7.9.0",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vite-plugin-eslint": "^1.8.1"
   },
   "description": "- [Atomic Design Guide 2](https://www.toptal.com/designers/ui/atomic-design-sketch)\r - [Atomic Design Guide 1](https://medium.com/@janelle.wg/atomic-design-pattern-how-to-structure-your-react-application-2bb4d9ca5f97)\r - [Atomic Design by Brad Frost](https://atomicdesign.bradfrost.com/)\r - [Git Branch Naming Convention](https://phoenixnap.com/kb/git-branch-name-convention)\r - [Git Cheat Sheet](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet)",
   "main": "postcss.config.js",

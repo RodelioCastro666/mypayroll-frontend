@@ -4,7 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import "../../../../index.css";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { CiMenuKebab } from "react-icons/ci";
 // interface IMemberProps {
@@ -17,14 +17,33 @@ export const Members = () => {
 
   const [memberSearch, setMemberSearch] = useState("");
 
+  const [members, setMembers] = useState([]);
+
   const { orgAlias } = useParams();
 
-  const { data: members, error } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ["Members"],
     queryFn: async () => {
-      return await axiosRequest.get(`/organizations/${orgAlias}/members/`);
+      const response = await axiosRequest.get(
+        `/organizations/${orgAlias}/members/`
+      );
+      setMembers(response.data);
+      return response;
     },
   });
+
+  // useEffect(() => {
+  //   const getMember = async () => {
+  //     const response = await axiosRequest.get(
+  //       `/organizations/${orgAlias}/members/`
+  //     );
+
+  //     setMembers(response.data);
+  //   };
+
+  //   getMember();
+  // }, []);
+
   console.log(members);
 
   return (
@@ -52,21 +71,47 @@ export const Members = () => {
         </thead>
 
         <tbody>
-          {members
-            ? members.data
-                ?.filter((member) => {
-                  if (memberSearch === "") {
-                    return member;
-                  } else if (
-                    member.user.firstName
-                      .toLowerCase()
-                      .includes(memberSearch.toLowerCase())
-                  ) {
-                    return member;
-                  }
-                })
-                .map((member) =>
-                  member.role?.name !== "owner" ? (
+          {members &&
+            members
+              ?.filter((member) => {
+                if (memberSearch === "") {
+                  return member;
+                } else if (
+                  member.user.firstName
+                    .toLowerCase()
+                    .includes(memberSearch.toLowerCase())
+                ) {
+                  return member;
+                }
+              })
+              .map((member) =>
+                member.role === null ? (
+                  <tr key={member.id}>
+                    <td className="">
+                      <CgProfile className="w-[25px] h-[25px] inline-block mr-2" />
+                      {member.user.firstName && member.user.firstName}
+                      {member.user.lastName && member.user.lastName}
+                    </td>
+                    <td>{member.membership}</td>
+                    <td>ACTIVE</td>
+                    <td>{member.role ? member.role.name : "not assigned"}</td>
+                    <td>
+                      {member.branch ? member.branch.name : "not assigned"}
+                    </td>
+                    <td>
+                      {member.department
+                        ? member.department.name
+                        : "not assigned"}
+                    </td>
+                    <td>{member.updatedAt}</td>
+                    <td className="relative ">
+                      <Link to={`${member.id}`}>
+                        <CiMenuKebab className="text-black  " />
+                      </Link>
+                    </td>
+                  </tr>
+                ) : (
+                  member.role.name !== "owner" && (
                     <tr key={member.id}>
                       <td className="">
                         <CgProfile className="w-[25px] h-[25px] inline-block mr-2" />
@@ -87,14 +132,14 @@ export const Members = () => {
                       </td>
                       <td>{member.updatedAt}</td>
                       <td className="relative ">
-                        <Link to={`members/${member.id}`}>
+                        <Link to={`${member.id}`}>
                           <CiMenuKebab className="text-black  " />
                         </Link>
                       </td>
                     </tr>
-                  ) : null
+                  )
                 )
-            : null}
+              )}
         </tbody>
       </table>
     </section>

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useOutletContext } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 export const ManageMember = () => {
   const axiosRequest = useAxiosRefreshRequest();
@@ -17,6 +19,19 @@ export const ManageMember = () => {
 
   const [isOpenDepartmentOption, setIsOpenDepartmentOption] =
     useState<boolean>(false);
+
+  const [firstName, setFirstName] = useState("");
+  const [lasttName, setLastName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [suffix, setSuffix] = useState("");
+  const [birthday, setBirthDay] = useState("");
+  const [sex, setSex] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [civilStatus, setCivilStatus] = useState("");
+  const [address, setAddress] = useState("");
+  const [salary, setSalary] = useState("");
+
+  const [credentials, setCredentials] = useState([]);
 
   //crederntials for setting role
 
@@ -34,7 +49,7 @@ export const ManageMember = () => {
     },
   });
 
-  console.log(user);
+  console.log("USER", members);
 
   const getDepartment = async (assignBranch) => {
     try {
@@ -58,7 +73,14 @@ export const ManageMember = () => {
 
       setRoles(response.data);
     };
-  }, []);
+
+    getRoles();
+  }, [members]);
+
+  console.log("====================================");
+  console.log(roles);
+  console.log("====================================");
+
   // const { data: roles, isSuccess } = useQuery({
   //   queryKey: ["Roles"],
   //   queryFn: async () => {
@@ -85,6 +107,7 @@ export const ManageMember = () => {
     },
     onSuccess: () => {
       console.log("SUCCESSS");
+      toast.success("Success");
     },
     onError: (error) => {
       console.log(error);
@@ -128,16 +151,13 @@ export const ManageMember = () => {
       });
       toast.success("Successfully set");
     },
-    onError: () => {
-      toast.error("Failed to set");
-    },
   });
 
   const handleSelectedBranch = (e) => {
     setIsAssignbranch(e.target.value);
     getDepartment(e.target.value);
     setCount((prev) => prev + 1);
-    setIsOpenDepartmentOption(true);
+
     console.log("LLLL");
   };
 
@@ -147,27 +167,24 @@ export const ManageMember = () => {
 
   const onSetSubmit = () => {
     Promise.all([
-      mutationSetBranch.mutate({
-        id: user.id,
-        branch: assignedBranch,
-      }),
       mutationSetDepartment.mutate({
         id: user.id,
         branch: assignedBranch,
         department: assignedDepartment,
       }),
-    ])
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      mutationSetBranch.mutate({
+        id: user.id,
+        branch: assignedBranch,
+      }),
+    ]).then((response) => {
+      console.log(response);
+      toast.success("Successfully Set");
+    });
   };
 
   const onSetSubmitRole = () => {
     console.log("ROLE SUBMIT");
-    console.log(memberId);
+    // console.log(user.id);
     console.log(roleId);
 
     mutation.mutate({
@@ -182,6 +199,19 @@ export const ManageMember = () => {
     setroleId(
       e.target.options[e.target.selectedIndex].getAttribute("data-key")
     );
+  };
+
+  const handleSaveUserInfo = () => {
+    console.log(firstName);
+    console.log(lasttName);
+    console.log(middleName);
+    console.log(suffix);
+    console.log(sex);
+    console.log(address);
+    console.log(nationality);
+    console.log(civilStatus);
+
+    console.log(credentials);
   };
 
   return (
@@ -222,42 +252,135 @@ export const ManageMember = () => {
         <div className=" grid grid-cols-3 grid-rows-5 gap-2">
           <div className="flex flex-col text-xs">
             <label htmlFor="">FirstName</label>
-            <input className="" type="text" />
+            <input
+              defaultValue={members && members.firstName}
+              onChange={(e) => {
+                set([...credentials, e.target.value]);
+                setFirstName(e.target.value);
+              }}
+              className=""
+              type="text"
+            />
           </div>
           <div className="flex flex-col text-xs">
             <label htmlFor="">MiddleName</label>
-            <input className="" type="text" />
+            <input
+              defaultValue={members && members.middleName}
+              onChange={(e) => {
+                set([...credentials, e.target.value]);
+                setMiddleName(e.target.value);
+              }}
+              className=""
+              type="text"
+            />
           </div>
+
           <div className="flex flex-col text-xs">
             <label htmlFor="">LastName</label>
-            <input className="" type="text" />
+            <input
+              defaultValue={members && members.lastName}
+              onChange={(e) => {
+                set([...credentials, e.target.value]);
+                setLastName(e.target.value);
+              }}
+              className=""
+              type="text"
+            />
+          </div>
+
+          <div className="flex flex-col text-xs">
+            <label htmlFor="">Suffix</label>
+            <input
+              defaultValue={members && members.suffix}
+              onChange={(e) => {
+                set([...credentials, e.target.value]);
+                setSuffix(e.target.value);
+              }}
+              className=""
+              type="text"
+            />
           </div>
           <div className="flex flex-col text-xs">
             <label htmlFor="">BirthDate</label>
-            <input className="" type="text" />
+            <input
+              defaultValue={members && members.birthDate}
+              onChange={(e) => {
+                set([...credentials, e.target.value]);
+                setBirthDay(e.target.value);
+              }}
+              type="date"
+              className=""
+            />
           </div>
           <div className="flex flex-col text-xs">
             <p>Sex</p>
             <div className="flex justify-start items-center  gap-2">
               <label htmlFor="">Male</label>
-              <input name="sex" className="" type="radio" />
+              <input
+                onChange={() => {
+                  set([...credentials, e.target.value]);
+                  setSex("male");
+                }}
+                checked={sex === "male"}
+                name="sex"
+                className=""
+                type="radio"
+              />
               <label htmlFor="">Female</label>
-              <input name="sex" className="" type="radio" />
+              <input
+                onChange={() => {
+                  set([...credentials, e.target.value]);
+                  setSex("female");
+                }}
+                checked={sex === "female"}
+                name="sex"
+                className=""
+                type="radio"
+              />
             </div>
           </div>
           <div className="flex flex-col text-xs">
-            <label htmlFor="">Contact No.</label>
-            <input className="" type="text" />
+            <label htmlFor="">Nationality</label>
+            <input
+              defaultValue={members && members.natinality}
+              onChange={(e) => {
+                set([...credentials, e.target.value]);
+                setNationality(e.target.value);
+              }}
+              className=""
+              type="text"
+            />
           </div>
           <div className="flex flex-col text-xs">
+            <label htmlFor="">Civil Status</label>
+            <input
+              defaultValue={members && members.civilStatus}
+              onChange={(e) => {
+                setCivilStatus(e.target.value);
+                set([...credentials, e.target.value]);
+              }}
+              className=""
+              type="text"
+            />
+          </div>
+
+          {/* <div className="flex flex-col text-xs">
             <label htmlFor="">Email Address</label>
             <input className="" type="text" />
-          </div>
+          </div> */}
           <div className="flex flex-col text-xs">
             <label htmlFor="">House/Building No. and Street Name</label>
-            <input className="" type="text" />
+            <input
+              defaultValue={members && members.address}
+              onChange={(e) => {
+                setAddress(e.target.value);
+                set([...credentials, e.target.value]);
+              }}
+              className=""
+              type="text"
+            />
           </div>
-          <div className="flex flex-col text-xs">
+          {/* <div className="flex flex-col text-xs">
             <label htmlFor="">Barangay/Subdivision</label>
             <input className="" type="text" />
           </div>
@@ -284,10 +407,14 @@ export const ManageMember = () => {
           <div className="flex flex-col text-xs">
             <label htmlFor="">Position</label>
             <input className="" type="text" />
-          </div>
+          </div> */}
           <div className="flex flex-col text-xs">
             <label htmlFor="">Basic Salary(Monthly)</label>
-            <input className="" type="text" />
+            <input
+              defaultValue={members && members.salary}
+              className=""
+              type="text"
+            />
           </div>
         </div>
         <div className="mt-4  flex justify-end gap-4">
@@ -301,7 +428,7 @@ export const ManageMember = () => {
           <button
             type="button"
             className="inline-flex  rounded-md border   px-4 py-2 text-sm font-medium text-blue-900"
-            // onClick={seTMembersBranch}
+            onClick={handleSaveUserInfo}
           >
             Save
           </button>
@@ -310,26 +437,36 @@ export const ManageMember = () => {
       {/* SET EMPLOYEE BRANCH AND DEPARTMENT */}
       <div className="border px-10 py-5 w-[80%] rounded">
         <p className="text-3xl">Set Branch and Department</p>
-        <div className="mt-2  grid grid-cols-3 gap-2">
-          <select
-            name="branches"
-            id=""
-            className="text-xs"
-            onChange={handleSelectedBranch}
-          >
-            <option value="">Select a branch</option>
+        <div className="mt-2  flex gap-5">
+          <div className="flex flex-col gap-2 ">
+            <select
+              name="branches"
+              id=""
+              className="text-xs"
+              onChange={handleSelectedBranch}
+            >
+              <option value="">Select a branch</option>
 
-            {branches &&
-              branches.data.map((branch) => (
-                <option
-                  className=" w-full"
-                  value={branch.branch_alias}
-                  key={branch.id}
-                >
-                  {branch.name}
-                </option>
-              ))}
-          </select>
+              {branches &&
+                branches.data.map((branch) => (
+                  <option
+                    className=" w-full"
+                    value={branch.branch_alias}
+                    key={branch.id}
+                  >
+                    {branch.name}
+                  </option>
+                ))}
+            </select>
+            <div>
+              <input
+                onClick={() => setIsOpenDepartmentOption((prev) => !prev)}
+                className="inline-block mr-2"
+                type="checkbox"
+              />
+              <label htmlFor="">Select a Department</label>
+            </div>
+          </div>
 
           {isOpenDepartmentOption ? (
             <select
@@ -350,9 +487,7 @@ export const ManageMember = () => {
                   </option>
                 ))}
             </select>
-          ) : (
-            <p className="text-center">Select a Branch First</p>
-          )}
+          ) : null}
         </div>
         <div className="mt-4  flex justify-end gap-4">
           <button
@@ -369,15 +504,19 @@ export const ManageMember = () => {
         <p>Set Role</p>
         <div className="mt-2  grid grid-cols-3 gap-2">
           <select onChange={onhandleSelectedRole} name="" id="">
-            <option value="">Select Role</option>
+            <option id="1" value="">
+              Select Role
+            </option>
             {roles &&
-              roles.data.map((role) => (
-                <option data-key={role.id} value={role.id}>
+              roles.map((role) => (
+                <option id={role.id} data-key={role.id} value={role.id}>
                   {role.name}
                 </option>
               ))}
           </select>
         </div>
+
+        <button onClick={() => console.log(roleId)}>KKK</button>
         <div className=" flex justify-end">
           <button
             onClick={onSetSubmitRole}

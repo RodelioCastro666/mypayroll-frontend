@@ -1,9 +1,10 @@
 export enum Action {
     MANAGE = 'manage',
-    CREATE = 'create',
-    READ = 'read',
-    UPDATE = 'update',
-    DELETE = 'delete',
+    ADD = 'add',
+    ACCEPT = 'accept',
+    MODIFY = 'modify',
+    VIEW = 'view',
+    
   }
   
   export enum Subject {
@@ -17,16 +18,17 @@ export enum Action {
   export const subjects = [
     // Subject.ALL,
     // Subject.ORGANIZATION,
+    Subject.MEMBER,
     Subject.BRANCH,
     Subject.DEPARTMENT,
-    // Subject.MEMBER,
+    
   ]
   
   export const actions = [
     Action.MANAGE,
-    Action.CREATE,
-    Action.READ,
-    Action.UPDATE,
-    Action.DELETE,
+    Action.ADD,
+    Action.ACCEPT,
+    Action.MODIFY,
+    Action.VIEW,
+  
   ]
-  ///?

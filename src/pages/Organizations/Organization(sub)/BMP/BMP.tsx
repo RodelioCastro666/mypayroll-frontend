@@ -96,12 +96,12 @@ export const BMP = () => {
                 onClick={memberFlip}
                 className=" px-8 border-b-4 border-blue-600 rounded-b"
               >
-                <Link to={`members`}>Members</Link>
-              </button>
-            ) : (
-              <button onClick={memberFlip} className=" px-8  rounded-b">
                 Members
               </button>
+            ) : (
+              <Link className=" flex px-8  rounded-b" to={`members`}>
+                <button onClick={memberFlip}>Members</button>
+              </Link>
             )}
             {branchHighLight ? (
               <button

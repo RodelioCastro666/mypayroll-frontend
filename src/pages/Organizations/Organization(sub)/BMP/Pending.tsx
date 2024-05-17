@@ -49,6 +49,15 @@ export const Pending = ({ orgAlias }) => {
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Pending"] });
+      toast.success("Member accepted");
+    },
+    onError: (error) => {
+      toast.error("You are not allowed to do this operation.");
+
+      if (error instanceof AxiosError) {
+        if (error.status === 412) {
+        }
+      }
     },
   });
 
@@ -92,7 +101,6 @@ export const Pending = ({ orgAlias }) => {
                     <button
                       onClick={() => {
                         approve(pendingUser.email);
-                        toast.success("User successfully Accepted");
                       }}
                       className="border p-2 px-2 rounded shadow-md"
                     >

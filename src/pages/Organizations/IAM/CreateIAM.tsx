@@ -24,6 +24,8 @@ export const CreateIAM = (props: CreateIAMprops) => {
   const [permissions, setPermissions] = useState<IPermission[]>([]);
 
   const [disabled, setDisabled] = useState([]);
+  const [disableBranchCheck, setDisableBranchCheck] = useState(false);
+  const [disableDepartmentCheck, setDisableDepartmentCheck] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -114,6 +116,12 @@ export const CreateIAM = (props: CreateIAMprops) => {
       setPermissions([{ action: "manage", subject: name }]);
       setDisabled([...disabled, name]);
       setDisableDepartmentCheck(true);
+    } else if (value === "manage" && name === "member") {
+      console.log("JJJJJJJ");
+      setPermissions([]);
+      setPermissions([{ action: "manage", subject: name }]);
+      setDisabled([...disabled, name]);
+      setDisableDepartmentCheck(true);
     }
 
     if (checked) {
@@ -129,6 +137,8 @@ export const CreateIAM = (props: CreateIAMprops) => {
         setDisabled([]);
       } else if (value === "manage" && name === "department") {
         setDisabled([]);
+      } else if (value === "manage" && name === "member") {
+        setDisabled([]);
       }
 
       permissions.forEach((permission) => {
@@ -143,6 +153,10 @@ export const CreateIAM = (props: CreateIAMprops) => {
     console.log("branchId", branchId);
     console.log("departmentId", departmentId);
 
+    console.log("====================================");
+    console.log(permissions);
+    console.log("====================================");
+
     mutation.mutate({
       name: owner,
       branchId: branchId ? branchId : null,
@@ -152,7 +166,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
   };
 
   return (
-    <div className=" ">
+    <div className=" h-full ">
       <button
         onClick={props.onClose}
         type="button"
@@ -174,8 +188,8 @@ export const CreateIAM = (props: CreateIAMprops) => {
           />
         </svg>
       </button>
-      <div className="flex flex-col justify-center">
-        <div className=" flex flex-col items-center gap-5">
+      <div className="flex h-full">
+        <div className=" flex flex-col items-start gap-5 w-full p-5">
           <div className="p-5">
             <input
               className="px-5 py-1 border rounded"
@@ -185,7 +199,7 @@ export const CreateIAM = (props: CreateIAMprops) => {
             />
           </div>
 
-          <div className=" p-5 flex gap-10">
+          <div className=" p-5 flex gap-10 flex-col">
             <select
               className="px-10 py-2 border rounded "
               onChange={onHandleBranchChange}
@@ -225,41 +239,48 @@ export const CreateIAM = (props: CreateIAMprops) => {
                 : null}
             </select>
           </div>
-          <h1 className="text-xl">PERMISSION</h1>
+          <h1 className="text-xl px-5">PERMISSION:</h1>
 
-          <div className="flex justify-around bg-red-200  w-[50%]"></div>
-
-          <div className="flex w-[50%] justify-around ">
+          <div className="flex w-[50%]   px-5 gap-5">
             {subjects.map((subject, index) => (
               <div className="mb-5" key={`${id}_${index}`}>
-                <h1 className="mb-5 text-lg">{subject.toLocaleUpperCase()}</h1>
-                {actions.map((action, index) => (
-                  <div key={`${id}_${index}`}>
-                    <input
-                      id={id}
-                      disabled={
-                        disabled.includes(subject) && action !== "manage"
-                      }
-                      type="checkbox"
-                      name={subject}
-                      value={action}
-                      onChange={handleCheckBox}
-                      checked={permissions.some(
-                        (permission) =>
-                          permission.action === action &&
-                          permission.subject == subject
-                      )}
-                    />
-                    <label htmlFor={id}>{action}</label>
-                  </div>
-                ))}
+                <h1 className="mb-5 text-lg">{subject.toLowerCase()}</h1>
+
+                {actions.map((action, index) =>
+                  (subject.toLocaleLowerCase() === "branch" &&
+                    action === "accept") ||
+                  (subject.toLocaleLowerCase() === "department" &&
+                    action === "accept") ? (
+                    console.log("AMEN")
+                  ) : (
+                    <div key={`${id}_${index}`}>
+                      <input
+                        id={id}
+                        disabled={
+                          disabled.includes(subject) && action !== "manage"
+                        }
+                        type="checkbox"
+                        name={subject}
+                        value={action}
+                        onChange={handleCheckBox}
+                        checked={permissions.some(
+                          (permission) =>
+                            permission.action === action &&
+                            permission.subject == subject
+                        )}
+                      />
+                      <label htmlFor={id}>{action}</label>
+                    </div>
+                  )
+                )}
               </div>
             ))}
           </div>
-
-          <button onClick={onHandleSubmit} class="my-custom-style">
-            Submit
-          </button>
+          <div className="flex justify-start p-3  w-full">
+            <button onClick={onHandleSubmit} class="my-custom-style ">
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </div>

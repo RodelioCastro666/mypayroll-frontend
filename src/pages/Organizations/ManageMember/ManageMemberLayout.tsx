@@ -8,10 +8,10 @@ export const ManageMemberLayout = () => {
   const { orgAlias, memberId } = useParams();
 
   const { data: member } = useQuery({
-    queryKey: ["Members"],
+    queryKey: ["Member"],
     queryFn: async () => {
       return await axiosRequest.get(
-        `/organizations/${orgAlias}/members/${memberId}`
+        `/organizations/${orgAlias}/members/${memberId}/credential`
       );
     },
   });
@@ -21,12 +21,8 @@ export const ManageMemberLayout = () => {
   const branch = member?.data.branch;
   const department = member?.data.department;
 
-  console.log(member?.data.id);
   return (
     <div className="p-2 w-full h-full">
-      {/* <aside></aside>
-      <nav></nav> */}
-
       <Outlet
         context={[orgAlias, members, memberId, user, branch, department]}
       />

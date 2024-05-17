@@ -6,9 +6,11 @@ import { JoinOrganization } from "../OrganizationModal/JoinOrganization";
 import Kebab from "./kebab";
 import { useQuery } from "@tanstack/react-query";
 import { PolarBear } from "../../../components/EmptyPages";
-
+import { IgetOrg } from "../../../types/orgTypes";
 export const Organizations = () => {
   const axiosRequest = useAxiosRefreshRequest();
+
+  const [organizations, setOrganization] = useState();
 
   const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
   const [isOpenJoinModal, setIsOpenJoinModal] = useState<boolean>(false);
@@ -22,10 +24,12 @@ export const Organizations = () => {
     isError,
   } = useQuery({
     queryKey: ["Organizations"],
-    queryFn: async () => await axiosRequest.get("/organizations"),
+    queryFn: async (): Promise<IgetOrg> =>
+      await axiosRequest.get("/organizations"),
     retry: 3,
   });
 
+  console.log(organization?.data);
   const createModalClose = () => {
     setIsOpenCreateModal(false);
   };

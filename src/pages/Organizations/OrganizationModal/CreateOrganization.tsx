@@ -3,40 +3,25 @@ import { Fragment } from "react";
 import { useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { IcreatedOrg, ICreateOrgModalProps } from "../../../types/orgTypes";
 import { toast } from "sonner";
-
-interface ICreateOrgModalProps {
-  isOpen: boolean;
-  closeModal(): void;
-}
-
-interface IOrg {
-  id: string;
-  name: string;
-  organizationUniqueName: string;
-  invitation: string;
-  created: string;
-  created_by: string;
-  created_by: string;
-  created_by: string;
-  created_by: string;
-}
+import { AxiosInstance } from "axios";
 
 export default function CreateOrganization(props: ICreateOrgModalProps) {
   const [newOrg, setNewORg] = useState("");
-  const axiosRequest = useAxiosRefreshRequest();
+  const axiosRequest = useAxiosRefreshRequest<AxiosInstance>();
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (credential): Promise<IOrg> => {
+    mutationFn: async (credential: string): Promise<IcreatedOrg> => {
       const response = await axiosRequest.post("/organizations", credential);
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["Organizations"] });
       toast.success("Organization has been created");
+      console.log(data);
     },
     onError: (error) => {
       if (error.response.status === 409) {

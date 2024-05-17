@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Fragment, useEffect, useState } from "react";
 import { useAxiosRefreshRequest } from "../../../auth/useAxiosRefreshRequest";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 interface IEditDepartmentProps {
   isOpen: void;
   closeModal: void;
@@ -18,7 +19,7 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
 
   const [editBranch, setEditBranch] = useState("");
 
-  const [deptAlias, setDeptAlias] = useState<string>("");
+  const [editdeptAlias, seteditDeptAlias] = useState<string>("");
 
   const { data: branches } = useQuery({
     queryKey: ["Branches"],
@@ -29,28 +30,19 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
     },
   });
 
-  useEffect(() => {
-    setEditBranch(props.branchAlias);
-
-    return () => {
-      setEditBranch();
-    };
-  }, []);
-
   console.log(editBranch);
 
   const mutation = useMutation({
     mutationFn: async (credential) => {
       return await axiosRequest.patch(
-        `/organizations/${props.orgAlias}/branches/${
-          editBranch === "" ? props.branchAlias : editBranch
-        }/departments/${props.deptAlias}`,
+        `/organizations/${props.orgAlias}/branches/${props.branchAlias}/departments/${props.deptAlias}`,
         credential
       );
     },
     onSuccess() {
       console.log("SUCCESS EDIT");
       queryClient.invalidateQueries({ queryKey: ["Departments"] });
+      toast.success("Successful updated");
     },
     onError: (error) => {
       console.log(error);
@@ -59,12 +51,13 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
 
   const onhandleEditSubmit = () => {
     mutation.mutate({
-      name: deptAlias,
+      name: editdeptAlias ? editdeptAlias : props.deptAlias,
+      branchAlias: editBranch ? editBranch : props.branchAlias,
     });
     props.closeModal();
-    console.log(deptAlias);
+    console.log(editdeptAlias);
     console.log(editBranch);
-    setDeptAlias("");
+    seteditDeptAlias("");
     setEditBranch("");
   };
 
@@ -104,9 +97,6 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
                   </Dialog.Title>
 
                   <div>
-                    <button onClick={() => console.log(editBranch)}>
-                      click
-                    </button>
                     <select
                       defaultValue={props.branchAlias}
                       onChange={(e) => setEditBranch(e.target.value)}
@@ -143,7 +133,8 @@ export const EditDepartment = (props: IEditDepartmentProps) => {
                       className="px-4 py-2 w-full border rounded"
                       type="text"
                       placeholder="Enter New  Name"
-                      onChange={(e) => setDeptAlias(e.target.value)}
+                      onFocus={(e) => seteditDeptAlias(e.target.value)}
+                      onChange={(e) => seteditDeptAlias(e.target.value)}
                     />
                   </div>
 
