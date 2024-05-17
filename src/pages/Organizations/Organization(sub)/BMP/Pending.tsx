@@ -52,11 +52,8 @@ export const Pending = ({ orgAlias }) => {
       toast.success("Member accepted");
     },
     onError: (error) => {
-      toast.error("You are not allowed to do this operation.");
-
-      if (error instanceof AxiosError) {
-        if (error.status === 412) {
-        }
+      if (error.response.status === 412) {
+        toast.error("You are not allowed to do this operation.");
       }
     },
   });
